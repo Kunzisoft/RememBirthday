@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:id="@+id/buddy_item_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/buddy_icon"
-        android:layout_width="@dimen/buddy_height_icon"
-        android:layout_height="@dimen/buddy_height_icon"
-        android:padding="8dp"
-        android:src="@drawable/ic_person_black_24dp"
-        android:tint="@color/colorWhite"
-        android:background="@color/colorPrimary"/>
-
-    <TextView
-        android:id="@+id/buddy_name"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_toRightOf="@+id/buddy_icon"
-        android:layout_toEndOf="@+id/buddy_icon"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"/>
+        android:padding="20dp">
 
-    <TextView
-        android:id="@+id/buddy_stay_days"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_below="@+id/buddy_name"
-        android:layout_toRightOf="@+id/buddy_icon"
-        android:layout_toEndOf="@+id/buddy_icon"
-        android:layout_marginLeft="80dp"
-        android:layout_marginStart="80dp" />
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/buddy_icon"
+            android:layout_width="@dimen/buddy_height_icon"
+            android:layout_height="@dimen/buddy_height_icon"
+            android:src="@drawable/ic_person_tint"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/buddy_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/buddy_icon"
+            android:layout_toEndOf="@+id/buddy_icon"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"/>
+
+        <TextView
+            android:id="@+id/buddy_stay_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_below="@+id/buddy_name"
+            android:layout_toRightOf="@+id/buddy_icon"
+            android:layout_toEndOf="@+id/buddy_icon"
+            android:layout_marginLeft="80dp"
+            android:layout_marginStart="80dp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorWhite"
+        android:id="@+id/view" />
+</LinearLayout>

@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+    <include
+        android:id="@+id/list_toolbar"
+        layout="@layout/toolbar_default" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_buddy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_person_add_white_24dp"
         android:layout_marginRight="19dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -23,6 +23,6 @@
         android:id="@+id/list_buddy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar" />
+        android:layout_below="@id/list_toolbar" />
 
 </RelativeLayout>

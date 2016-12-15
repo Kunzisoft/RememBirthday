@@ -1,14 +1,13 @@
 package com.kunzisoft.remembirthday;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.kunzisoft.remembirthday.adapter.BuddyAdapter;
@@ -68,5 +67,25 @@ public class ListBuddyActivity extends AppCompatActivity {
 
         BuddyAdapter buddyAdapter = new BuddyAdapter(listBuddy);
         recyclerView.setAdapter(buddyAdapter);
+
+        BuddyAdapter.OnClickItemBuddyListener onClickItemBuddyListener = new BuddyListener(this);
+        buddyAdapter.setOnClickItemBuddyListener(onClickItemBuddyListener);
+    }
+
+
+    class BuddyListener implements BuddyAdapter.OnClickItemBuddyListener {
+        private Context context;
+
+        public BuddyListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onItemBuddyClick(View view, Buddy buddy) {
+            Intent intent = new Intent(context, BuddyActivity.class);
+            // TODO datas
+            //intent.setData();
+            startActivity(intent);
+        }
     }
 }

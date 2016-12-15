@@ -1,13 +1,12 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Buddy;
 
@@ -21,6 +20,12 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
     private static final String TAG = "BuddyAdapter";
 
+    private OnClickItemBuddyListener onClickItemBuddyListener;
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        }
+    };
     private List<Buddy> listBuddy;
 
     public BuddyAdapter(List<Buddy> listBuddy) {
@@ -40,6 +45,22 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
         //holder.icon.
         holder.name.setText(currentBuddy.getName());
         holder.stayDays.setText(String.valueOf(Buddy.getStayDays(currentBuddy.getDate())));
+
+        if(onClickItemBuddyListener != null) {
+            holder.container.setOnClickListener(new BufferBuddyClickListener(currentBuddy));
+        }
+    }
+
+    public OnClickItemBuddyListener getOnClickItemBuddyListener() {
+        return onClickItemBuddyListener;
+    }
+
+    /**
+     * Add click buddy listener to each item
+     * @param onClickItemBuddyListener
+     */
+    public void setOnClickItemBuddyListener(OnClickItemBuddyListener onClickItemBuddyListener) {
+        this.onClickItemBuddyListener = onClickItemBuddyListener;
     }
 
     @Override
@@ -52,16 +73,41 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
      */
     class BuddyViewHolder extends RecyclerView.ViewHolder {
 
-        protected ImageView icon;
+        protected ViewGroup container;
+
+        protected CircularImageView icon;
         protected TextView name;
         protected TextView stayDays;
 
         public BuddyViewHolder(View itemView) {
             super(itemView);
 
-            icon = (ImageView) itemView.findViewById(R.id.buddy_icon);
+            container = (ViewGroup) itemView.findViewById(R.id.buddy_item_container);
+
+            icon = (CircularImageView) itemView.findViewById(R.id.buddy_icon);
             name = (TextView) itemView.findViewById(R.id.buddy_name);
             stayDays = (TextView) itemView.findViewById(R.id.buddy_stay_days);
+        }
+    }
+
+    /**
+     * Listener when a click on buddy item is performed
+     */
+    public interface OnClickItemBuddyListener {
+        void onItemBuddyClick(View view, Buddy buddy);
+    }
+
+    private class BufferBuddyClickListener implements View.OnClickListener {
+
+        private Buddy buddy;
+
+        public BufferBuddyClickListener(Buddy buddy) {
+            this.buddy = buddy;
+        }
+
+        @Override
+        public void onClick(View view) {
+            onClickItemBuddyListener.onItemBuddyClick(view, buddy);
         }
     }
 }
