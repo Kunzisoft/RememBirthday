@@ -44,7 +44,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
         // TODO icon
         //holder.icon.
         holder.name.setText(currentBuddy.getName());
-        holder.stayDays.setText(String.valueOf(Buddy.getStayDays(currentBuddy.getDate())));
+        holder.stayDays.setText(String.valueOf(Buddy.getStayDays(currentBuddy.getBirthday())));
 
         if(onClickItemBuddyListener != null) {
             holder.container.setOnClickListener(new BufferBuddyClickListener(currentBuddy));

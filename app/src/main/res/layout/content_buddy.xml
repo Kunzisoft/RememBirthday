@@ -8,10 +8,38 @@
     tools:context="com.kunzisoft.remembirthday.BuddyActivity"
     tools:showIn="@layout/activity_buddy">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/content_buddy_year"
+            android:layout_margin="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="36sp"
+            android:text=""
+            android:layout_below="@+id/content_buddy_dayAndMonth"
+            android:layout_centerHorizontal="true" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/content_buddy_dayAndMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:text=""
+            android:layout_below="@+id/content_buddy_avatar"
+            android:layout_centerHorizontal="true" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/content_buddy_avatar"
+            android:src="@drawable/ic_account_circle_black_100dp"
+            android:tint="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

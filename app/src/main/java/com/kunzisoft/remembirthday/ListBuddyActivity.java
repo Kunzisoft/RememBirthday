@@ -50,19 +50,13 @@ public class ListBuddyActivity extends AppCompatActivity {
 
         // TODO List users
         List<Buddy> listBuddy = new ArrayList<>();
-        Buddy michel = new Buddy();
-        michel.setName("michmich");
-        michel.setDate(new Date());
+        Buddy michel = new Buddy("michmich", new Date());
         listBuddy.add(michel);
 
-        Buddy jeanmichel = new Buddy();
-        jeanmichel.setName("jeanmichmich");
-        jeanmichel.setDate(new Date());
+        Buddy jeanmichel = new Buddy("jeanmichmich", new Date());
         listBuddy.add(jeanmichel);
 
-        Buddy bernadette = new Buddy();
-        bernadette.setName("berna dettes");
-        bernadette.setDate(new Date());
+        Buddy bernadette = new Buddy("berna dettes", new Date());
         listBuddy.add(bernadette);
 
         BuddyAdapter buddyAdapter = new BuddyAdapter(listBuddy);
@@ -83,8 +77,7 @@ public class ListBuddyActivity extends AppCompatActivity {
         @Override
         public void onItemBuddyClick(View view, Buddy buddy) {
             Intent intent = new Intent(context, BuddyActivity.class);
-            // TODO datas
-            //intent.setData();
+            intent.putExtra(BuddyActivity.EXTRA_BUDDY, buddy);
             startActivity(intent);
         }
     }

@@ -12,8 +12,8 @@
 
         <com.github.siyamed.shapeimageview.CircularImageView
             android:id="@+id/buddy_icon"
-            android:layout_width="@dimen/buddy_height_icon"
-            android:layout_height="@dimen/buddy_height_icon"
+            android:layout_width="@dimen/buddy_list_height_icon"
+            android:layout_height="@dimen/buddy_list_height_icon"
             android:src="@drawable/ic_person_tint"/>
 
         <TextView
