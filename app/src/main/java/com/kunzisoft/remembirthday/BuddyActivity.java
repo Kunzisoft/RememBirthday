@@ -1,22 +1,20 @@
 package com.kunzisoft.remembirthday;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.kunzisoft.remembirthday.adapter.BuddyAdapter;
 import com.kunzisoft.remembirthday.element.Buddy;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class BuddyActivity extends AppCompatActivity {
 
@@ -28,37 +26,41 @@ public class BuddyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buddy);
 
-        Buddy currentBuddy = getIntent().getParcelableExtra(EXTRA_BUDDY);
-        Log.d(TAG, "CurrentBuddy : " + currentBuddy);
-
         // Toolbar generation
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(currentBuddy.getName());
+        //toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        // Button event
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // Button add
+        FloatingActionButton floatingActionButtonAddBuddy = (FloatingActionButton) findViewById(R.id.fab_add_buddy);
+        floatingActionButtonAddBuddy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO Event add
+            }
+        });
+
+        // Button modify
+        /*
+        //TODO Settings toolbar
+        FloatingActionButton floatingActionButtonModifyDetailsBuddy = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButtonModifyDetailsBuddy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+        */
 
-        ImageView avatarImageView = (ImageView) findViewById(R.id.content_buddy_avatar);
-        TextView dayAndMonthTextView = (TextView) findViewById(R.id.content_buddy_dayAndMonth);
-        TextView yearTextView = (TextView) findViewById(R.id.content_buddy_year);
-
-        // TODO Titre
-        currentBuddy.getName();
-        Date currentBuddyBirthday = currentBuddy.getBirthday();
-        SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.FRENCH);
-        SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.FRENCH);
-        dayAndMonthTextView.setText(dayAndMonthSimpleDateFormat.format(currentBuddyBirthday));
-        yearTextView.setText(yearSimpleDateFormat.format(currentBuddyBirthday));
-
-
+        try {
+            // Assign event
+            ListBuddyFragment buddyListFragment = (ListBuddyFragment) getSupportFragmentManager().findFragmentById(R.id.activity_buddy_list_fragment);
+            BuddyAdapter.OnClickItemBuddyListener onClickItemBuddyListener = new BuddyListener(this);
+            buddyListFragment.setOnClickItemBuddyListener(onClickItemBuddyListener);
+        } catch(ClassCastException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
@@ -80,5 +82,25 @@ public class BuddyActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    // TODO Doc
+    class BuddyListener implements BuddyAdapter.OnClickItemBuddyListener {
+        private Context context;
+
+        public BuddyListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onItemBuddyClick(View view, Buddy buddy) {
+            // During initial setup, plug in the details fragment.
+            DetailsBuddyFragment detailsBuddyFragment =  DetailsBuddyFragment.newInstance(buddy);
+            detailsBuddyFragment.setBuddy(buddy);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.activity_buddy_details_fragment, detailsBuddyFragment);
+            ft.commit();
+        }
     }
 }
