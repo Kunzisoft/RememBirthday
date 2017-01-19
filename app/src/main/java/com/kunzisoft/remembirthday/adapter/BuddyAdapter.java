@@ -63,6 +63,10 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
         this.onClickItemBuddyListener = onClickItemBuddyListener;
     }
 
+    public void setItemChecked(Buddy buddy) {
+        // TODO
+    }
+
     @Override
     public int getItemCount() {
         return listBuddy.size();

@@ -3,7 +3,6 @@ package com.kunzisoft.remembirthday;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,27 +22,11 @@ import java.util.Locale;
 public class DetailsBuddyFragment extends Fragment {
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
-    private static DetailsBuddyFragment detailsBuddyFragmentInstance;
 
-    private Buddy buddy;
-
-    public static DetailsBuddyFragment newInstance(Buddy currentBuddy) {
-
-        Log.d(TAG, currentBuddy.toString());
-
-        if(detailsBuddyFragmentInstance == null);
-            detailsBuddyFragmentInstance = new DetailsBuddyFragment();
-
-        // Supply index input as an argument.
+    public void setBuddy(Buddy currentBuddy) {
         Bundle args = new Bundle();
         args.putParcelable(BuddyActivity.EXTRA_BUDDY, currentBuddy);
-        detailsBuddyFragmentInstance.setArguments(args);
-
-        return detailsBuddyFragmentInstance;
-    }
-
-    void setBuddy(Buddy buddy) {
-        this.buddy = buddy;
+        setArguments(args);
     }
 
     @Nullable
@@ -55,6 +38,10 @@ public class DetailsBuddyFragment extends Fragment {
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.content_buddy_dayAndMonth);
         TextView yearTextView = (TextView) root.findViewById(R.id.content_buddy_year);
 
+        Buddy buddy = null;
+        if(getArguments()!=null) {
+            buddy = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
+        }
         if(buddy != null) {
             Date currentBuddyBirthday = buddy.getBirthday();
             SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.FRENCH);

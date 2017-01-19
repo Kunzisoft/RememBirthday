@@ -1,20 +1,12 @@
 package com.kunzisoft.remembirthday;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.kunzisoft.remembirthday.adapter.BuddyAdapter;
-import com.kunzisoft.remembirthday.element.Buddy;
 
 public class BuddyActivity extends AppCompatActivity {
 
@@ -28,7 +20,7 @@ public class BuddyActivity extends AppCompatActivity {
 
         // Toolbar generation
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
         // Button add
@@ -52,15 +44,6 @@ public class BuddyActivity extends AppCompatActivity {
             }
         });
         */
-
-        try {
-            // Assign event
-            ListBuddyFragment buddyListFragment = (ListBuddyFragment) getSupportFragmentManager().findFragmentById(R.id.activity_buddy_list_fragment);
-            BuddyAdapter.OnClickItemBuddyListener onClickItemBuddyListener = new BuddyListener(this);
-            buddyListFragment.setOnClickItemBuddyListener(onClickItemBuddyListener);
-        } catch(ClassCastException e) {
-            Log.e(TAG, e.getMessage());
-        }
     }
 
     @Override
@@ -84,23 +67,12 @@ public class BuddyActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    // TODO Doc
-    class BuddyListener implements BuddyAdapter.OnClickItemBuddyListener {
-        private Context context;
-
-        public BuddyListener(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void onItemBuddyClick(View view, Buddy buddy) {
-            // During initial setup, plug in the details fragment.
-            DetailsBuddyFragment detailsBuddyFragment =  DetailsBuddyFragment.newInstance(buddy);
-            detailsBuddyFragment.setBuddy(buddy);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.activity_buddy_details_fragment, detailsBuddyFragment);
-            ft.commit();
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
         }
     }
 }

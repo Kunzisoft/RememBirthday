@@ -76,6 +76,25 @@ public class Buddy implements Parcelable{
     };
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Buddy buddy = (Buddy) o;
+
+        if (name != null ? !name.equals(buddy.name) : buddy.name != null) return false;
+        return birthday != null ? birthday.equals(buddy.birthday) : buddy.birthday == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Buddy{" +
                 "name='" + name + '\'' +
