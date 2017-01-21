@@ -11,17 +11,33 @@ import java.util.Date;
  */
 public class Buddy implements Parcelable{
 
+    public static final long ID_UNDEFINED = -1;
+
+    private long id;
     private String name;
     private Date birthday;
 
-    public Buddy(String name, Date birthday) {
+    public Buddy(long id, String name, Date birthday) {
+        this.id = id;
         this.name = name;
         this.birthday = birthday;
+    }
+
+    public Buddy(String name, Date birthday) {
+        this(ID_UNDEFINED, name, birthday);
     }
 
     private Buddy(Parcel in) {
         name = in.readString();
         birthday = (Date) in.readSerializable();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

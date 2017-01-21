@@ -34,9 +34,9 @@ public class DetailsBuddyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_details_buddy, container, false);
 
-        ImageView avatarImageView = (ImageView) root.findViewById(R.id.content_buddy_avatar);
-        TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.content_buddy_dayAndMonth);
-        TextView yearTextView = (TextView) root.findViewById(R.id.content_buddy_year);
+        ImageView avatarImageView = (ImageView) root.findViewById(R.id.fragment_details_buddy_avatar);
+        TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
+        TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
 
         Buddy buddy = null;
         if(getArguments()!=null) {

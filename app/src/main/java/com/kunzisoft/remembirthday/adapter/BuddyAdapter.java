@@ -21,11 +21,6 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
     private static final String TAG = "BuddyAdapter";
 
     private OnClickItemBuddyListener onClickItemBuddyListener;
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        }
-    };
     private List<Buddy> listBuddy;
 
     public BuddyAdapter(List<Buddy> listBuddy) {
@@ -34,7 +29,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
     @Override
     public BuddyAdapter.BuddyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_buddy, parent, false);
+        View itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_buddies, parent, false);
         return new BuddyViewHolder(itemListBuddyView);
     }
 

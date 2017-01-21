@@ -9,7 +9,7 @@
         layout="@layout/toolbar_default"/>
 
     <FrameLayout
-        android:id="@+id/activity_details_buddy_fragment"
+        android:id="@+id/activity_details_buddy_fragment_details_buddy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar" />

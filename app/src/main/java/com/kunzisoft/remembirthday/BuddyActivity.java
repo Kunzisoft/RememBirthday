@@ -1,5 +1,6 @@
 package com.kunzisoft.remembirthday;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,8 @@ public class BuddyActivity extends AppCompatActivity {
         floatingActionButtonAddBuddy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Event add
+                Intent intent = new Intent(BuddyActivity.this, ListContactsActivity.class);
+                startActivity(intent);
             }
         });
 

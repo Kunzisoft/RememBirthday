@@ -33,7 +33,7 @@ public class DetailsBuddyActivity extends AppCompatActivity {
             // During initial setup, plug in the details fragment.
             DetailsBuddyFragment details = new DetailsBuddyFragment();
             details.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().add(R.id.activity_details_buddy_fragment, details).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_details_buddy_fragment_details_buddy, details).commit();
         }
     }
 }
