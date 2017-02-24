@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_details_buddy"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundElement">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/fragment_details_buddy_year"
@@ -27,7 +28,7 @@
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/fragment_details_buddy_avatar"
         android:src="@drawable/ic_account_circle_black_100dp"
-        android:tint="@color/colorWhite"
+        android:tint="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="25dp"
