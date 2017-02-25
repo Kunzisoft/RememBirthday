@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/buddy_item_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundElement">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <android.support.v7.widget.CardView
+        android:id="@+id/item_list_contact_container_icon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp">
-
-        <com.github.siyamed.shapeimageview.CircularImageView
+        app:cardElevation="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/item_list_contact_icon"
-            android:layout_width="@dimen/buddy_list_height_icon"
-            android:layout_height="@dimen/buddy_list_height_icon"
-            android:src="@drawable/ic_person_tint"/>
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_person_tint"/>
+    </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/item_list_contact_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_toRightOf="@+id/item_list_contact_icon"
-            android:layout_toEndOf="@+id/item_list_contact_icon"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"/>
-    </RelativeLayout>
-</LinearLayout>
+    <TextView
+        android:id="@+id/item_list_contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text=""
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/item_list_contact_container_icon"
+        android:layout_toEndOf="@+id/item_list_contact_container_icon" />
+</RelativeLayout>

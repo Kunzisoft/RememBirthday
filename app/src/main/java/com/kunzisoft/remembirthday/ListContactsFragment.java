@@ -1,12 +1,14 @@
 package com.kunzisoft.remembirthday;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -17,6 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  * Created by joker on 19/01/17.
@@ -37,7 +42,10 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
             Build.VERSION.SDK_INT
                     >= Build.VERSION_CODES.HONEYCOMB ?
                     ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                    ContactsContract.Contacts.DISPLAY_NAME
+                    ContactsContract.Contacts.DISPLAY_NAME,
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+                    ContactsContract.Contacts.PHOTO_THUMBNAIL_URI :
+                    ContactsContract.Contacts.PHOTO_URI
     };
 
     /*
@@ -46,7 +54,8 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
      * the Android framework, so it is prefaced with "android.R.id"
      */
     private final static int[] TO_IDS = {
-            R.id.item_list_contact_name//, R.id.buddy_stay_days
+            R.id.item_list_contact_name,
+            R.id.item_list_contact_icon
     };
 
     private ListView mContactsList;
@@ -72,27 +81,19 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
     private static final int LOOKUP_KEY_INDEX = 1;
 
     @SuppressLint("InlinedApi")
-    private static final String[] PROJECTION =
-            {
-                    ContactsContract.Contacts._ID,
-                    ContactsContract.Contacts.LOOKUP_KEY,
-                    Build.VERSION.SDK_INT
-                            >= Build.VERSION_CODES.HONEYCOMB ?
-                            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                            ContactsContract.Contacts.DISPLAY_NAME
-
-            };
-
-    // Defines the text expression
-    @SuppressLint("InlinedApi")
-    private static final String SELECTION =
+    private static final String[] PROJECTION = {
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?" :
-                    ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
-    // Defines a variable for the search string
-    private String mSearchString;
+                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
+                    ContactsContract.Contacts.DISPLAY_NAME,
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+                    ContactsContract.Contacts.PHOTO_THUMBNAIL_URI :
+                    ContactsContract.Contacts.PHOTO_URI
+    };
+
     // Defines the array to hold values that replace the ?
-    private String[] mSelectionArgs = { mSearchString };
+    private String[] mSelectionArgs = { null };
 
     @Override
     public void doAfterGranted() {
@@ -131,6 +132,21 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
                 null,
                 FROM_COLUMNS, TO_IDS,
                 0);
+        /*
+        mCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                if (view.getId() == R.id.item_list_contact_icon) {
+                    CircularImageView photoImageView = (CircularImageView) view;
+                    //int resID = getResources().getIdentifier(cursor.getString(columnIndex), "drawable",  getContext().getPackageName());
+                    //photoImageView.setImageDrawable(ContextCompat.getDrawable(getContext(), resID));
+                    return false;
+                }
+                return false;
+            }
+        });
+        //*/
+
         // Sets the adapter for the ListView
         mContactsList.setAdapter(mCursorAdapter);
 
@@ -149,7 +165,7 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
          * Makes search string into pattern and
          * stores it in the selection array
          */
-        mSelectionArgs[0] = "%" + mSearchString + "%";
+        //mSelectionArgs[0] = "%" + mSearchString + "%";
         // Starts the query
         return new CursorLoader(
                 getActivity(),
@@ -190,5 +206,29 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
          * You can use mContactUri as the content URI for retrieving
          * the details for a contact.
          */
+        DialogFragment dialog = new SelectBirthdayFragment();
+        dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
+    }
+
+    /*TODO javadoc */
+    public InputStream openPhoto(long contactId) {
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
+        Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+        Cursor cursor = getContext().getContentResolver().query(photoUri,
+                new String[] {ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
+        if (cursor == null) {
+            return null;
+        }
+        try {
+            if (cursor.moveToFirst()) {
+                byte[] data = cursor.getBlob(0);
+                if (data != null) {
+                    return new ByteArrayInputStream(data);
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+        return null;
     }
 }

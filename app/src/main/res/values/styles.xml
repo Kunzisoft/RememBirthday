@@ -1,7 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+        <item name="android:textColor">@color/colorPrimary</item>
+
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -9,27 +14,57 @@
 
         <item name="android:windowBackground">@color/background</item>
 
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance</item>
+        <item name="android:textAppearanceMedium">@style/AppTheme.TextAppearance</item>
+
         <!-- Text colors -->
         <item name="android:textColorPrimary">@color/colorWhite</item>
-        <item name="android:textColorPrimaryInverse">@color/abc_primary_text_material_dark</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
-        <item name="android:textColorSecondaryInverse">@color/abc_secondary_text_material_dark</item>
-        <item name="android:textColorTertiary">@color/colorPrimaryDark</item>
-        <item name="android:textColorTertiaryInverse">@color/abc_secondary_text_material_dark</item>
+        <item name="android:textColorSecondaryInverse">@color/colorPrimaryDarkInverse</item>
         <!--
         <item name="android:textColorPrimaryDisableOnly">@color/abc_primary_text_disable_only_material_light</item>
         <item name="android:textColorPrimaryInverseDisableOnly">@color/abc_primary_text_disable_only_material_dark</item>
-        <item name="android:textColorHint">@color/hint_foreground_material_light</item>
-        <item name="android:textColorHintInverse">@color/hint_foreground_material_dark</item>
+        <item name="android:textColorHint">#ff0000</item>
+        <item name="android:textColorHintInverse">#0011ff</item>
         <item name="android:textColorHighlight">@color/highlighted_text_material_light</item>
         <item name="android:textColorLink">?attr/colorAccent</item>
-        -->
-
+                -->
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.TextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Inverse" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimaryInverse</item>
+    </style>
+
+    <style name="AppTheme.CardView" parent="CardView">
+        <!-- Card background color -->
+        <item name="cardBackgroundColor">@color/backgroundElement</item>
+        <!-- Ripple for API 21 of android, and regular selector on older -->
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <!-- Resting Elevation from Material guidelines -->
+        <item name="cardElevation">2dp</item>
+        <!-- Add corner Radius -->
+        <item name="cardCornerRadius">2dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
+
+    <style name="AppTheme.CardView.Alternative" parent="CardView">
+        <!-- Card background color -->
+        <item name="cardBackgroundColor">@color/backgroundElementInverse</item>
+        <!-- Ripple for API 21 of android, and regular selector on older -->
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <!-- Resting Elevation from Material guidelines -->
+        <item name="cardElevation">2dp</item>
+        <!-- Add corner Radius -->
+        <item name="cardCornerRadius">2dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textColor">@color/colorPrimaryInverse</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

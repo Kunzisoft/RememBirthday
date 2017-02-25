@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:id="@+id/buddy_item_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/backgroundElement">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/buddy_item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
-
-        <com.github.siyamed.shapeimageview.CircularImageView
-            android:id="@+id/buddy_icon"
-            android:layout_width="@dimen/buddy_list_height_icon"
-            android:layout_height="@dimen/buddy_list_height_icon"
-            android:src="@drawable/ic_person_tint"/>
-
-        <TextView
-            android:id="@+id/buddy_name"
-            android:layout_width="wrap_content"
+        style="@style/AppTheme.CardView">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_toRightOf="@+id/buddy_icon"
-            android:layout_toEndOf="@+id/buddy_icon"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"/>
+            android:padding="20dp">
 
-        <TextView
-            android:id="@+id/buddy_stay_days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_below="@+id/buddy_name"
-            android:layout_toRightOf="@+id/buddy_icon"
-            android:layout_toEndOf="@+id/buddy_icon"
-            android:layout_marginLeft="80dp"
-            android:layout_marginStart="80dp" />
-    </RelativeLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/buddy_icon"
+                android:layout_width="@dimen/buddy_list_height_icon"
+                android:layout_height="@dimen/buddy_list_height_icon"
+                android:background="@drawable/ic_person_tint_inverse"/>
+
+            <TextView
+                android:id="@+id/buddy_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text=""
+                android:layout_toRightOf="@+id/buddy_icon"
+                android:layout_toEndOf="@+id/buddy_icon"
+                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"/>
+
+            <TextView
+                android:id="@+id/buddy_stay_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text=""
+                android:layout_below="@+id/buddy_name"
+                android:layout_toRightOf="@+id/buddy_icon"
+                android:layout_toEndOf="@+id/buddy_icon"
+                android:layout_marginLeft="80dp"
+                android:layout_marginStart="80dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
 </LinearLayout>

@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.siyamed.shapeimageview.CircularImageView;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Buddy;
 
@@ -74,7 +74,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
         protected ViewGroup container;
 
-        protected CircularImageView icon;
+        protected ImageView icon;
         protected TextView name;
         protected TextView stayDays;
 
@@ -83,7 +83,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
             container = (ViewGroup) itemView.findViewById(R.id.buddy_item_container);
 
-            icon = (CircularImageView) itemView.findViewById(R.id.buddy_icon);
+            icon = (ImageView) itemView.findViewById(R.id.buddy_icon);
             name = (TextView) itemView.findViewById(R.id.buddy_name);
             stayDays = (TextView) itemView.findViewById(R.id.buddy_stay_days);
         }
