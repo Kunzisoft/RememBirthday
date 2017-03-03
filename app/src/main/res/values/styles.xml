@@ -30,6 +30,8 @@
         <item name="android:textColorHighlight">@color/highlighted_text_material_light</item>
         <item name="android:textColorLink">?attr/colorAccent</item>
                 -->
+        <!-- <item name="android:spinnerStyle">@style/AppSpinner</item> -->
+
     </style>
 
     <style name="AppTheme.TextAppearance" parent="@android:style/TextAppearance">
@@ -65,6 +67,10 @@
         <item name="android:clickable">true</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:textColor">@color/colorPrimaryInverse</item>
+    </style>
+
+    <style name="AppSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@color/background</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

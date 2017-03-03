@@ -3,14 +3,17 @@ package com.kunzisoft.remembirthday;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -37,6 +40,7 @@ public class SelectBirthdayFragment extends DialogFragment {
     private Spinner spinnerMonth;
     private Spinner spinnerDay;
     private Spinner spinnerYear;
+    private SwitchCompat switchYear;
 
     private OnClickBirthdayListener onClickListener;
 
@@ -52,6 +56,7 @@ public class SelectBirthdayFragment extends DialogFragment {
         spinnerMonth = (Spinner) root.findViewById(R.id.fragment_birthday_select_month);
         spinnerDay = (Spinner) root.findViewById(R.id.fragment_birthday_select_day);
         spinnerYear = (Spinner) root.findViewById(R.id.fragment_birthday_select_year);
+        switchYear = (SwitchCompat) root.findViewById(R.id.fragment_birthday_select_enable_year);
 
         // Create a calendar object and set year and month
         final Calendar calendar = new GregorianCalendar();
@@ -82,33 +87,41 @@ public class SelectBirthdayFragment extends DialogFragment {
 
         // Spinners and Adapters
         final ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, listMonth);
+                R.layout.spinner_item_month, listMonth);
         spinnerMonth.setAdapter(monthAdapter);
         spinnerMonth.setSelection(positionCurrentMonth);
 
         ArrayAdapter<Integer> daysAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, listDays);
+                R.layout.spinner_item_day, listDays);
         spinnerDay.setAdapter(daysAdapter);
         spinnerDay.setSelection(currentDay-1);
 
         ArrayAdapter<Integer> yearsAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, listYears);
+                R.layout.spinner_item_year, listYears);
         spinnerYear.setAdapter(yearsAdapter);
         spinnerYear.setSelection(YEAR_DELTA);
+        spinnerYear.setEnabled(false);
+        switchYear.setChecked(false);
+        switchYear.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                spinnerYear.setEnabled(b);
+            }
+        });
 
         builder.setView(root)
-                //TODO string
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.d(TAG, calcDate().toString());
                         if(onClickListener!=null)
-                            onClickListener.onClickPositiveButton(calcDate());
+                            onClickListener.onClickPositiveButton(
+                                    new DateUnknownYear(calcDate(), switchYear.isChecked()));
                     }
                 })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(onClickListener!=null)
-                            onClickListener.onClickNegativeButton(calcDate());
+                            onClickListener.onClickNegativeButton(
+                                    new DateUnknownYear(calcDate(), switchYear.isChecked()));
                     }
                 });
         // Create the AlertDialog object and return it
@@ -125,8 +138,8 @@ public class SelectBirthdayFragment extends DialogFragment {
         try {
             date = dateFormat.parse(
                     spinnerDay.getSelectedItem()+ " "+
-                            spinnerMonth.getSelectedItem()+ " "+
-                            spinnerYear.getSelectedItem());
+                    spinnerMonth.getSelectedItem()+ " "+
+                    spinnerYear.getSelectedItem());
         } catch (ParseException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -142,7 +155,7 @@ public class SelectBirthdayFragment extends DialogFragment {
     }
 
     public interface OnClickBirthdayListener {
-        void onClickPositiveButton(Date selectedDate);
-        void onClickNegativeButton(Date selectedDate);
+        void onClickPositiveButton(DateUnknownYear selectedDate);
+        void onClickNegativeButton(DateUnknownYear selectedDate);
     }
 }
