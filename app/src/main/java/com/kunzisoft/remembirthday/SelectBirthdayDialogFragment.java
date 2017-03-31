@@ -9,9 +9,11 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
@@ -28,12 +30,11 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by joker on 25/02/17.
+ * DialogFragment used for selecting birthday, with day, month and year. Displays the delta between the current date and the date selected.
  */
+public class SelectBirthdayDialogFragment extends DialogFragment {
 
-public class SelectBirthdayFragment extends DialogFragment {
-
-    private final static String TAG = "SelectBirthdayFragment";
+    private final static String TAG = "SelectBirthdayDialogFrg";
 
     private final static int YEAR_DELTA = 80;
 
@@ -41,8 +42,11 @@ public class SelectBirthdayFragment extends DialogFragment {
     private Spinner spinnerDay;
     private Spinner spinnerYear;
     private SwitchCompat switchYear;
+    private TextView deltaDate;
 
     private OnClickBirthdayListener onClickListener;
+
+    private DateUnknownYear dateUnknownYearSelected;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class SelectBirthdayFragment extends DialogFragment {
         spinnerDay = (Spinner) root.findViewById(R.id.fragment_birthday_select_day);
         spinnerYear = (Spinner) root.findViewById(R.id.fragment_birthday_select_year);
         switchYear = (SwitchCompat) root.findViewById(R.id.fragment_birthday_select_enable_year);
+        deltaDate = (TextView) root.findViewById(R.id.fragment_birthday_select_days_left);
 
         // Create a calendar object and set year and month
         final Calendar calendar = new GregorianCalendar();
@@ -86,21 +91,54 @@ public class SelectBirthdayFragment extends DialogFragment {
         }
 
         // Spinners and Adapters
-        final ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getContext(),
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_item_month, listMonth);
         spinnerMonth.setAdapter(monthAdapter);
         spinnerMonth.setSelection(positionCurrentMonth);
+        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                assignDeltaDateText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         ArrayAdapter<Integer> daysAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_item_day, listDays);
         spinnerDay.setAdapter(daysAdapter);
         spinnerDay.setSelection(currentDay-1);
+        spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                assignDeltaDateText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         ArrayAdapter<Integer> yearsAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_item_year, listYears);
         spinnerYear.setAdapter(yearsAdapter);
         spinnerYear.setSelection(YEAR_DELTA);
         spinnerYear.setEnabled(false);
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                assignDeltaDateText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         switchYear.setChecked(false);
         switchYear.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -109,28 +147,46 @@ public class SelectBirthdayFragment extends DialogFragment {
             }
         });
 
+        // Show days left
+        assignDeltaDateText();
+
         builder.setView(root)
                 .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(onClickListener!=null)
                             onClickListener.onClickPositiveButton(
-                                    new DateUnknownYear(calcDate(), switchYear.isChecked()));
+                                    dateUnknownYearSelected = new DateUnknownYear(calcDate(), switchYear.isChecked()));
                     }
                 })
                 .setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(onClickListener!=null)
                             onClickListener.onClickNegativeButton(
-                                    new DateUnknownYear(calcDate(), switchYear.isChecked()));
+                                    dateUnknownYearSelected = new DateUnknownYear(calcDate(), switchYear.isChecked()));
                     }
                 });
         // Create the AlertDialog object and return it
         return builder.create();
     }
 
-    /** TODO JAVADOC
-     *
-     * @return
+    /**
+     * Define string corresponding to the delta between current date and date selected and add the string in the view
+     */
+    private void assignDeltaDateText() {
+        dateUnknownYearSelected = new DateUnknownYear(calcDate(), switchYear.isChecked());
+        int numberDaysLeft = dateUnknownYearSelected.getDeltaDaysInAYear();
+        if(numberDaysLeft == 0) {
+            deltaDate.setText(getString(R.string.birthday_zero_day_left));
+        } else if(numberDaysLeft == 1){
+            deltaDate.setText(getString(R.string.birthday_one_day_left));
+        } else{
+            deltaDate.setText(getString(R.string.birthday_number_days_left, numberDaysLeft));
+        }
+    }
+
+    /**
+     * Calculate the date with day, month and year selected
+     * @return Date object corresponding to day, month and year
      */
     private Date calcDate() {
         DateFormat dateFormat = new SimpleDateFormat("d MMMMM yyyy", Locale.getDefault());
@@ -146,16 +202,36 @@ public class SelectBirthdayFragment extends DialogFragment {
         return date;
     }
 
+    /**
+     * Return listener linked to dialog
+     * @return OnClickBirthdayListener: the listener linked
+     */
     public OnClickBirthdayListener getOnClickListener() {
         return onClickListener;
     }
 
+    /**
+     * Assign the listener for event who managed click on buttons
+     * @param onClickListener OnClickBirthdayListener: the listener
+     */
     public void setOnClickListener(OnClickBirthdayListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
-    public interface OnClickBirthdayListener {
+    /**
+     * Callback listener for manage click on buttons
+     */
+    interface OnClickBirthdayListener {
+        /**
+         * Event called when click on positive button is performed
+         * @param selectedDate DateUnknownYear: Date selected
+         */
         void onClickPositiveButton(DateUnknownYear selectedDate);
+
+        /**
+         * Event called when click on negative button is performed
+         * @param selectedDate DateUnknownYear: Date selected
+         */
         void onClickNegativeButton(DateUnknownYear selectedDate);
     }
 }

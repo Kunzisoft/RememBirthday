@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
@@ -39,13 +38,8 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
      */
     @SuppressLint("InlinedApi")
     private final static String[] FROM_COLUMNS = {
-            Build.VERSION.SDK_INT
-                    >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                    ContactsContract.Contacts.DISPLAY_NAME,
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.PHOTO_THUMBNAIL_URI :
-                    ContactsContract.Contacts.PHOTO_URI
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
     };
 
     /*
@@ -84,12 +78,8 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
     private static final String[] PROJECTION = {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.LOOKUP_KEY,
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                    ContactsContract.Contacts.DISPLAY_NAME,
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.PHOTO_THUMBNAIL_URI :
-                    ContactsContract.Contacts.PHOTO_URI
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
     };
 
     // Defines the array to hold values that replace the ?
@@ -206,7 +196,7 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
          * You can use mContactUri as the content URI for retrieving
          * the details for a contact.
          */
-        DialogFragment dialog = new SelectBirthdayFragment();
+        DialogFragment dialog = new SelectBirthdayDialogFragment();
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 

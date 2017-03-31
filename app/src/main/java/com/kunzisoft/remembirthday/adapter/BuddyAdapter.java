@@ -13,9 +13,8 @@ import com.kunzisoft.remembirthday.element.Buddy;
 import java.util.List;
 
 /**
- * Created by joker on 15/12/16.
+ * Adapter linked to buddies for data feeding
  */
-
 public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHolder>{
 
     private static final String TAG = "BuddyAdapter";
@@ -52,7 +51,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
     /**
      * Add click buddy listener to each item
-     * @param onClickItemBuddyListener
+     * @param onClickItemBuddyListener Listener who defined the `onItemBuddyClick` method
      */
     public void setOnClickItemBuddyListener(OnClickItemBuddyListener onClickItemBuddyListener) {
         this.onClickItemBuddyListener = onClickItemBuddyListener;
@@ -72,13 +71,13 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
      */
     class BuddyViewHolder extends RecyclerView.ViewHolder {
 
-        protected ViewGroup container;
+        private ViewGroup container;
 
-        protected ImageView icon;
-        protected TextView name;
-        protected TextView stayDays;
+        private ImageView icon;
+        private TextView name;
+        private TextView stayDays;
 
-        public BuddyViewHolder(View itemView) {
+        BuddyViewHolder(View itemView) {
             super(itemView);
 
             container = (ViewGroup) itemView.findViewById(R.id.buddy_item_container);
@@ -100,7 +99,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
         private Buddy buddy;
 
-        public BufferBuddyClickListener(Buddy buddy) {
+        BufferBuddyClickListener(Buddy buddy) {
             this.buddy = buddy;
         }
 

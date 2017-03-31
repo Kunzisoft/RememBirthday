@@ -14,7 +14,6 @@ import java.lang.ref.WeakReference;
 /**
  * Created by joker on 25/02/17.
  */
-
 public class ContactThumbnailTask extends AsyncTask<Void, Void, Bitmap> {
 
     private WeakReference<ImageView> imageViewWeakReference;

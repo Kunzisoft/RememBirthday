@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by joker on 15/12/16.
+ * Model for buddy
  */
 public class Buddy implements Parcelable{
 
@@ -98,8 +98,7 @@ public class Buddy implements Parcelable{
 
         Buddy buddy = (Buddy) o;
 
-        if (name != null ? !name.equals(buddy.name) : buddy.name != null) return false;
-        return birthday != null ? birthday.equals(buddy.birthday) : buddy.birthday == null;
+        return name != null ? name.equals(buddy.name) : buddy.name == null && (birthday != null ? birthday.equals(buddy.birthday) : buddy.birthday == null);
 
     }
 

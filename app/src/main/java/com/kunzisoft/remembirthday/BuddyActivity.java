@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+/**
+ * Activity for show list and details (depend of screen) of buddies
+ */
 public class BuddyActivity extends AppCompatActivity {
 
     private static final String TAG = "BuddyActivity";
