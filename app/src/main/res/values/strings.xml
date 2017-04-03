@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">RememBirthday</string>
     <string name="action_settings">Settings</string>
-    <string name="birthday_zero_day_left">Happy birthday!</string>
-    <string name="birthday_one_day_left">Birthday in only 1 day!</string>
-    <string name="birthday_number_days_left">Birthday in %1$d days.</string>
+
+    <string name="dialog_select_birthday_title">Select Birthday</string>
+
+    <string name="dialog_select_birthday_zero_day_left">Happy Birthday!</string>
+    <string name="dialog_select_birthday_one_day_left">Birthday in only 1 day!</string>
+    <string name="dialog_select_birthday_number_days_left">Birthday in %1$d days.</string>
 </resources>

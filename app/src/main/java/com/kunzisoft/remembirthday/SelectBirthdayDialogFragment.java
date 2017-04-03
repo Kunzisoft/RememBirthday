@@ -51,7 +51,8 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Chocolate_Dialog);
+        builder.setTitle(getString(R.string.dialog_select_birthday_title));
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -176,11 +177,11 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         dateUnknownYearSelected = new DateUnknownYear(calcDate(), switchYear.isChecked());
         int numberDaysLeft = dateUnknownYearSelected.getDeltaDaysInAYear();
         if(numberDaysLeft == 0) {
-            deltaDate.setText(getString(R.string.birthday_zero_day_left));
+            deltaDate.setText(getString(R.string.dialog_select_birthday_zero_day_left));
         } else if(numberDaysLeft == 1){
-            deltaDate.setText(getString(R.string.birthday_one_day_left));
+            deltaDate.setText(getString(R.string.dialog_select_birthday_one_day_left));
         } else{
-            deltaDate.setText(getString(R.string.birthday_number_days_left, numberDaysLeft));
+            deltaDate.setText(getString(R.string.dialog_select_birthday_number_days_left, numberDaysLeft));
         }
     }
 
