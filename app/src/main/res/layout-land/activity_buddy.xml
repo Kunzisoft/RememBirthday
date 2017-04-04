@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.kunzisoft.remembirthday.BuddyActivity">
+    tools:context="com.kunzisoft.remembirthday.activity.BuddyActivity">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar_default" />
 
-    <fragment android:name="com.kunzisoft.remembirthday.ListBuddiesFragment"
+    <fragment android:name="com.kunzisoft.remembirthday.activity.ListBuddiesFragment"
         android:id="@+id/activity_buddy_fragment_list_buddies"
         android:layout_width="200dp"
         android:layout_height="match_parent"
@@ -29,12 +29,12 @@
         android:layout_below="@+id/toolbar" />
 
     <android.support.design.widget.FloatingActionButton
-        xmlns:button="http://schemas.android.com/apk/res-auto"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab_add_buddy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_person_add_white_24dp"
-        button:backgroundTint="@color/colorPrimaryDark"
+        fab:srcCompat="@drawable/ic_person_add_white_24dp"
+        fab:backgroundTint="@color/colorPrimaryDark"
         android:layout_margin="20dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

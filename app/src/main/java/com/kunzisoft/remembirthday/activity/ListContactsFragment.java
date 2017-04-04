@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,13 +18,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 /**
- * Created by joker on 19/01/17.
+ * Fragment that retrieves and displays the list of contacts
  */
-
 public class ListContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         AdapterView.OnItemClickListener, ListContactsActivity.CallbackContactsPermission {
 
@@ -196,7 +198,18 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
          * You can use mContactUri as the content URI for retrieving
          * the details for a contact.
          */
-        DialogFragment dialog = new SelectBirthdayDialogFragment();
+        SelectBirthdayDialogFragment dialog = new SelectBirthdayDialogFragment();
+        dialog.setOnClickListener(new SelectBirthdayDialogFragment.OnClickBirthdayListener() {
+            @Override
+            public void onClickPositiveButton(DateUnknownYear selectedDate) {
+                // On positive button click, add birthday to contact
+                new AddBirthdayToContactTask(mContactId, selectedDate, getActivity()).execute();
+            }
+
+            @Override
+            public void onClickNegativeButton(DateUnknownYear selectedDate) {
+            }
+        });
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 

@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 import java.text.DateFormat;

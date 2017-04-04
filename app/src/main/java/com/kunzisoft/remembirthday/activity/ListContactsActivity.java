@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
+
+import com.kunzisoft.remembirthday.R;
 
 /**
  * Created by joker on 19/01/17.

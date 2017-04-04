@@ -7,4 +7,7 @@
     <string name="dialog_select_birthday_zero_day_left">Happy Birthday!</string>
     <string name="dialog_select_birthday_one_day_left">Birthday in only 1 day!</string>
     <string name="dialog_select_birthday_number_days_left">Birthday in %1$d days.</string>
+
+    <string name="activity_list_contacts_error_add_birthday">Error when adding birthday</string>
+    <string name="activity_list_contacts_success_add_birthday">Successful addition of birthday</string>
 </resources>

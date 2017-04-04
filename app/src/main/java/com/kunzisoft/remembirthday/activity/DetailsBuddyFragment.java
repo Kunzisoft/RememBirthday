@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Buddy;
 
 import java.text.SimpleDateFormat;
@@ -16,9 +17,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by joker on 08/01/17.
+ * Activity who show the details of buddy selected
  */
-
 public class DetailsBuddyFragment extends Fragment {
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";

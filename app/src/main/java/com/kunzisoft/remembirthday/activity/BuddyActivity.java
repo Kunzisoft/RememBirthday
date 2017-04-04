@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.kunzisoft.remembirthday.R;
 
 /**
  * Activity for show list and details (depend of screen) of buddies

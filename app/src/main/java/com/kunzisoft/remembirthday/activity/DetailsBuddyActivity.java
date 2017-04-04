@@ -1,14 +1,15 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-/**
- * Created by joker on 19/01/17.
- */
+import com.kunzisoft.remembirthday.R;
 
+/**
+ * Activity that displays the details of a buddy
+ */
 public class DetailsBuddyActivity extends AppCompatActivity {
 
     @Override

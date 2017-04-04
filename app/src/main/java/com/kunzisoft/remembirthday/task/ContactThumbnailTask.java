@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.task;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by joker on 25/02/17.
+ * AsyncTask to get thumbnail of contact
  */
 public class ContactThumbnailTask extends AsyncTask<Void, Void, Bitmap> {
 

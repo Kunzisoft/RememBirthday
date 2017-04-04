@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday;
+package com.kunzisoft.remembirthday.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.BuddyAdapter;
 import com.kunzisoft.remembirthday.element.Buddy;
 
