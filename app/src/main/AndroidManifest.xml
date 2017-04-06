@@ -12,12 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/ChocolateTheme">
         <activity
-            android:name=".activity.BuddyActivity"
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashChocolateTheme"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.BuddyActivity"
+            android:label="@string/app_name">
         </activity>
         <activity
             android:name=".activity.DetailsBuddyActivity"
