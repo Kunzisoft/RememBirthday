@@ -5,7 +5,9 @@ import org.joda.time.Days;
 import org.joda.time.MonthDay;
 import org.joda.time.Years;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Class for manage a date who can contains a year or not
@@ -83,5 +85,10 @@ public class DateUnknownYear {
      */
     public int getDeltaYears() {
         return yearsBetweenTodayAnd(this.date);
+    }
+
+    public String toString() {
+        SimpleDateFormat datePattern = new SimpleDateFormat ("yy-MM-dd", Locale.getDefault());
+        return datePattern.format(date);
     }
 }

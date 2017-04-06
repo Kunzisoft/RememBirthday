@@ -11,7 +11,7 @@ import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import java.util.ArrayList;
 
 /**
- * AsyncTask who store the birthday in contact database for a specific contact
+ * AsyncTask who store the birthday in database for a specific contact
  */
 public class AddBirthdayToContactTask extends AsyncTask<Void, Void, Exception> {
 
@@ -34,10 +34,10 @@ public class AddBirthdayToContactTask extends AsyncTask<Void, Void, Exception> {
         try {
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             ops.add(ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
-                    .withSelection(ContactsContract.Data.RAW_CONTACT_ID + "=?", new String[]{String.valueOf(contactId)})
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, (int) contactId)
                     .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toString())
                     .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)
-                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, "26-05-2015")
                     .build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
 
