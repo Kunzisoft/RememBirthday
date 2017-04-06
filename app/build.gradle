@@ -31,5 +31,8 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     // Date library
     compile 'net.danlew:android.joda:2.9.9'
+    // Permission
+    compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
     testCompile 'junit:junit:4.12'
 }

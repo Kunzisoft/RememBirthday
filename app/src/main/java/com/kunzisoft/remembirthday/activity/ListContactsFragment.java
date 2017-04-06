@@ -7,11 +7,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,9 @@ import java.io.InputStream;
  * Fragment that retrieves and displays the list of contacts
  */
 public class ListContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        AdapterView.OnItemClickListener, ListContactsActivity.CallbackContactsPermission {
+        AdapterView.OnItemClickListener, AddBirthdayToContactTask.CallbackAddBirthdayToContact {
+
+    private static final String TAG = "ListContactsFragment";
 
     /*
     CURSOR ADAPTER
@@ -88,16 +92,9 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
     private String[] mSelectionArgs = { null };
 
     @Override
-    public void doAfterGranted() {
-
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         listContactsActivity = (ListContactsActivity) context;
-        listContactsActivity.setCallbackContactsPermission(this);
     }
 
     // A UI Fragment must inflate its View
@@ -108,8 +105,6 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
 
         // Gets the ListView from the View list of the parent activity
         mContactsList = (ListView) root.findViewById(R.id.fragment_list_contacts_listview);
-
-        listContactsActivity.doActionGranted();
         return root;
     }
 
@@ -201,9 +196,10 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
         SelectBirthdayDialogFragment dialog = new SelectBirthdayDialogFragment();
         dialog.setOnClickListener(new SelectBirthdayDialogFragment.OnClickBirthdayListener() {
             @Override
-            public void onClickPositiveButton(DateUnknownYear selectedDate) {
-                // On positive button click, add birthday to contact
-                new AddBirthdayToContactTask(mContactId, selectedDate, getActivity()).execute();
+            public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
+                AddBirthdayToContactTask addBirthdayToContactTask = new AddBirthdayToContactTask(mContactId, dateUnknownYear, getActivity());
+                addBirthdayToContactTask.setCallbackAddBirthdayToContact(ListContactsFragment.this);
+                addBirthdayToContactTask.execute();
             }
 
             @Override
@@ -233,5 +229,20 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
             cursor.close();
         }
         return null;
+    }
+
+    @Override
+    public void afterAddBirthdayInDatabase(Exception exception) {
+        String message;
+        if(exception == null)
+            message = getString(R.string.activity_list_contacts_success_add_birthday);
+        else {
+            Log.e(TAG, exception.getMessage());
+            message = getString(R.string.activity_list_contacts_error_add_birthday);
+        }
+
+        Snackbar infoSnackbar = Snackbar.make(getActivity().findViewById(R.id.activity_list_contacts_information),
+                message, Snackbar.LENGTH_SHORT);
+        infoSnackbar.show();
     }
 }

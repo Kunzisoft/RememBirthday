@@ -10,4 +10,12 @@
 
     <string name="activity_list_contacts_error_add_birthday">Error when adding birthday</string>
     <string name="activity_list_contacts_success_add_birthday">Successful addition of birthday</string>
+
+    <!-- permissions -->
+    <string name="permission_contacts_rationale">Contact permissions are required to display them and save each anniversary date.</string>
+    <string name="permission_contacts_denied">The application will not be able to save birthdays in contacts.</string>
+    <string name="permission_contacts_neverask">Never Ask</string>
+
+    <string name="button_allow">Allow</string>
+    <string name="button_deny">Deny</string>
 </resources>
