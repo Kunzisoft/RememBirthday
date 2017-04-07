@@ -3,11 +3,15 @@ package com.kunzisoft.remembirthday.element;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.joda.time.DateTime;
+import org.joda.time.Years;
+
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Model for buddy
+ * Model for buddy <br />
+ * Use Joda, must be init
  */
 public class Buddy implements Parcelable{
 
@@ -15,21 +19,22 @@ public class Buddy implements Parcelable{
 
     private long id;
     private String name;
-    private Date birthday;
+    private DateUnknownYear birthday;
 
-    public Buddy(long id, String name, Date birthday) {
+    public Buddy(long id, String name, DateUnknownYear birthday) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
     }
 
-    public Buddy(String name, Date birthday) {
+    public Buddy(String name, DateUnknownYear birthday) {
         this(ID_UNDEFINED, name, birthday);
     }
 
     private Buddy(Parcel in) {
+        id = in.readLong();
         name = in.readString();
-        birthday = (Date) in.readSerializable();
+        birthday = in.readParcelable(DateUnknownYear.class.getClassLoader());
     }
 
     public long getId() {
@@ -48,26 +53,32 @@ public class Buddy implements Parcelable{
         this.name = name;
     }
 
-    public Date getBirthday() {
+    public DateUnknownYear getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date date) {
+    public void setBirthday(DateUnknownYear date) {
         this.birthday = date;
     }
 
     /**
-     * Return number of days between today and the birthday
-     * @param birthday Birthday of buddy
-     * @return Number of days
+     * Get number of years between the birthday and today <br />
+     * WARNING : if the year is unknown, return -1
+     * @return
      */
-    public static int getStayDays(Date birthday) {
+    public int getAge() {
+        if(!birthday.isUnknownYear())
+            return birthday.getDeltaYears();
+        else
+            return -1;
+    }
 
-        Calendar calendar = Calendar.getInstance();
-        Date today = new Date();
-
-        // Todo difference date
-        return 12;
+    /**
+     * Return number of days between today and the birthday
+     * @return Number of days left
+     */
+    public int getBirthdayDaysRemaining() {
+        return birthday.getDeltaDaysInAYear();
     }
 
     @Override
@@ -77,8 +88,9 @@ public class Buddy implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
         parcel.writeString(name);
-        parcel.writeSerializable(birthday);
+        parcel.writeParcelable(birthday, i);
     }
 
     public static final Parcelable.Creator<Buddy> CREATOR = new Parcelable.Creator<Buddy>() {
@@ -98,13 +110,16 @@ public class Buddy implements Parcelable{
 
         Buddy buddy = (Buddy) o;
 
-        return name != null ? name.equals(buddy.name) : buddy.name == null && (birthday != null ? birthday.equals(buddy.birthday) : buddy.birthday == null);
+        if (id != buddy.id) return false;
+        if (name != null ? !name.equals(buddy.name) : buddy.name != null) return false;
+        return birthday != null ? birthday.equals(buddy.birthday) : buddy.birthday == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         return result;
     }
@@ -112,7 +127,8 @@ public class Buddy implements Parcelable{
     @Override
     public String toString() {
         return "Buddy{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", birthday=" + birthday +
                 '}';
     }

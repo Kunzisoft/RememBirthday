@@ -43,7 +43,7 @@ public class DetailsBuddyFragment extends Fragment {
             buddy = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
         if(buddy != null) {
-            Date currentBuddyBirthday = buddy.getBirthday();
+            Date currentBuddyBirthday = buddy.getBirthday().getDate();
             SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.FRENCH);
             SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.FRENCH);
             dayAndMonthTextView.setText(dayAndMonthSimpleDateFormat.format(currentBuddyBirthday));

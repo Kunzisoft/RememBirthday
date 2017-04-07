@@ -1,6 +1,9 @@
 package com.kunzisoft.remembirthday.adapter;
 
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,37 +11,59 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Buddy;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
-import java.util.List;
+import java.text.ParseException;
 
 /**
  * Adapter linked to buddies for data feeding
  */
-public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHolder>{
+public class BuddiesAdapter extends RecyclerView.Adapter<BuddiesAdapter.BuddyViewHolder>{
 
-    private static final String TAG = "BuddyAdapter";
+    private static final String TAG = "BuddiesAdapter";
 
     private OnClickItemBuddyListener onClickItemBuddyListener;
-    private List<Buddy> listBuddy;
 
-    public BuddyAdapter(List<Buddy> listBuddy) {
-        this.listBuddy = listBuddy;
+    private Cursor cursor;
+    private final int contactIdColIdx, contactNameColIdx, contactBirthdayColIdx;
+
+    //TODO change generic
+    public BuddiesAdapter(Cursor cursor) {
+        this.cursor = cursor;
+        this.contactIdColIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+        this.contactNameColIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+        this.contactBirthdayColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
     }
 
     @Override
-    public BuddyAdapter.BuddyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BuddiesAdapter.BuddyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_buddies, parent, false);
         return new BuddyViewHolder(itemListBuddyView);
     }
 
     @Override
     public void onBindViewHolder(BuddyViewHolder holder, int position) {
-        Buddy currentBuddy = listBuddy.get(position);
+        cursor.moveToPosition(position);
+
+        DateUnknownYear dateUnknownYear;
+        try {
+            dateUnknownYear= DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactBirthdayColIdx));
+        } catch (ParseException e) {
+            Log.e(TAG, "Birthday can't be extract : " + e.getMessage());
+            dateUnknownYear = DateUnknownYear.getDefault();
+        }
+
+        Buddy currentBuddy = new Buddy(cursor.getLong(contactIdColIdx),
+                cursor.getString(contactNameColIdx),
+                dateUnknownYear);
+
         // TODO icon
         //holder.icon.
         holder.name.setText(currentBuddy.getName());
-        holder.stayDays.setText(String.valueOf(Buddy.getStayDays(currentBuddy.getBirthday())));
+        holder.age.setText(String.valueOf(currentBuddy.getAge()));
+        Utility.assignDaysRemainingInTextView(holder.daysLeft, currentBuddy.getBirthdayDaysRemaining());
 
         if(onClickItemBuddyListener != null) {
             holder.container.setOnClickListener(new BufferBuddyClickListener(currentBuddy));
@@ -63,7 +88,7 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
     @Override
     public int getItemCount() {
-        return listBuddy.size();
+        return cursor.getCount();
     }
 
     /**
@@ -75,7 +100,8 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
         private ImageView icon;
         private TextView name;
-        private TextView stayDays;
+        private TextView age;
+        private TextView daysLeft;
 
         BuddyViewHolder(View itemView) {
             super(itemView);
@@ -84,7 +110,8 @@ public class BuddyAdapter extends RecyclerView.Adapter<BuddyAdapter.BuddyViewHol
 
             icon = (ImageView) itemView.findViewById(R.id.buddy_icon);
             name = (TextView) itemView.findViewById(R.id.buddy_name);
-            stayDays = (TextView) itemView.findViewById(R.id.buddy_stay_days);
+            age = (TextView) itemView.findViewById(R.id.buddy_age);
+            daysLeft = (TextView) itemView.findViewById(R.id.buddy_days_left);
         }
     }
 

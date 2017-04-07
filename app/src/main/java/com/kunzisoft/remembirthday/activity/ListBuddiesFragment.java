@@ -8,6 +8,9 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.adapter.BuddyAdapter;
+import com.kunzisoft.remembirthday.adapter.BuddiesAdapter;
 import com.kunzisoft.remembirthday.element.Buddy;
 
 import java.text.ParseException;
@@ -30,35 +33,43 @@ import java.util.Locale;
 /**
  * Created by joker on 08/01/17.
  */
-
-public class ListBuddiesFragment extends Fragment implements BuddyAdapter.OnClickItemBuddyListener{
+public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnClickItemBuddyListener,
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
     private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private static final String TAG = "ListBuddiesFragment";
     private Buddy currentCheckBuddy;
 
-    private BuddyAdapter buddyAdapter;
+    private BuddiesAdapter buddiesAdapter;
 
     private boolean mDualPane;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    // Connexion to database
+    private static final Uri URI = ContactsContract.Data.CONTENT_URI;
+    private static final String[] PROJECTION = {
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+            ContactsContract.CommonDataKinds.Event.START_DATE
+    };
+    //private static final String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?";
+    /*
+    private static final String SELECTION =
+                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                    ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+                    */
+    /*
+    String where =
+            ContactsContract.Data.MIMETYPE + "= ? AND " +
+                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                    ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+    String[] selectionArgs = new String[] {
+            ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
+    };
+    */
 
-        // TODO List users
-        List<Buddy> listBuddy = new ArrayList<>();
-        Buddy michel = new Buddy("michmich", new Date());
-        listBuddy.add(michel);
-
-        Buddy jeanmichel = new Buddy("jeanmichmich", new Date());
-        listBuddy.add(jeanmichel);
-
-        Buddy bernadette = new Buddy("berna dettes", new Date());
-        listBuddy.add(bernadette);
-
-        buddyAdapter = new BuddyAdapter(listBuddy);
-    }
+    private RecyclerView buddiesListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,14 +79,14 @@ public class ListBuddiesFragment extends Fragment implements BuddyAdapter.OnClic
         View rootView = inflater.inflate(R.layout.fragment_list_buddies, container, false);
 
         // List buddies
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_list_buddies_recyclerview_buddies);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        buddiesListView = (RecyclerView) rootView.findViewById(R.id.fragment_list_buddies_recyclerview_buddies);
+        buddiesListView.setHasFixedSize(true);
+        buddiesListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        buddiesListView.setLayoutManager(linearLayoutManager);
 
-        recyclerView.setAdapter(buddyAdapter);
+        buddiesListView.setAdapter(buddiesAdapter);
 
         return rootView;
     }
@@ -97,7 +108,11 @@ public class ListBuddiesFragment extends Fragment implements BuddyAdapter.OnClic
             showDetails(currentCheckBuddy);
         }
 
-        buddyAdapter.setOnClickItemBuddyListener(this);
+        // Put the result Cursor in the adapter for the ListView
+        //TODO init here (onLoadFinish)
+
+        // Initializes the loader for contacts
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -117,7 +132,7 @@ public class ListBuddiesFragment extends Fragment implements BuddyAdapter.OnClic
         if (mDualPane) {
             // We can display everything in-place with fragments, so update
             // the list to highlight the selected item and show the data.
-            buddyAdapter.setItemChecked(buddy);
+            buddiesAdapter.setItemChecked(buddy);
 
             // Make new fragment to show this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
@@ -148,53 +163,27 @@ public class ListBuddiesFragment extends Fragment implements BuddyAdapter.OnClic
         showDetails(buddy);
     }
 
-    /**
-     * Get list of contacts with id, name and birthday
-     * @return
-     */
-    private List<Buddy> getContactsBirthdays() {
-        List<Buddy> buddies = new ArrayList<>();
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Starts the query
+        return new CursorLoader(
+                getActivity(),
+                URI,
+                PROJECTION,
+                null,
+                null,
+                null);
+    }
 
-        Uri uri = ContactsContract.Data.CONTENT_URI;
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        buddiesAdapter = new BuddiesAdapter(data);
+        buddiesListView.setAdapter(buddiesAdapter);
+        buddiesAdapter.setOnClickItemBuddyListener(this);
+    }
 
-        String[] projection = new String[] {
-                ContactsContract.CommonDataKinds.Event.CONTACT_ID,
-                ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Event.START_DATE
-        };
-
-        String where =
-                ContactsContract.Data.MIMETYPE + "= ? AND " +
-                        ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
-        String[] selectionArgs = new String[] {
-                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-        };
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, where, selectionArgs, null);
-        if(cursor != null) {
-            if (cursor.moveToFirst()) {
-                // Iterate through the cursor
-                do {
-                    // Get the contacts name
-                    long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.CONTACT_ID));
-                    String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    String date = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
-
-                    try {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                        Date dateBuddy = sdf.parse(date);
-                        Buddy newBuddy = new Buddy(id, name, dateBuddy);
-                        buddies.add(newBuddy);
-
-                    } catch (ParseException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-
-                } while (cursor.moveToNext());
-            }
-            // Close the cursor
-            cursor.close();
-        }
-        return buddies;
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        buddiesAdapter = null;
     }
 }

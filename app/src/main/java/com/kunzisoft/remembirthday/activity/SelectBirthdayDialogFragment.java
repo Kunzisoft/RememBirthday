@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 import java.text.DateFormat;
@@ -43,7 +44,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
     private Spinner spinnerDay;
     private Spinner spinnerYear;
     private SwitchCompat switchYear;
-    private TextView deltaDate;
+    private TextView textViewDaysRemaining;
 
     private OnClickBirthdayListener onClickListener;
 
@@ -63,7 +64,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         spinnerDay = (Spinner) root.findViewById(R.id.fragment_birthday_select_day);
         spinnerYear = (Spinner) root.findViewById(R.id.fragment_birthday_select_year);
         switchYear = (SwitchCompat) root.findViewById(R.id.fragment_birthday_select_enable_year);
-        deltaDate = (TextView) root.findViewById(R.id.fragment_birthday_select_days_left);
+        textViewDaysRemaining = (TextView) root.findViewById(R.id.fragment_birthday_select_days_left);
 
         // Create a calendar object and set year and month
         final Calendar calendar = new GregorianCalendar();
@@ -100,7 +101,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                assignDeltaDateText();
+                assignDaysRemainingText();
             }
 
             @Override
@@ -116,7 +117,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                assignDeltaDateText();
+                assignDaysRemainingText();
             }
 
             @Override
@@ -133,7 +134,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                assignDeltaDateText();
+                assignDaysRemainingText();
             }
 
             @Override
@@ -150,7 +151,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         });
 
         // Show days left
-        assignDeltaDateText();
+        assignDaysRemainingText();
 
         builder.setView(root)
                 .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
@@ -174,16 +175,10 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
     /**
      * Define string corresponding to the delta between current date and date selected and add the string in the view
      */
-    private void assignDeltaDateText() {
+    private void assignDaysRemainingText() {
         dateUnknownYearSelected = new DateUnknownYear(calcDate(), switchYear.isChecked());
         int numberDaysLeft = dateUnknownYearSelected.getDeltaDaysInAYear();
-        if(numberDaysLeft == 0) {
-            deltaDate.setText(getString(R.string.dialog_select_birthday_zero_day_left));
-        } else if(numberDaysLeft == 1){
-            deltaDate.setText(getString(R.string.dialog_select_birthday_one_day_left));
-        } else{
-            deltaDate.setText(getString(R.string.dialog_select_birthday_number_days_left, numberDaysLeft));
-        }
+        Utility.assignDaysRemainingInTextView(textViewDaysRemaining, numberDaysLeft);
     }
 
     /**

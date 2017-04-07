@@ -119,20 +119,6 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
                 null,
                 FROM_COLUMNS, TO_IDS,
                 0);
-        /*
-        mCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                if (view.getId() == R.id.item_list_contact_icon) {
-                    CircularImageView photoImageView = (CircularImageView) view;
-                    //int resID = getResources().getIdentifier(cursor.getString(columnIndex), "drawable",  getContext().getPackageName());
-                    //photoImageView.setImageDrawable(ContextCompat.getDrawable(getContext(), resID));
-                    return false;
-                }
-                return false;
-            }
-        });
-        //*/
 
         // Sets the adapter for the ListView
         mContactsList.setAdapter(mCursorAdapter);
