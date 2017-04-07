@@ -3,17 +3,11 @@ package com.kunzisoft.remembirthday.element;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.joda.time.DateTime;
-import org.joda.time.Years;
-
-import java.util.Calendar;
-import java.util.Date;
-
 /**
- * Model for buddy <br />
- * Use Joda, must be init
+ * Model for contact with birthday manager <br />
+ * Use Joda, must be initialize
  */
-public class Buddy implements Parcelable{
+public class ContactBirthday implements Parcelable{
 
     public static final long ID_UNDEFINED = -1;
 
@@ -21,17 +15,17 @@ public class Buddy implements Parcelable{
     private String name;
     private DateUnknownYear birthday;
 
-    public Buddy(long id, String name, DateUnknownYear birthday) {
+    public ContactBirthday(long id, String name, DateUnknownYear birthday) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
     }
 
-    public Buddy(String name, DateUnknownYear birthday) {
+    public ContactBirthday(String name, DateUnknownYear birthday) {
         this(ID_UNDEFINED, name, birthday);
     }
 
-    private Buddy(Parcel in) {
+    private ContactBirthday(Parcel in) {
         id = in.readLong();
         name = in.readString();
         birthday = in.readParcelable(DateUnknownYear.class.getClassLoader());
@@ -93,13 +87,13 @@ public class Buddy implements Parcelable{
         parcel.writeParcelable(birthday, i);
     }
 
-    public static final Parcelable.Creator<Buddy> CREATOR = new Parcelable.Creator<Buddy>() {
-        public Buddy createFromParcel(Parcel in) {
-            return new Buddy(in);
+    public static final Parcelable.Creator<ContactBirthday> CREATOR = new Parcelable.Creator<ContactBirthday>() {
+        public ContactBirthday createFromParcel(Parcel in) {
+            return new ContactBirthday(in);
         }
 
-        public Buddy[] newArray(int size) {
-            return new Buddy[size];
+        public ContactBirthday[] newArray(int size) {
+            return new ContactBirthday[size];
         }
     };
 
@@ -108,11 +102,11 @@ public class Buddy implements Parcelable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Buddy buddy = (Buddy) o;
+        ContactBirthday contactBirthday = (ContactBirthday) o;
 
-        if (id != buddy.id) return false;
-        if (name != null ? !name.equals(buddy.name) : buddy.name != null) return false;
-        return birthday != null ? birthday.equals(buddy.birthday) : buddy.birthday == null;
+        if (id != contactBirthday.id) return false;
+        if (name != null ? !name.equals(contactBirthday.name) : contactBirthday.name != null) return false;
+        return birthday != null ? birthday.equals(contactBirthday.birthday) : contactBirthday.birthday == null;
 
     }
 
@@ -126,7 +120,7 @@ public class Buddy implements Parcelable{
 
     @Override
     public String toString() {
-        return "Buddy{" +
+        return "ContactBirthday{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", birthday=" + birthday +

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.element.Buddy;
+import com.kunzisoft.remembirthday.element.ContactBirthday;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,9 +23,9 @@ public class DetailsBuddyFragment extends Fragment {
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
 
-    public void setBuddy(Buddy currentBuddy) {
+    public void setBuddy(ContactBirthday currentContactBirthday) {
         Bundle args = new Bundle();
-        args.putParcelable(BuddyActivity.EXTRA_BUDDY, currentBuddy);
+        args.putParcelable(BuddyActivity.EXTRA_BUDDY, currentContactBirthday);
         setArguments(args);
     }
 
@@ -38,12 +38,12 @@ public class DetailsBuddyFragment extends Fragment {
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
 
-        Buddy buddy = null;
+        ContactBirthday contactBirthday = null;
         if(getArguments()!=null) {
-            buddy = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
+            contactBirthday = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
-        if(buddy != null) {
-            Date currentBuddyBirthday = buddy.getBirthday().getDate();
+        if(contactBirthday != null) {
+            Date currentBuddyBirthday = contactBirthday.getBirthday().getDate();
             SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.FRENCH);
             SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.FRENCH);
             dayAndMonthTextView.setText(dayAndMonthSimpleDateFormat.format(currentBuddyBirthday));

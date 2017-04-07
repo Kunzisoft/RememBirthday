@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/buddy_item_container"
+        android:id="@+id/item_list_contacts_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Chocolate.CardView">
@@ -15,16 +15,16 @@
             android:padding="16dp">
 
             <FrameLayout
-                android:id="@+id/buddy_icon_container"
+                android:id="@+id/item_list_contact_icon_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/buddy_icon"
+                    android:id="@+id/item_list_contact_icon"
                     android:layout_width="@dimen/buddy_list_height_icon"
                     android:layout_height="@dimen/buddy_list_height_icon"
                     android:background="@drawable/ic_person_tint_inverse"/>
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/buddy_age"
+                    android:id="@+id/item_list_contact_age"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -38,35 +38,35 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/buddy_name"
+                android:id="@+id/item_list_contact_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:text=""
-                android:layout_toRightOf="@+id/buddy_icon_container"
-                android:layout_toEndOf="@+id/buddy_icon_container"
+                android:layout_toRightOf="@+id/item_list_contact_icon_container"
+                android:layout_toEndOf="@+id/item_list_contact_icon_container"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"/>
 
             <TextView
-                android:id="@+id/buddy_birthday_date"
+                android:id="@+id/item_list_contact_birthday_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:text=""
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_below="@+id/buddy_days_left"
-                android:layout_toRightOf="@+id/buddy_icon_container"
-                android:layout_toEndOf="@+id/buddy_icon_container" />
+                android:layout_below="@+id/item_list_contact_days_left"
+                android:layout_toRightOf="@+id/item_list_contact_icon_container"
+                android:layout_toEndOf="@+id/item_list_contact_icon_container" />
 
             <TextView
-                android:id="@+id/buddy_days_left"
+                android:id="@+id/item_list_contact_days_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text=""
-                android:layout_below="@+id/buddy_name"
+                android:layout_below="@+id/item_list_contact_name"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
         </RelativeLayout>

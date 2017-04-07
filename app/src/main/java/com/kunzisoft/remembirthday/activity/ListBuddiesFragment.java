@@ -14,34 +14,27 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.adapter.BuddiesAdapter;
-import com.kunzisoft.remembirthday.element.Buddy;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
+import com.kunzisoft.remembirthday.element.ContactBirthday;
 
 /**
  * Created by joker on 08/01/17.
  */
-public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnClickItemBuddyListener,
+public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdapter.OnClickItemBuddyListener,
         LoaderManager.LoaderCallbacks<Cursor>{
 
     private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
     private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private static final String TAG = "ListBuddiesFragment";
-    private Buddy currentCheckBuddy;
+    private ContactBirthday currentCheckContactBirthday;
 
-    private BuddiesAdapter buddiesAdapter;
+    private RecyclerView buddiesListView;
+    private ContactBirthdayAdapter contactBirthdayAdapter;
 
     private boolean mDualPane;
 
@@ -54,11 +47,9 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
             ContactsContract.CommonDataKinds.Event.START_DATE
     };
     //private static final String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?";
-    /*
     private static final String SELECTION =
                     ContactsContract.CommonDataKinds.Event.TYPE + "=" +
                     ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
-                    */
     /*
     String where =
             ContactsContract.Data.MIMETYPE + "= ? AND " +
@@ -69,7 +60,6 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
     };
     */
 
-    private RecyclerView buddiesListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,7 +76,7 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         buddiesListView.setLayoutManager(linearLayoutManager);
 
-        buddiesListView.setAdapter(buddiesAdapter);
+        buddiesListView.setAdapter(contactBirthdayAdapter);
 
         return rootView;
     }
@@ -100,12 +90,12 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            currentCheckBuddy = savedInstanceState.getParcelable(EXTRA_DUAL_PANEL);
+            currentCheckContactBirthday = savedInstanceState.getParcelable(EXTRA_DUAL_PANEL);
         }
 
         if (mDualPane) {
             // Make sure our UI is in the correct state.
-            showDetails(currentCheckBuddy);
+            showDetails(currentCheckContactBirthday);
         }
 
         // Put the result Cursor in the adapter for the ListView
@@ -118,7 +108,7 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(EXTRA_DUAL_PANEL, currentCheckBuddy);
+        outState.putParcelable(EXTRA_DUAL_PANEL, currentCheckContactBirthday);
     }
 
     /**
@@ -126,17 +116,17 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
      * displaying a fragment in-place in the current UI, or starting a
      * whole new activity in which it is displayed.
      */
-    private void showDetails(Buddy buddy) {
-        currentCheckBuddy = buddy;
+    private void showDetails(ContactBirthday contactBirthday) {
+        currentCheckContactBirthday = contactBirthday;
 
         if (mDualPane) {
             // We can display everything in-place with fragments, so update
             // the list to highlight the selected item and show the data.
-            buddiesAdapter.setItemChecked(buddy);
+            contactBirthdayAdapter.setItemChecked(contactBirthday);
 
             // Make new fragment to show this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
-            detailsFragment.setBuddy(buddy);
+            detailsFragment.setBuddy(contactBirthday);
 
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
@@ -153,14 +143,14 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
             // the dialog fragment with selected text.
             Intent intent = new Intent();
             intent.setClass(getActivity(), DetailsBuddyActivity.class);
-            intent.putExtra(BuddyActivity.EXTRA_BUDDY, buddy);
+            intent.putExtra(BuddyActivity.EXTRA_BUDDY, contactBirthday);
             startActivity(intent);
         }
     }
 
     @Override
-    public void onItemBuddyClick(View view, Buddy buddy) {
-        showDetails(buddy);
+    public void onItemBuddyClick(View view, ContactBirthday contactBirthday) {
+        showDetails(contactBirthday);
     }
 
     @Override
@@ -170,20 +160,20 @@ public class ListBuddiesFragment extends Fragment implements BuddiesAdapter.OnCl
                 getActivity(),
                 URI,
                 PROJECTION,
-                null,
+                SELECTION,
                 null,
                 null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        buddiesAdapter = new BuddiesAdapter(data);
-        buddiesListView.setAdapter(buddiesAdapter);
-        buddiesAdapter.setOnClickItemBuddyListener(this);
+        contactBirthdayAdapter = new ContactBirthdayAdapter(data);
+        buddiesListView.setAdapter(contactBirthdayAdapter);
+        contactBirthdayAdapter.setOnClickItemBuddyListener(this);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        buddiesAdapter = null;
+        contactBirthdayAdapter = null;
     }
 }

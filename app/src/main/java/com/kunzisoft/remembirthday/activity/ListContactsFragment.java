@@ -2,7 +2,6 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,9 +68,6 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
     // An adapter that binds the result Cursor to the ListView
     private SimpleCursorAdapter mCursorAdapter;
 
-    // Activity for permissions
-    private ListContactsActivity listContactsActivity;
-
     /*
     CURSOR LOADER
      */
@@ -88,14 +84,6 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
             ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
     };
 
-    // Defines the array to hold values that replace the ?
-    private String[] mSelectionArgs = { null };
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        listContactsActivity = (ListContactsActivity) context;
-    }
 
     // A UI Fragment must inflate its View
     @Override
@@ -104,7 +92,7 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
         View root = inflater.inflate(R.layout.fragment_list_contacts, container, false);
 
         // Gets the ListView from the View list of the parent activity
-        mContactsList = (ListView) root.findViewById(R.id.fragment_list_contacts_listview);
+        mContactsList = (ListView) root.findViewById(R.id.fragment_list_contacts_listView_contacts);
         return root;
     }
 

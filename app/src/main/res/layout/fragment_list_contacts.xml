@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/fragment_list_contacts_listview"
+        android:id="@+id/fragment_list_contacts_listView_contacts"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
