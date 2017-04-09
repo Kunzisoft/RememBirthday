@@ -1,5 +1,6 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,6 +14,7 @@ public class Contact implements Parcelable{
 
     private long id;
     private String name;
+    private Uri imageUri;
     private DateUnknownYear birthday;
 
     public Contact(long id, String name) {
@@ -65,6 +67,18 @@ public class Contact implements Parcelable{
 
     public void setBirthday(DateUnknownYear date) {
         this.birthday = date;
+    }
+
+    public boolean containsImage() {
+        return imageUri!=null;
+    }
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
     }
 
     /**

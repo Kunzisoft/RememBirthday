@@ -1,6 +1,7 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     private OnClickItemContactListener onClickItemContactListener;
 
     private Cursor cursor;
-    protected int contactIdColIdx, contactNameColIdx;
+    protected int contactIdColIdx, contactNameColIdx, contactImageUriColIdx;
 
     /**
      * Change cursor implementation for retrieving data
@@ -31,9 +32,11 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         this.cursor = cursor;
         this.contactIdColIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
         this.contactNameColIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+        this.contactImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
     }
 
     public void resetCursor() {
+        cursor.close();
     }
 
     @Override
@@ -62,8 +65,12 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @return The new item created
      */
     protected Contact getItemFromCursor(Cursor cursor) {
-        return new Contact(cursor.getLong(contactIdColIdx),
+        Contact contact = new Contact(cursor.getLong(contactIdColIdx),
                 cursor.getString(contactNameColIdx));
+        String uriString = cursor.getString(contactImageUriColIdx);
+        if(uriString!=null && !uriString.isEmpty())
+            contact.setImageUri(Uri.parse(uriString));
+        return contact;
     }
 
     /**
@@ -73,8 +80,8 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @param contact The item
      */
     protected void assignDataToView(T holder, Contact contact) {
-        // TODO icon
-        //holder.icon.
+        if(contact.containsImage())
+            holder.icon.setImageURI(contact.getImageUri());
         holder.name.setText(contact.getName());
     }
 

@@ -35,6 +35,8 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
 
     @Override
     protected Contact getItemFromCursor(Cursor cursor) {
+
+        Contact contact = super.getItemFromCursor(cursor);
         DateUnknownYear dateUnknownYear;
         try {
             dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactBirthdayColIdx));
@@ -42,10 +44,9 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
             Log.e(TAG, "Birthday can't be extract : " + e.getMessage());
             dateUnknownYear = DateUnknownYear.getDefault();
         }
+        contact.setBirthday(dateUnknownYear);
 
-        return new Contact(cursor.getLong(contactIdColIdx),
-                cursor.getString(contactNameColIdx),
-                dateUnknownYear);
+        return contact;
     }
 
     @Override
