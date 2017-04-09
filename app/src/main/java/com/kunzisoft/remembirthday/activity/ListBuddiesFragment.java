@@ -21,7 +21,6 @@ import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.element.ContactBirthday;
 
 /**
  * Created by joker on 08/01/17.
@@ -32,7 +31,7 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
     private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
     private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private static final String TAG = "ListBuddiesFragment";
-    private ContactBirthday currentCheckContactBirthday;
+    private Contact currentCheckContact;
 
     private RecyclerView buddiesListView;
     private ContactBirthdayAdapter contactBirthdayAdapter;
@@ -87,12 +86,12 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            currentCheckContactBirthday = savedInstanceState.getParcelable(EXTRA_DUAL_PANEL);
+            currentCheckContact = savedInstanceState.getParcelable(EXTRA_DUAL_PANEL);
         }
 
         if (mDualPane) {
             // Make sure our UI is in the correct state.
-            showDetails(currentCheckContactBirthday);
+            showDetails(currentCheckContact);
         }
 
         // Put the result Cursor in the adapter for the ListView
@@ -105,7 +104,7 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(EXTRA_DUAL_PANEL, currentCheckContactBirthday);
+        outState.putParcelable(EXTRA_DUAL_PANEL, currentCheckContact);
     }
 
     /**
@@ -113,17 +112,17 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
      * displaying a fragment in-place in the current UI, or starting a
      * whole new activity in which it is displayed.
      */
-    private void showDetails(ContactBirthday contactBirthday) {
-        currentCheckContactBirthday = contactBirthday;
+    private void showDetails(Contact contact) {
+        currentCheckContact = contact;
 
         if (mDualPane) {
             // We can display everything in-place with fragments, so update
             // the list to highlight the selected item and show the data.
-            contactBirthdayAdapter.setItemChecked(contactBirthday);
+            contactBirthdayAdapter.setItemChecked(contact);
 
             // Make new fragment to show this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
-            detailsFragment.setBuddy(contactBirthday);
+            detailsFragment.setBuddy(contact);
 
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
@@ -140,14 +139,14 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
             // the dialog fragment with selected text.
             Intent intent = new Intent();
             intent.setClass(getActivity(), DetailsBuddyActivity.class);
-            intent.putExtra(BuddyActivity.EXTRA_BUDDY, contactBirthday);
+            intent.putExtra(BuddyActivity.EXTRA_BUDDY, contact);
             startActivity(intent);
         }
     }
 
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
-        showDetails((ContactBirthday) contact);
+        showDetails(contact);
     }
 
     @Override

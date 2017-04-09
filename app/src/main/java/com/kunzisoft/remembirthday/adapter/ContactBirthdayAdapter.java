@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.element.ContactBirthday;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 /**
  * Adapter linked to contacts with birthday for data feeding
  */
-public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHolder, ContactBirthday> {
+public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHolder> {
 
     private static final String TAG = "ContactBirthdayAdapter";
 
@@ -43,13 +42,13 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
             dateUnknownYear = DateUnknownYear.getDefault();
         }
 
-        return new ContactBirthday(cursor.getLong(contactIdColIdx),
+        return new Contact(cursor.getLong(contactIdColIdx),
                 cursor.getString(contactNameColIdx),
                 dateUnknownYear);
     }
 
     @Override
-    protected void assignDataToView(ContactBirthdayViewHolder holder, ContactBirthday contact) {
+    protected void assignDataToView(ContactBirthdayViewHolder holder, Contact contact) {
         super.assignDataToView(holder, contact);
 
         holder.age.setText(String.valueOf(contact.getAge()));

@@ -1,6 +1,5 @@
 package com.kunzisoft.remembirthday.activity;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
@@ -135,7 +131,11 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
         mContactId = contact.getId();
-        dialogSelection.show(getChildFragmentManager(), "NoticeDialogFragment");
+
+        if(contact.hasBirthday()) {
+            // TODO Show details activity
+        } else
+            dialogSelection.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
     @Override

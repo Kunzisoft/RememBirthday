@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.element.ContactBirthday;
 
 /**
  * Adapter linked to contacts with birthday for data feeding
  */
-public class ContactAdapter<T extends ContactViewHolder, C extends Contact> extends RecyclerView.Adapter<T>{
+public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Adapter<T>{
 
     private static final String TAG = "ContactBirthdayAdapter";
 
@@ -43,7 +42,7 @@ public class ContactAdapter<T extends ContactViewHolder, C extends Contact> exte
         cursor.moveToPosition(position);
 
         Contact currentContact = getItemFromCursor(cursor);
-        assignDataToView(holder, (C) currentContact);
+        assignDataToView(holder, currentContact);
 
         if(onClickItemContactListener != null) {
             holder.container.setOnClickListener(new BufferContactClickListener(currentContact, position));
@@ -67,7 +66,7 @@ public class ContactAdapter<T extends ContactViewHolder, C extends Contact> exte
      * @param holder The ViewHolder
      * @param contact The item
      */
-    protected void assignDataToView(T holder, C contact) {
+    protected void assignDataToView(T holder, Contact contact) {
         // TODO icon
         //holder.icon.
         holder.name.setText(contact.getName());
@@ -89,7 +88,7 @@ public class ContactAdapter<T extends ContactViewHolder, C extends Contact> exte
         this.onClickItemContactListener = onClickItemContactListener;
     }
 
-    public void setItemChecked(ContactBirthday contactBirthday) {
+    public void setItemChecked(Contact contact) {
         // TODO highlight
     }
 
