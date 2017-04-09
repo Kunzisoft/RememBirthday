@@ -1,14 +1,8 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,47 +21,16 @@ import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
 /**
  * Fragment that retrieves and displays the list of contacts
  */
-public class ListContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        OnClickItemContactListener, AddBirthdayToContactTask.CallbackAddBirthdayToContact {
+public class ListContactsFragment extends AbstractListContactsFragment
+        implements AddBirthdayToContactTask.CallbackAddBirthdayToContact, OnClickItemContactListener {
 
     private static final String TAG = "ListContactsFragment";
 
-    private Contact currentCheckContact;
-
-    private RecyclerView contactsListView;
-    private ContactAdapter contactAdapter;
-
-    // Connexion to database
-    private static final Uri URI = ContactsContract.Data.CONTENT_URI;
-    private static final String[] PROJECTION = {
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.LOOKUP_KEY,
-            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
-    };
-    //private static final String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?";
-    private static final String SELECTION =
-            ContactsContract.Data.MIMETYPE + "= ? AND (" +
-                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                    ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + " OR " +
-                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                    ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
-                    " ) ";
-    String[] selectionArgs = new String[] {
-            ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-    };
-
     // The contact's _ID value
     private long mContactId;
-    // The contact's LOOKUP_KEY
-    private String mContactKey;
-    // A content URI for the selected contact
-    private Uri mContactUri;
-
 
     // Dialog for birthday selection
     private SelectBirthdayDialogFragment dialogSelection;
-
 
     // A UI Fragment must inflate its View
     @Override
@@ -82,6 +45,17 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contactsListView.setLayoutManager(linearLayoutManager);
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Put the result Cursor in the adapter for the ListView
+        contactAdapter = new ContactAdapter();
+        contactAdapter.setOnClickItemContactListener(this);
         contactsListView.setAdapter(contactAdapter);
 
         // Initialize dialog for birthday selection
@@ -98,19 +72,6 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
             public void onClickNegativeButton(DateUnknownYear selectedDate) {
             }
         });
-
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Put the result Cursor in the adapter for the ListView
-        //TODO init here (onLoadFinish)
-
-        // Initializes the loader
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -136,36 +97,5 @@ public class ListContactsFragment extends Fragment implements LoaderManager.Load
             // TODO Show details activity
         } else
             dialogSelection.show(getChildFragmentManager(), "NoticeDialogFragment");
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        /*
-         * Makes search string into pattern and
-         * stores it in the selection array
-         */
-        //mSelectionArgs[0] = "%" + mSearchString + "%";
-        // Starts the query
-        return new CursorLoader(
-                getActivity(),
-                URI,
-                PROJECTION,
-                SELECTION,
-                selectionArgs,
-                null
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        contactAdapter = new ContactAdapter(cursor);
-        contactsListView.setAdapter(contactAdapter);
-        contactAdapter.setOnClickItemContactListener(this);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // Delete the reference to the existing Cursor
-        contactAdapter = null;
     }
 }

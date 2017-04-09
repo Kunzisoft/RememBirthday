@@ -20,13 +20,20 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     private OnClickItemContactListener onClickItemContactListener;
 
     private Cursor cursor;
-    protected final int contactIdColIdx, contactNameColIdx;
+    protected int contactIdColIdx, contactNameColIdx;
 
-    //TODO change generic
-    public ContactAdapter(Cursor cursor) {
+    /**
+     * Change cursor implementation for retrieving data
+     * @param cursor New cursor
+     * @return The old cursor
+     */
+    public void swapCursor(Cursor cursor) {
         this.cursor = cursor;
         this.contactIdColIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
         this.contactNameColIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+    }
+
+    public void resetCursor() {
     }
 
     @Override
@@ -37,7 +44,6 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onBindViewHolder(T holder, int position) {
         cursor.moveToPosition(position);
 
@@ -94,7 +100,10 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     @Override
     public int getItemCount() {
-        return cursor.getCount();
+        if(cursor!=null)
+            return cursor.getCount();
+        else
+            return 0;
     }
 
     /**

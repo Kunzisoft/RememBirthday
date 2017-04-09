@@ -19,10 +19,11 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
 
     private static final String TAG = "ContactBirthdayAdapter";
 
-    private final int contactBirthdayColIdx;
+    private int contactBirthdayColIdx;
 
-    public ContactBirthdayAdapter(Cursor cursor) {
-        super(cursor);
+    @Override
+    public void swapCursor(Cursor cursor) {
+        super.swapCursor(cursor);
         this.contactBirthdayColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
     }
 

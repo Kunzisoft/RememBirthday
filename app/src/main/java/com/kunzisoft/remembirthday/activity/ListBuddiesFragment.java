@@ -2,15 +2,10 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,54 +20,48 @@ import com.kunzisoft.remembirthday.element.Contact;
 /**
  * Created by joker on 08/01/17.
  */
-public class ListBuddiesFragment extends Fragment implements OnClickItemContactListener,
-        LoaderManager.LoaderCallbacks<Cursor>{
+public class ListBuddiesFragment extends AbstractListContactsFragment implements OnClickItemContactListener {
 
     private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
     private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private static final String TAG = "ListBuddiesFragment";
     private Contact currentCheckContact;
 
-    private RecyclerView buddiesListView;
-    private ContactBirthdayAdapter contactBirthdayAdapter;
-
     private boolean mDualPane;
-
-    // Connexion to database
-    private static final Uri URI = ContactsContract.Data.CONTENT_URI;
-    private static final String[] PROJECTION = {
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.LOOKUP_KEY,
-            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-            ContactsContract.CommonDataKinds.Event.START_DATE,
-            ContactsContract.CommonDataKinds.Event.TYPE
-    };
-    //private static final String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?";
-    private static final String SELECTION =
-            ContactsContract.Data.MIMETYPE + "= ? AND (" +
-                ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + " OR " +
-                ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
-                " ) ";
-    String[] selectionArgs = new String[] {
-            ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        // Redefined Query
+        uri = ContactsContract.Data.CONTENT_URI;
+        projection = new String[]{
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.LOOKUP_KEY,
+                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                ContactsContract.CommonDataKinds.Event.START_DATE,
+                ContactsContract.CommonDataKinds.Event.TYPE
+        };
+        selection =
+                ContactsContract.Data.MIMETYPE + "= ? AND (" +
+                        ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                        ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + " OR " +
+                        ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                        ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
+                        " ) ";
+        selectionArgs = new String[] {
+                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
+        };
+
         View rootView = inflater.inflate(R.layout.fragment_list_buddies, container, false);
 
         // List buddies
-        buddiesListView = (RecyclerView) rootView.findViewById(R.id.fragment_list_buddies_recyclerview_buddies);
-        buddiesListView.setHasFixedSize(true);
+        contactsListView = (RecyclerView) rootView.findViewById(R.id.fragment_list_buddies_recyclerview_buddies);
+        contactsListView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        buddiesListView.setLayoutManager(linearLayoutManager);
-        buddiesListView.setAdapter(contactBirthdayAdapter);
+        contactsListView.setLayoutManager(linearLayoutManager);
 
         return rootView;
     }
@@ -81,6 +70,12 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Put the result Cursor in the adapter for the ListView
+        contactAdapter = new ContactBirthdayAdapter();
+        contactAdapter.setOnClickItemContactListener(this);
+        contactsListView.setAdapter(contactAdapter);
+
+        // Manage dual panel
         View detailsFrame = getActivity().findViewById(R.id.activity_buddy_container_details_fragment);
         mDualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
 
@@ -93,12 +88,6 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
             // Make sure our UI is in the correct state.
             showDetails(currentCheckContact);
         }
-
-        // Put the result Cursor in the adapter for the ListView
-        //TODO init here (onLoadFinish)
-
-        // Initializes the loader for contacts
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -118,7 +107,7 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
         if (mDualPane) {
             // We can display everything in-place with fragments, so update
             // the list to highlight the selected item and show the data.
-            contactBirthdayAdapter.setItemChecked(contact);
+            contactAdapter.setItemChecked(contact);
 
             // Make new fragment to show this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
@@ -147,29 +136,5 @@ public class ListBuddiesFragment extends Fragment implements OnClickItemContactL
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
         showDetails(contact);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Starts the query
-        return new CursorLoader(
-                getActivity(),
-                URI,
-                PROJECTION,
-                SELECTION,
-                selectionArgs,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        contactBirthdayAdapter = new ContactBirthdayAdapter(data);
-        buddiesListView.setAdapter(contactBirthdayAdapter);
-        contactBirthdayAdapter.setOnClickItemContactListener(this);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        contactBirthdayAdapter = null;
     }
 }
