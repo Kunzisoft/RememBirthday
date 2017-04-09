@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,12 +19,14 @@ import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
+import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
+import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.ContactBirthday;
 
 /**
  * Created by joker on 08/01/17.
  */
-public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdapter.OnClickItemBuddyListener,
+public class ListBuddiesFragment extends Fragment implements OnClickItemContactListener,
         LoaderManager.LoaderCallbacks<Cursor>{
 
     private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
@@ -44,22 +45,20 @@ public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdap
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.LOOKUP_KEY,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-            ContactsContract.CommonDataKinds.Event.START_DATE
+            ContactsContract.CommonDataKinds.Event.START_DATE,
+            ContactsContract.CommonDataKinds.Event.TYPE
     };
     //private static final String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?";
     private static final String SELECTION =
-                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                    ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
-    /*
-    String where =
-            ContactsContract.Data.MIMETYPE + "= ? AND " +
-                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                    ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+            ContactsContract.Data.MIMETYPE + "= ? AND (" +
+                ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + " OR " +
+                ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
+                " ) ";
     String[] selectionArgs = new String[] {
             ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
     };
-    */
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,11 +70,9 @@ public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdap
         // List buddies
         buddiesListView = (RecyclerView) rootView.findViewById(R.id.fragment_list_buddies_recyclerview_buddies);
         buddiesListView.setHasFixedSize(true);
-        buddiesListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         buddiesListView.setLayoutManager(linearLayoutManager);
-
         buddiesListView.setAdapter(contactBirthdayAdapter);
 
         return rootView;
@@ -149,8 +146,8 @@ public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdap
     }
 
     @Override
-    public void onItemBuddyClick(View view, ContactBirthday contactBirthday) {
-        showDetails(contactBirthday);
+    public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
+        showDetails((ContactBirthday) contact);
     }
 
     @Override
@@ -161,7 +158,7 @@ public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdap
                 URI,
                 PROJECTION,
                 SELECTION,
-                null,
+                selectionArgs,
                 null);
     }
 
@@ -169,7 +166,7 @@ public class ListBuddiesFragment extends Fragment implements ContactBirthdayAdap
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         contactBirthdayAdapter = new ContactBirthdayAdapter(data);
         buddiesListView.setAdapter(contactBirthdayAdapter);
-        contactBirthdayAdapter.setOnClickItemBuddyListener(this);
+        contactBirthdayAdapter.setOnClickItemContactListener(this);
     }
 
     @Override

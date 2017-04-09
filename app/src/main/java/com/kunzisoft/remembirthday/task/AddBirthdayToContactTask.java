@@ -2,7 +2,6 @@ package com.kunzisoft.remembirthday.task;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -34,12 +33,18 @@ public class AddBirthdayToContactTask extends AsyncTask<Void, Void, Exception> {
     protected Exception doInBackground(Void... params) {
         try {
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+            ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValue(ContactsContract.Data.RAW_CONTACT_ID, contactId)
-                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE);
+            if(birthday.hasUnknownYear())
+                contentBuilder
                     .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toString())
-                    .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)
-                    .build());
+                    .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY);
+            else
+                contentBuilder
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toString())
+                    .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
+            ops.add(contentBuilder.build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
 
         } catch(Exception e) {

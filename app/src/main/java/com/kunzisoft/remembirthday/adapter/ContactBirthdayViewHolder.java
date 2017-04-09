@@ -6,13 +6,12 @@ import android.widget.TextView;
 import com.kunzisoft.remembirthday.R;
 
 /**
- * Created by joker on 07/04/17.
+ * The ViewHolder used to manage the views of a contact
  */
+class ContactBirthdayViewHolder extends ContactViewHolder {
 
-public class ContactBirthdayViewHolder extends ContactViewHolder {
-
-    public TextView age;
-    public TextView daysLeft;
+    TextView age;
+    TextView daysLeft;
 
     ContactBirthdayViewHolder(View itemView) {
         super(itemView);

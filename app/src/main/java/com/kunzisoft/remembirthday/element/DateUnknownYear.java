@@ -43,7 +43,7 @@ public class DateUnknownYear implements Parcelable {
         return new DateUnknownYear(new Date(), true);
     }
 
-    public boolean isUnknownYear() {
+    public boolean hasUnknownYear() {
         return unknownYear;
     }
 

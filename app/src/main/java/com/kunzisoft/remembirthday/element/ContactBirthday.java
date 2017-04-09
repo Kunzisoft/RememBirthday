@@ -7,17 +7,14 @@ import android.os.Parcelable;
  * Model for contact with birthday manager <br />
  * Use Joda, must be initialize
  */
-public class ContactBirthday implements Parcelable{
+public class ContactBirthday extends Contact{
 
     public static final long ID_UNDEFINED = -1;
 
-    private long id;
-    private String name;
     private DateUnknownYear birthday;
 
     public ContactBirthday(long id, String name, DateUnknownYear birthday) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
         this.birthday = birthday;
     }
 
@@ -26,25 +23,8 @@ public class ContactBirthday implements Parcelable{
     }
 
     private ContactBirthday(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
+        super(in);
         birthday = in.readParcelable(DateUnknownYear.class.getClassLoader());
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public DateUnknownYear getBirthday() {
@@ -61,7 +41,7 @@ public class ContactBirthday implements Parcelable{
      * @return
      */
     public int getAge() {
-        if(!birthday.isUnknownYear())
+        if(!birthday.hasUnknownYear())
             return birthday.getDeltaYears();
         else
             return -1;
@@ -82,8 +62,7 @@ public class ContactBirthday implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(name);
+        super.writeToParcel(parcel, i);
         parcel.writeParcelable(birthday, i);
     }
 

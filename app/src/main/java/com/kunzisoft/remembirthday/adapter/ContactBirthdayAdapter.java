@@ -2,7 +2,6 @@ package com.kunzisoft.remembirthday.adapter;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,26 +9,21 @@ import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
+import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.ContactBirthday;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 /**
  * Adapter linked to contacts with birthday for data feeding
  */
-public class ContactBirthdayAdapter extends RecyclerView.Adapter<ContactBirthdayViewHolder>{
+public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHolder, ContactBirthday> {
 
     private static final String TAG = "ContactBirthdayAdapter";
 
-    private OnClickItemBuddyListener onClickItemBuddyListener;
+    private final int contactBirthdayColIdx;
 
-    private Cursor cursor;
-    private final int contactIdColIdx, contactNameColIdx, contactBirthdayColIdx;
-
-    //TODO change generic
     public ContactBirthdayAdapter(Cursor cursor) {
-        this.cursor = cursor;
-        this.contactIdColIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-        this.contactNameColIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+        super(cursor);
         this.contactBirthdayColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
     }
 
@@ -40,9 +34,7 @@ public class ContactBirthdayAdapter extends RecyclerView.Adapter<ContactBirthday
     }
 
     @Override
-    public void onBindViewHolder(ContactBirthdayViewHolder holder, int position) {
-        cursor.moveToPosition(position);
-
+    protected Contact getItemFromCursor(Cursor cursor) {
         DateUnknownYear dateUnknownYear;
         try {
             dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactBirthdayColIdx));
@@ -51,61 +43,17 @@ public class ContactBirthdayAdapter extends RecyclerView.Adapter<ContactBirthday
             dateUnknownYear = DateUnknownYear.getDefault();
         }
 
-        ContactBirthday currentContactBirthday = new ContactBirthday(cursor.getLong(contactIdColIdx),
+        return new ContactBirthday(cursor.getLong(contactIdColIdx),
                 cursor.getString(contactNameColIdx),
                 dateUnknownYear);
-
-        // TODO icon
-        //holder.icon.
-        holder.name.setText(currentContactBirthday.getName());
-        holder.age.setText(String.valueOf(currentContactBirthday.getAge()));
-        Utility.assignDaysRemainingInTextView(holder.daysLeft, currentContactBirthday.getBirthdayDaysRemaining());
-
-        if(onClickItemBuddyListener != null) {
-            holder.container.setOnClickListener(new BufferContactClickListener(currentContactBirthday));
-        }
-    }
-
-    public OnClickItemBuddyListener getOnClickItemBuddyListener() {
-        return onClickItemBuddyListener;
-    }
-
-    /**
-     * Add click contactBirthday listener to each item
-     * @param onClickItemBuddyListener Listener who defined the `onItemBuddyClick` method
-     */
-    public void setOnClickItemBuddyListener(OnClickItemBuddyListener onClickItemBuddyListener) {
-        this.onClickItemBuddyListener = onClickItemBuddyListener;
-    }
-
-    public void setItemChecked(ContactBirthday contactBirthday) {
-        // TODO
     }
 
     @Override
-    public int getItemCount() {
-        return cursor.getCount();
+    protected void assignDataToView(ContactBirthdayViewHolder holder, ContactBirthday contact) {
+        super.assignDataToView(holder, contact);
+
+        holder.age.setText(String.valueOf(contact.getAge()));
+        Utility.assignDaysRemainingInTextView(holder.daysLeft, contact.getBirthdayDaysRemaining());
     }
 
-    /**
-     * Listener when a click on contactBirthday item is performed
-     */
-    public interface OnClickItemBuddyListener {
-        void onItemBuddyClick(View view, ContactBirthday contactBirthday);
-    }
-
-
-    private class BufferContactClickListener implements View.OnClickListener {
-
-        private ContactBirthday contactBirthday;
-
-        BufferContactClickListener(ContactBirthday contactBirthday) {
-            this.contactBirthday = contactBirthday;
-        }
-
-        @Override
-        public void onClick(View view) {
-            onClickItemBuddyListener.onItemBuddyClick(view, contactBirthday);
-        }
-    }
 }
