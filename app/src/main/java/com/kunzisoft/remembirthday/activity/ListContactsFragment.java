@@ -26,6 +26,8 @@ public class ListContactsFragment extends AbstractListContactsFragment
 
     private static final String TAG = "ListContactsFragment";
 
+    private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
+
     // The contact's _ID value
     private long mContactId;
 
@@ -59,7 +61,10 @@ public class ListContactsFragment extends AbstractListContactsFragment
         contactsListView.setAdapter(contactAdapter);
 
         // Initialize dialog for birthday selection
-        dialogSelection = new SelectBirthdayDialogFragment();
+        dialogSelection = (SelectBirthdayDialogFragment) getFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
+        if(dialogSelection == null)
+            dialogSelection = new SelectBirthdayDialogFragment();
+
         dialogSelection.setOnClickListener(new SelectBirthdayDialogFragment.OnClickBirthdayListener() {
             @Override
             public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
@@ -96,6 +101,6 @@ public class ListContactsFragment extends AbstractListContactsFragment
         if(contact.hasBirthday()) {
             // TODO Show details activity
         } else
-            dialogSelection.show(getChildFragmentManager(), "NoticeDialogFragment");
+            dialogSelection.show(getChildFragmentManager(), TAG_SELECT_DIALOG);
     }
 }

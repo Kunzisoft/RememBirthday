@@ -81,6 +81,7 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         contactAdapter.swapCursor(cursor);
+        contactAdapter.notifyDataSetChanged();
     }
 
     @Override

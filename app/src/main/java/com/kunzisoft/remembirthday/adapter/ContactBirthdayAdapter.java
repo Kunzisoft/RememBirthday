@@ -19,12 +19,16 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
 
     private static final String TAG = "ContactBirthdayAdapter";
 
-    private int contactBirthdayColIdx;
+    private int contactStartDateColIdx;
+    private int contactTypeColIdx;
+    private final int contactTypeBirthdayDataIdx = ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+    private final int contactTypeAnniversaryDataIdx = ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY;
 
     @Override
     public void swapCursor(Cursor cursor) {
         super.swapCursor(cursor);
-        this.contactBirthdayColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
+        this.contactStartDateColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
+        this.contactTypeColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE);
     }
 
     @Override
@@ -35,16 +39,23 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
 
     @Override
     protected Contact getItemFromCursor(Cursor cursor) {
-
         Contact contact = super.getItemFromCursor(cursor);
-        DateUnknownYear dateUnknownYear;
+        DateUnknownYear dateUnknownYear = null;
         try {
-            dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactBirthdayColIdx));
+            switch(cursor.getInt(contactTypeColIdx)) {
+                case contactTypeBirthdayDataIdx:
+                    dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactStartDateColIdx));
+                    break;
+                case contactTypeAnniversaryDataIdx:
+                    dateUnknownYear = DateUnknownYear.stringToDateWithUnknownYear(cursor.getString(contactStartDateColIdx));
+                    break;
+            }
         } catch (Exception e) {
             Log.e(TAG, "Birthday can't be extract : " + e.getMessage());
-            dateUnknownYear = DateUnknownYear.getDefault();
+        } finally {
+            if(dateUnknownYear != null)
+                contact.setBirthday(dateUnknownYear);
         }
-        contact.setBirthday(dateUnknownYear);
 
         return contact;
     }
@@ -53,7 +64,13 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
     protected void assignDataToView(ContactBirthdayViewHolder holder, Contact contact) {
         super.assignDataToView(holder, contact);
 
-        holder.age.setText(String.valueOf(contact.getAge()));
+        if(contact.getBirthday().containsYear()) {
+            holder.age.setVisibility(View.VISIBLE);
+            holder.age.setText(String.valueOf(contact.getAge()));
+        } else {
+            holder.age.setVisibility(View.INVISIBLE);
+            holder.age.setText("");
+        }
         Utility.assignDaysRemainingInTextView(holder.daysLeft, contact.getBirthdayDaysRemaining());
     }
 

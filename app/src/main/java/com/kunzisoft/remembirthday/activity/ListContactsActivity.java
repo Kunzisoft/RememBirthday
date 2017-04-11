@@ -22,6 +22,8 @@ public class ListContactsActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
+
+        //TODO Add button contact
     }
 
 }

@@ -1,6 +1,7 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;

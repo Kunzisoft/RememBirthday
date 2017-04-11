@@ -19,36 +19,38 @@ import java.util.Locale;
 public class DateUnknownYear implements Parcelable {
 
     private static String YEAR_FORMAT = "yy-MM-dd";
+    private static String WITHOUT_YEAR_FORMAT = "MM-dd";
     private static SimpleDateFormat YEAR_SDF = new SimpleDateFormat(YEAR_FORMAT, Locale.getDefault());
+    private static SimpleDateFormat WITHOUT_YEAR_SDF = new SimpleDateFormat(WITHOUT_YEAR_FORMAT, Locale.getDefault());
 
-    private boolean unknownYear;
+    private boolean containsYear;
     private Date date;
 
     /**
      * Construct date with unknown year indication
      * @param date date to store
-     * @param unknownYear true if year is known, false elsewhere
+     * @param containsYear true if year is known, false elsewhere
      */
-    public DateUnknownYear(Date date, boolean unknownYear) {
-        this.unknownYear = unknownYear;
+    public DateUnknownYear(Date date, boolean containsYear) {
+        this.containsYear = containsYear;
         this.date = date;
     }
 
     private DateUnknownYear(Parcel in) {
-        this.unknownYear = in.readByte() != 0;
+        this.containsYear = in.readByte() != 0;
         this.date = (Date) in.readSerializable();
     }
 
     public static DateUnknownYear getDefault() {
-        return new DateUnknownYear(new Date(), true);
+        return new DateUnknownYear(new Date(), false);
     }
 
-    public boolean hasUnknownYear() {
-        return unknownYear;
+    public boolean containsYear() {
+        return containsYear;
     }
 
-    public void setUnknownYear(boolean unknownYear) {
-        this.unknownYear = unknownYear;
+    public void setContainsYear(boolean containsYear) {
+        this.containsYear = containsYear;
     }
 
     public Date getDate() {
@@ -103,9 +105,32 @@ public class DateUnknownYear implements Parcelable {
         return yearsBetweenTodayAnd(this.date);
     }
 
+    @Override
     public String toString() {
+        if(!containsYear())
+            return toStringWithoutYear();
+        else
+            return toStringWithYear();
+    }
+
+    private String toStringWithYear() {
         SimpleDateFormat datePattern = new SimpleDateFormat (YEAR_FORMAT, Locale.getDefault());
         return datePattern.format(date);
+    }
+
+    private String toStringWithoutYear() {
+        SimpleDateFormat datePattern = new SimpleDateFormat (WITHOUT_YEAR_FORMAT, Locale.getDefault());
+        return datePattern.format(date);
+    }
+
+    /**
+     * Convert string formatted in "MM-dd" to DateUnknownYear
+     * @param string
+     * @return
+     * @throws ParseException
+     */
+    public static DateUnknownYear stringToDateWithUnknownYear(String string) throws ParseException {
+        return new DateUnknownYear(WITHOUT_YEAR_SDF.parse(string), false);
     }
 
     /**
@@ -115,7 +140,7 @@ public class DateUnknownYear implements Parcelable {
      * @throws ParseException
      */
     public static DateUnknownYear stringToDateWithKnownYear(String string) throws ParseException {
-        return new DateUnknownYear(YEAR_SDF.parse(string), false);
+        return new DateUnknownYear(YEAR_SDF.parse(string), true);
     }
 
     @Override
@@ -125,7 +150,7 @@ public class DateUnknownYear implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByte((byte) (unknownYear ? 1 : 0));
+        parcel.writeByte((byte) (containsYear ? 1 : 0));
         parcel.writeSerializable(date);
     }
 

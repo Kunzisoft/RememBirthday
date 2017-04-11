@@ -82,13 +82,13 @@ public class Contact implements Parcelable{
     }
 
     /**
-     * Get number of years between the birthday and today <br />
+     * Get number of years always > 0 between the birthday and today <br />
      * WARNING : if the year is unknown, return -1
      * @return
      */
     public int getAge() {
-        if(!birthday.hasUnknownYear())
-            return birthday.getDeltaYears();
+        if(birthday.containsYear())
+            return Math.abs(birthday.getDeltaYears());
         else
             return -1;
     }
