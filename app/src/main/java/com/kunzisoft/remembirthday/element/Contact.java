@@ -14,6 +14,7 @@ public class Contact implements Parcelable{
 
     private long id;
     private String name;
+    private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
 
@@ -24,6 +25,8 @@ public class Contact implements Parcelable{
     public Contact(long id, String name, DateUnknownYear birthday) {
         this.id = id;
         this.name = name;
+        this.imageThumbnailUri = null;
+        this.imageUri = null;
         this.birthday = birthday;
     }
 
@@ -38,6 +41,8 @@ public class Contact implements Parcelable{
     private Contact(Parcel in) {
         id = in.readLong();
         name = in.readString();
+        imageThumbnailUri = in.readParcelable(Uri.class.getClassLoader());
+        imageUri = in.readParcelable(Uri.class.getClassLoader());
         birthday = in.readParcelable(DateUnknownYear.class.getClassLoader());
     }
 
@@ -57,6 +62,22 @@ public class Contact implements Parcelable{
         this.name = name;
     }
 
+    public Uri getImageThumbnailUri() {
+        return imageThumbnailUri;
+    }
+
+    public void setImageThumbnailUri(Uri imageUri) {
+        this.imageThumbnailUri = imageUri;
+    }
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
+    }
+
     public boolean hasBirthday() {
         return birthday!=null;
     }
@@ -71,14 +92,6 @@ public class Contact implements Parcelable{
 
     public boolean containsImage() {
         return imageUri!=null;
-    }
-
-    public Uri getImageUri() {
-        return imageUri;
-    }
-
-    public void setImageUri(Uri imageUri) {
-        this.imageUri = imageUri;
     }
 
     /**
@@ -110,6 +123,8 @@ public class Contact implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
         parcel.writeString(name);
+        parcel.writeParcelable(imageThumbnailUri, i);
+        parcel.writeParcelable(imageUri, i);
         parcel.writeParcelable(birthday, i);
     }
 
@@ -130,18 +145,13 @@ public class Contact implements Parcelable{
 
         Contact contact = (Contact) o;
 
-        if (id != contact.id) return false;
-        if (name != null ? !name.equals(contact.name) : contact.name != null) return false;
-        return birthday != null ? birthday.equals(contact.birthday) : contact.birthday == null;
+        return id == contact.id;
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        return result;
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override

@@ -34,7 +34,8 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.LOOKUP_KEY,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
+            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
+            ContactsContract.Contacts.PHOTO_URI
     };
     protected String selection = null;
     protected String[] selectionArgs = null;

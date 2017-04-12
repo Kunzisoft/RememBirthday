@@ -1,7 +1,6 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
@@ -12,11 +11,13 @@ import com.kunzisoft.remembirthday.R;
 class ContactBirthdayViewHolder extends ContactViewHolder {
 
     TextView age;
+    TextView birthday;
     TextView daysLeft;
 
     ContactBirthdayViewHolder(View itemView) {
         super(itemView);
         age = (TextView) itemView.findViewById(R.id.item_list_contact_age);
+        birthday = (TextView) itemView.findViewById(R.id.item_list_contact_birthday_date);
         daysLeft = (TextView) itemView.findViewById(R.id.item_list_contact_days_left);
     }
 }

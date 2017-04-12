@@ -1,94 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_details_buddy"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <ScrollView
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_details_buddy_container_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/fragment_details_buddy_avatar"
-                app:srcCompat="@drawable/ic_person_tint"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_margin="25dp"
-                android:layout_gravity="center"/>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/fragment_details_buddy_container_date"
+            style="@style/Chocolate.CardView">
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Chocolate.CardView">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="12dp">
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/fragment_details_buddy_dayAndMonth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="36sp"
-                        android:textStyle="bold"
-                        android:text=""
-                        android:layout_below="@+id/fragment_details_buddy_year"
-                        android:layout_centerHorizontal="true" />
+                android:layout_height="match_parent"
+                android:padding="12dp">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/fragment_details_buddy_dayAndMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:text=""
+                    android:layout_below="@+id/fragment_details_buddy_year"
+                    android:layout_centerHorizontal="true" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/fragment_details_buddy_year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:text=""
-                        android:layout_centerHorizontal="true" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/fragment_details_buddy_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text=""
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/fragment_details_buddy_container_days_left"
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_details_buddy_container_days_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Chocolate.CardView" >
+            <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp">
+                <!-- TODO Dimens -->
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/fragment_details_buddy_cake"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/img_cake"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/fragment_details_buddy_days_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_below="@id/fragment_details_buddy_cake"
+                    android:text=""
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_details_buddy_container_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Chocolate.CardView.Alternative" >
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Chocolate.CardView" >
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="12dp">
-                    <!-- TODO Dimens -->
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/fragment_details_buddy_cake"
-                        android:layout_width="wrap_content"
-                        android:layout_height="120dp"
-                        android:layout_centerHorizontal="true"
-                        app:srcCompat="@drawable/img_cake"/>
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/fragment_details_buddy_days_left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:layout_below="@id/fragment_details_buddy_cake"
-                        android:text=""
-                        android:layout_centerHorizontal="true" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/fragment_details_buddy_container_days_options"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Chocolate.CardView">
-
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
-
-
-
-</LinearLayout>
+                android:layout_margin="20dp"
+                android:text="Create new auto SMS"
+                style="@style/Chocolate.TextAppearance.Inverse"/>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

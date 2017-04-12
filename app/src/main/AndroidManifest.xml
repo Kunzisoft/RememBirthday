@@ -25,11 +25,11 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".activity.DetailsBuddyActivity"
+            android:name=".activity.ListContactsActivity"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".activity.ListContactsActivity"
+            android:name=".activity.DetailsBuddyActivity"
             android:label="@string/app_name">
         </activity>
     </application>

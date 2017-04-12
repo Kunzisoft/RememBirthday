@@ -21,7 +21,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     private OnClickItemContactListener onClickItemContactListener;
 
     private Cursor cursor;
-    protected int contactIdColIdx, contactNameColIdx, contactImageUriColIdx;
+    protected int contactIdColIdx, contactNameColIdx, contactThumbnailImageUriColIdx, contactImageUriColIdx;
 
     /**
      * Change cursor implementation for retrieving data
@@ -32,7 +32,8 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         this.cursor = cursor;
         this.contactIdColIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
         this.contactNameColIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
-        this.contactImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
+        this.contactThumbnailImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
+        this.contactImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI);
     }
 
     public void resetCursor() {
@@ -67,6 +68,11 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     protected Contact getItemFromCursor(Cursor cursor) {
         Contact contact = new Contact(cursor.getLong(contactIdColIdx),
                 cursor.getString(contactNameColIdx));
+        // Thumbnail
+        String uriThumbnailString = cursor.getString(contactThumbnailImageUriColIdx);
+        if(uriThumbnailString!=null && !uriThumbnailString.isEmpty())
+            contact.setImageThumbnailUri(Uri.parse(uriThumbnailString));
+        // Photo
         String uriString = cursor.getString(contactImageUriColIdx);
         if(uriString!=null && !uriString.isEmpty())
             contact.setImageUri(Uri.parse(uriString));

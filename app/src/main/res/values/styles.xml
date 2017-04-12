@@ -7,9 +7,12 @@
 
 
     <!-- Base application theme. -->
-    <style name="ChocolateTheme" parent="Theme.AppCompat.Light">
+    <style name="ChocolateTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+
+        <!-- Toolbar -->
+        <item name="colorControlNormal">@color/colorWhite</item>
 
         <item name="android:textColor">@color/colorPrimary</item>
 

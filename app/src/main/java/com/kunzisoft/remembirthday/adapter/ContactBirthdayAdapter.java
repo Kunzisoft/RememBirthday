@@ -71,6 +71,7 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
             holder.age.setVisibility(View.INVISIBLE);
             holder.age.setText("");
         }
+        holder.birthday.setText(contact.getBirthday().toString());
         Utility.assignDaysRemainingInTextView(holder.daysLeft, contact.getBirthdayDaysRemaining());
     }
 

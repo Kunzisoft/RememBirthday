@@ -119,12 +119,12 @@ public class BuddyActivity extends AppCompatActivity {
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_CONTACTS)
-    void showDeniedForCamera() {
+    void showDeniedForContacts() {
         Toast.makeText(this, R.string.permission_contacts_denied, Toast.LENGTH_SHORT).show();
     }
 
     @OnNeverAskAgain(Manifest.permission.WRITE_CONTACTS)
-    void showNeverAskForCamera() {
+    void showNeverAskForContacts() {
         Toast.makeText(this, R.string.permission_contacts_neverask, Toast.LENGTH_SHORT).show();
     }
 

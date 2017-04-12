@@ -34,7 +34,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         fab:srcCompat="@drawable/ic_person_add_white_24dp"
-        fab:backgroundTint="@color/colorPrimaryDark"
         android:layout_margin="20dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
