@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RememBirthday</string>
+    <string name="anniversaries_title">Anniversaries</string>
     <string name="settings_title">Settings</string>
+    <string name="select_contact_title">Select a contact</string>
 
     <!-- Menus -->
     <string name="action_settings">Settings</string>

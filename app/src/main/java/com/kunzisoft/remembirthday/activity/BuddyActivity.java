@@ -39,30 +39,17 @@ public class BuddyActivity extends AppCompatActivity {
 
         // Toolbar generation
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setTitle(getString(R.string.anniversaries_title));
         setSupportActionBar(toolbar);
 
         // Button add
-        FloatingActionButton floatingActionButtonAddBuddy = (FloatingActionButton) findViewById(R.id.fab_add_buddy);
-        floatingActionButtonAddBuddy.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
+        addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BuddyActivityPermissionsDispatcher.showRationalForContactsWithCheck(BuddyActivity.this);
             }
         });
-
-        // Button modify
-        /*
-        //TODO Settings toolbar
-        FloatingActionButton floatingActionButtonModifyDetailsBuddy = (FloatingActionButton) findViewById(R.id.fab);
-        floatingActionButtonModifyDetailsBuddy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
     }
 
     @Override

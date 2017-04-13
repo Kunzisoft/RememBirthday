@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_list_contacts_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/backgroundElement">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/item_list_contact_icon"
@@ -21,8 +20,8 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text=""
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/item_list_contact_icon"
         android:layout_toEndOf="@+id/item_list_contact_icon" />

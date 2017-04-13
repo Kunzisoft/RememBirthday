@@ -30,10 +30,10 @@
 
     <android.support.design.widget.FloatingActionButton
         xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab_add_buddy"
+        android:id="@+id/fab_add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:srcCompat="@drawable/ic_person_add_white_24dp"
+        fab:srcCompat="@drawable/ic_event_note_white_24dp"
         android:layout_margin="20dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

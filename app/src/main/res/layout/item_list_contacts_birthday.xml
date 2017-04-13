@@ -1,81 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_list_contacts_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="2dp">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/item_list_contacts_container"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/item_list_contact_icon_container"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Chocolate.CardView">
-        <RelativeLayout
-            android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_list_contact_icon"
+            android:layout_width="@dimen/buddy_list_height_icon"
+            android:layout_height="@dimen/buddy_list_height_icon"
+            android:src="@drawable/ic_person_tint_inverse"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/item_list_contact_age"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimaryInverse"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:background="@drawable/background_year"/>
+    </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/item_list_contact_icon_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/item_list_contact_icon"
-                    android:layout_width="@dimen/buddy_list_height_icon"
-                    android:layout_height="@dimen/buddy_list_height_icon"
-                    android:src="@drawable/ic_person_tint_inverse"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/item_list_contact_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="12sp"
-                    android:textColor="@color/colorPrimaryInverse"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:background="@drawable/background_year"/>
-            </FrameLayout>
+    <TextView
+        android:id="@+id/item_list_contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:text=""
+        android:layout_toRightOf="@+id/item_list_contact_icon_container"
+        android:layout_toEndOf="@+id/item_list_contact_icon_container"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
 
-            <TextView
-                android:id="@+id/item_list_contact_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:text=""
-                android:layout_toRightOf="@+id/item_list_contact_icon_container"
-                android:layout_toEndOf="@+id/item_list_contact_icon_container"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"/>
+    <TextView
+        android:id="@+id/item_list_contact_birthday_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text=""
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_below="@+id/item_list_contact_days_left"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-            <TextView
-                android:id="@+id/item_list_contact_birthday_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text=""
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_below="@+id/item_list_contact_days_left"
-                android:layout_centerHorizontal="true" />
-
-            <TextView
-                android:id="@+id/item_list_contact_days_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text=""
-                android:gravity="end"
-                android:layout_below="@+id/item_list_contact_name"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/item_list_contact_icon_container"
-                android:layout_toEndOf="@+id/item_list_contact_icon_container" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
+    <TextView
+        android:id="@+id/item_list_contact_days_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text=""
+        android:gravity="start"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_below="@+id/item_list_contact_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/item_list_contact_icon_container"
+        android:layout_toEndOf="@+id/item_list_contact_icon_container" />
+</RelativeLayout>
