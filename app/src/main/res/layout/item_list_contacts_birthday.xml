@@ -25,7 +25,7 @@
                     android:id="@+id/item_list_contact_icon"
                     android:layout_width="@dimen/buddy_list_height_icon"
                     android:layout_height="@dimen/buddy_list_height_icon"
-                    android:background="@drawable/ic_person_tint_inverse"/>
+                    android:src="@drawable/ic_person_tint_inverse"/>
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/item_list_contact_age"
                     android:layout_width="wrap_content"

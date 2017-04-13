@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_category_notifications_title"
+        android:key="pref_key_storage_settings">
+        <CheckBoxPreference
+            android:title="@string/pref_notifications_service_title"
+            android:summary="@string/pref_notifications_service_summary"
+            android:key="@string/pref_notifications_service_key"
+            android:defaultValue="@string/pref_notifications_service_default" />
+        <EditTextPreference
+            android:title="@string/pref_notifications_days_title"
+            android:summary="@string/pref_notifications_days_summary"
+            android:key="@string/pref_notifications_days_key"
+            android:defaultValue="@string/pref_notifications_days_default" />
+        <com.kunzisoft.remembirthday.preference.TimePreference
+            android:title="@string/pref_notifications_time_title"
+            android:summary="@string/pref_notifications_time_summary"
+            android:key="@string/pref_notifications_time_key"
+            android:defaultValue="@string/pref_notifications_time_default" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_category_contacts_sort_title"
+        android:key="pref_key_storage_settings">
+        <ListPreference
+            android:title="@string/pref_contacts_sort_list_title"
+            android:summary="@string/pref_contacts_sort_list_summary"
+            android:key="@string/pref_contacts_sort_list_key"
+            android:defaultValue="@string/pref_contacts_sort_list_values_default"
+            android:entries="@array/pref_contacts_sort_list_array"
+            android:entryValues="@array/pref_contacts_sort_list_values" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_category_theme_title"
+        android:key="pref_key_storage_settings">
+        <ListPreference
+            android:title="@string/pref_theme_title"
+            android:summary="@string/pref_theme_summary"
+            android:key="@string/pref_theme_key"
+            android:defaultValue="@string/pref_theme_values_default"
+            android:entries="@array/pref_theme_array"
+            android:entryValues="@array/pref_theme_values" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_category_advanced_preferences_title"
+        android:key="pref_key_storage_settings">
+        <EditTextPreference
+            android:title="@string/pref_advanced_preferences_store_anniversary_title"
+            android:summary="@string/pref_advanced_preferences_store_anniversary_summary"
+            android:key="@string/pref_advanced_preferences_store_anniversary_key" />
+        <EditTextPreference
+            android:title="@string/pref_advanced_preferences_store_birthday_title"
+            android:summary="@string/pref_advanced_preferences_store_birthday_summary"
+            android:key="@string/pref_advanced_preferences_store_birthday_key" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

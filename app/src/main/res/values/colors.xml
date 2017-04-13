@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#d19f68</color>
-    <color name="backgroundElement">#edd6b0</color>
-    <color name="backgroundElementInverse">#60380c</color>
+    <color name="background">#F5F5F5</color>
+    <color name="backgroundElement">#FAFAFA</color>
+    <color name="backgroundElementInverse">#4e342e</color>
 
     <!-- <color name="colorPrimary">#935918</color> -->
-    <color name="colorPrimary">#60380c</color>
-    <color name="colorPrimaryInverse">#edd6b0</color>
-    <color name="colorPrimaryDark">#432608</color>
+    <color name="colorPrimary">#5D4037</color>
+    <color name="colorPrimaryInverse">#FFECB3</color>
+    <color name="colorPrimaryDark">#4E342E</color>
     <color name="colorPrimaryDarkInverse">#fcecd2</color>
-    <color name="colorAccent">#ef9632</color>
+    <color name="colorAccent">#FB8C00</color>
 
-    <color name="colorWhite">#FFF</color>
     <color name="colorSecondary">#edd6b0</color>
 </resources>

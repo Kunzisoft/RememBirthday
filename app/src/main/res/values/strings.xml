@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">RememBirthday</string>
+    <string name="settings_title">Settings</string>
 
     <!-- Menus -->
     <string name="action_settings">Settings</string>
@@ -23,4 +24,61 @@
 
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
+
+    <!-- Preferences -->
+    <string name="pref_category_notifications_title">Notifications</string>
+
+    <string name="pref_notifications_service_title">Enable Notifications</string>
+    <string name="pref_notifications_service_summary">Enables and disables notifications and associated services</string>
+    <string name="pref_notifications_service_key" translatable="false">notifications_service_enable</string>
+    <string name="pref_notifications_service_default" translatable="false">true</string>
+
+    <string name="pref_notifications_days_title">Notifications in event day</string>
+    <string name="pref_notifications_days_summary">Enables notifications for the day and days before the event. (Ex : "0|2|7" A notification will be visible on the day of the event, 2 days before the event and 7 days before the event.)</string>
+    <string name="pref_notifications_days_key" translatable="false">notifications_day_enable</string>
+    <string name="pref_notifications_days_default" translatable="false">true</string>
+
+    <string name="pref_notifications_time_title">Time of Notifications</string>
+    <string name="pref_notifications_time_summary">The default time for notifications</string>
+    <string name="pref_notifications_time_key" translatable="false">notifications_time_enable</string>
+    <string name="pref_notifications_time_default" translatable="false">10:00</string>
+
+    <string name="pref_category_contacts_sort_title">Contact sort</string>
+
+    <string name="pref_contacts_sort_list_title">Sort</string>
+    <string name="pref_contacts_sort_list_summary">Select the sort mode of contacts</string>
+    <string name="pref_contacts_sort_list_key" translatable="false">contacts_sort_list</string>
+    <string-array name="pref_contacts_sort_list_array">
+        <item>By Birthday</item> <!-- todo and by year -->
+        <item>By Name</item>
+        <!-- <item>By Favorite</item> -->
+    </string-array>
+    <string name="pref_contacts_sort_list_values_default">by_birthday</string>
+    <string-array name="pref_contacts_sort_list_values">
+        <item>@string/pref_contacts_sort_list_values_default</item>
+        <item>by_name</item>
+    </string-array>
+
+    <string name="pref_category_theme_title">Theme</string>
+
+    <string name="pref_theme_title">Theme Selection</string>
+    <string name="pref_theme_summary">Select the theme of the application</string>
+    <string name="pref_theme_key" translatable="false">themes_sort_list</string>
+    <string-array name="pref_theme_array">
+        <item>Chocolate</item>
+    </string-array>
+    <string name="pref_theme_values_default">Chocolate</string>
+    <string-array name="pref_theme_values">
+        <item>@string/pref_theme_values_default</item>
+    </string-array>
+
+    <string name="pref_category_advanced_preferences_title">Advanced preferences</string>
+
+    <string name="pref_advanced_preferences_store_anniversary_title">Store Anniversary</string>
+    <string name="pref_advanced_preferences_store_anniversary_summary">How to store anniversaries (without year)</string>
+    <string name="pref_advanced_preferences_store_anniversary_key" translatable="false">advanced_preferences_store_anniversary</string>
+
+    <string name="pref_advanced_preferences_store_birthday_title">Store Birthday</string>
+    <string name="pref_advanced_preferences_store_birthday_summary">How to store birthdays (with year)</string>
+    <string name="pref_advanced_preferences_store_birthday_key" translatable="false">advanced_preferences_store_birthday</string>
 </resources>

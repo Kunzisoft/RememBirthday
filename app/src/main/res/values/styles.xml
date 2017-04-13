@@ -5,14 +5,13 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
-
     <!-- Base application theme. -->
     <style name="ChocolateTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
 
         <!-- Toolbar -->
-        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="colorControlNormal">@android:color/white</item>
 
         <item name="android:textColor">@color/colorPrimary</item>
 
@@ -27,14 +26,40 @@
         <item name="android:textAppearanceMedium">@style/Chocolate.TextAppearance</item>
 
         <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondaryInverse">@color/colorPrimaryDarkInverse</item>
     </style>
 
+    <style name="Chocolate.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+    <style name="Chocolate.Toolbar.Transparent" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="Chocolate.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="Chocolate.Expanded.TextAppearance.Title" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimaryDarkInverse</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Chocolate.Collapsed.TextAppearance.Title" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="Chocolate.TextAppearance" parent="@android:style/TextAppearance">

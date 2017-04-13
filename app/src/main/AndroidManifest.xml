@@ -32,6 +32,10 @@
             android:name=".activity.DetailsBuddyActivity"
             android:label="@string/app_name">
         </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/settings_title">
+        </activity>
     </application>
 
 </manifest>

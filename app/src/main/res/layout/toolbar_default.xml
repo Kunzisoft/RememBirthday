@@ -5,5 +5,4 @@
     android:title="@string/app_name"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorPrimary"
-    app:layout_collapseMode="pin" />
+    app:theme="@style/Chocolate.Toolbar" />
