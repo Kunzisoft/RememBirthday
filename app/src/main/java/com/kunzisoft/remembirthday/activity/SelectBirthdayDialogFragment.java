@@ -38,7 +38,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
 
     private final static String TAG = "SelectBirthdayDialogFrg";
 
-    private final static int YEAR_DELTA = 80;
+    private final static int YEAR_DELTA = 150;
 
     private Spinner spinnerMonth;
     private Spinner spinnerDay;
@@ -89,7 +89,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         // Current year
         int currentYear = calendar.get(Calendar.YEAR);
         List<Integer> listYears = new ArrayList<>();
-        for(int i = currentYear-YEAR_DELTA; i<currentYear+YEAR_DELTA; i++) {
+        for(int i = currentYear-YEAR_DELTA; i<=currentYear; i++) {
             listYears.add(i);
         }
 
