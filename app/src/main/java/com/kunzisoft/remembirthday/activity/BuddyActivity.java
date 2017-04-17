@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.notifications.NotificationEventReceiver;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -41,6 +42,9 @@ public class BuddyActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.anniversaries_title));
         setSupportActionBar(toolbar);
+
+        // Launch Notification Manager TODO if preference OK and elements
+        NotificationEventReceiver.setupAlarm(getApplicationContext());
 
         // Button add
         FloatingActionButton addEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);

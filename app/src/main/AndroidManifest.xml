@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application android:name="com.kunzisoft.remembirthday.RememBirthday"
         android:allowBackup="true"
@@ -36,6 +37,25 @@
             android:name=".activity.SettingsActivity"
             android:label="@string/settings_title">
         </activity>
+        <activity
+            android:name=".activity.NotificationActivity"
+            android:label="@string/settings_title">
+        </activity>
+
+        <service
+            android:name=".notifications.NotificationIntentService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name=".notifications.NotificationEventReceiver" />
+        <receiver android:name=".notifications.NotificationServiceStarterReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

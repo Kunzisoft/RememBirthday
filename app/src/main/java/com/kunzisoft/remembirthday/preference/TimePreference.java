@@ -2,6 +2,7 @@ package com.kunzisoft.remembirthday.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -39,20 +40,32 @@ public class TimePreference extends DialogPreference {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
 
-        picker.setCurrentHour(lastHour);
-        picker.setCurrentMinute(lastMinute);
+        if (Build.VERSION.SDK_INT < 23) {
+            picker.setCurrentHour(lastHour);
+            picker.setCurrentMinute(lastMinute);
+        } else {
+            picker.setHour(lastHour);
+            picker.setMinute(lastMinute);
+        }
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
 
         if (positiveResult) {
-            lastHour=picker.getCurrentHour();
-            lastMinute=picker.getCurrentMinute();
+            if (Build.VERSION.SDK_INT < 23) {
+                lastHour = picker.getCurrentHour();
+                lastMinute = picker.getCurrentMinute();
+            } else {
+                lastHour = picker.getHour();
+                lastMinute = picker.getMinute();
+            }
 
             String time=String.valueOf(lastHour)+":"+String.valueOf(lastMinute);
 
