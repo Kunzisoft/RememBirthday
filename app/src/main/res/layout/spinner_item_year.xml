@@ -8,7 +8,7 @@
     android:textSize="22sp"
     android:textColor="@color/color_text_year"
     android:background="@color/backgroundElementInverse"
-    android:text="test"
+    android:text=""
     android:duplicateParentState="true"
     android:ellipsize="marquee"
     android:textAlignment="inherit"/>

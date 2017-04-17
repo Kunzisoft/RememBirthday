@@ -91,7 +91,7 @@ public class BuddyActivity extends AppCompatActivity {
     @OnShowRationale(Manifest.permission.WRITE_CONTACTS)
     public void showRationaleForContacts(final PermissionRequest request) {
         new AlertDialog.Builder(this)
-                .setMessage(R.string.permission_contacts_rationale)
+                .setMessage(R.string.permission_write_contacts_rationale)
                 .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -109,7 +109,7 @@ public class BuddyActivity extends AppCompatActivity {
 
     @OnPermissionDenied(Manifest.permission.WRITE_CONTACTS)
     void showDeniedForContacts() {
-        Toast.makeText(this, R.string.permission_contacts_denied, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.permission_write_contacts_denied, Toast.LENGTH_SHORT).show();
     }
 
     @OnNeverAskAgain(Manifest.permission.WRITE_CONTACTS)
