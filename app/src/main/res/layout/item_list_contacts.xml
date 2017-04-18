@@ -13,10 +13,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:padding="8dp"
         app:srcCompat="@drawable/ic_person_white_24dp"
-        android:tint="@color/colorSecondary"
-        android:background="@color/colorPrimary"/>
+        android:background="@drawable/background_circle"/>
 
     <TextView
         android:id="@+id/item_list_contact_name"

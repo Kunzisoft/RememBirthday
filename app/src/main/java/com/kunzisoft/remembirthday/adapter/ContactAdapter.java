@@ -1,15 +1,24 @@
 package com.kunzisoft.remembirthday.adapter;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Contact;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 /**
  * Adapter linked to contacts with birthday for data feeding
@@ -18,10 +27,15 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     private static final String TAG = "ContactBirthdayAdapter";
 
+    private Context context;
     private OnClickItemContactListener onClickItemContactListener;
 
     private Cursor cursor;
     protected int contactIdColIdx, contactNameColIdx, contactThumbnailImageUriColIdx, contactImageUriColIdx;
+
+    public ContactAdapter(Context context) {
+        this.context = context;
+    }
 
     /**
      * Change cursor implementation for retrieving data
@@ -70,8 +84,9 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
                 cursor.getString(contactNameColIdx));
         // Thumbnail
         String uriThumbnailString = cursor.getString(contactThumbnailImageUriColIdx);
-        if(uriThumbnailString!=null && !uriThumbnailString.isEmpty())
+        if(uriThumbnailString!=null && !uriThumbnailString.isEmpty()) {
             contact.setImageThumbnailUri(Uri.parse(uriThumbnailString));
+        }
         // Photo
         String uriString = cursor.getString(contactImageUriColIdx);
         if(uriString!=null && !uriString.isEmpty())
@@ -85,10 +100,34 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @param holder The ViewHolder
      * @param contact The item
      */
-    protected void assignDataToView(T holder, Contact contact) {
-        if(contact.containsImage())
-            holder.icon.setImageURI(contact.getImageUri());
+    protected void assignDataToView(final T holder, Contact contact) {
+        if(contact.containsImage()) {
+            Picasso.with(context).load(contact.getImageThumbnailUri())
+                    .into(holder.icon, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            cropRoundedImageView(holder.icon);
+                        }
+                        @Override
+                        public void onError() {}
+                    });
+        } else {
+            holder.icon.setColorFilter(
+                    ContextCompat.getColor(context, R.color.colorPrimary));
+        }
+
         holder.name.setText(contact.getName());
+    }
+
+    /**
+     * Crop ImageView in parameter for create a circle
+     */
+    private void cropRoundedImageView(ImageView imageView) {
+        Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        RoundedBitmapDrawable imageDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), imageBitmap);
+        imageDrawable.setCircular(true);
+        imageDrawable.setCornerRadius(Math.max(imageBitmap.getWidth(), imageBitmap.getHeight()) / 2.0f);
+        imageView.setImageDrawable(imageDrawable);
     }
 
     /**

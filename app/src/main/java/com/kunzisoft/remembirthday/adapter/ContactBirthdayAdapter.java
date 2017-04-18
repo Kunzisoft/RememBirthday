@@ -1,5 +1,6 @@
 package com.kunzisoft.remembirthday.adapter;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -23,6 +24,10 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
     private int contactTypeColIdx;
     private final int contactTypeBirthdayDataIdx = ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
     private final int contactTypeAnniversaryDataIdx = ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY;
+
+    public ContactBirthdayAdapter(Context context) {
+        super(context);
+    }
 
     @Override
     public void swapCursor(Cursor cursor) {

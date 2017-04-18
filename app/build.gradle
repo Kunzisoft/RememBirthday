@@ -34,6 +34,8 @@ dependencies {
     // Permission
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
+    // Picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
     // Unit Tests
     testCompile 'junit:junit:4.12'
 }

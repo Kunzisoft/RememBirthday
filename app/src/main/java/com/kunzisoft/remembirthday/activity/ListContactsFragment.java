@@ -43,7 +43,7 @@ public class ListContactsFragment extends AbstractListContactsFragment
         super.onActivityCreated(savedInstanceState);
 
         // Put the result Cursor in the adapter for the ListView
-        contactAdapter = new ContactAdapter();
+        contactAdapter = new ContactAdapter(getContext());
         contactAdapter.setOnClickItemContactListener(this);
         contactsListView.setAdapter(contactAdapter);
     }

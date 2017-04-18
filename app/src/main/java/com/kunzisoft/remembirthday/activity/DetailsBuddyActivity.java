@@ -2,6 +2,7 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Contact;
+import com.squareup.picasso.Picasso;
 
 /**
  * Activity that displays the details of a buddy
@@ -43,8 +45,13 @@ public class DetailsBuddyActivity extends AppCompatActivity {
 
         // Display avatar
         ImageView avatarImageView = (ImageView) findViewById(R.id.fragment_details_buddy_avatar);
-        if(contact != null && avatarImageView != null && contact.containsImage())
-            avatarImageView.setImageURI(contact.getImageUri());
+        if(avatarImageView != null) {
+            if (contact != null && contact.containsImage()) {
+                Picasso.with(this).load(contact.getImageUri()).into(avatarImageView);
+            } else {
+                avatarImageView.setColorFilter(ContextCompat.getColor(this, R.color.colorSecondary));
+            }
+        }
 
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.

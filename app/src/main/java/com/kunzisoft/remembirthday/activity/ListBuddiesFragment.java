@@ -73,7 +73,7 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         super.onActivityCreated(savedInstanceState);
 
         // Put the result Cursor in the adapter for the ListView
-        contactAdapter = new ContactBirthdayAdapter();
+        contactAdapter = new ContactBirthdayAdapter(getContext());
         contactAdapter.setOnClickItemContactListener(this);
         contactsListView.setAdapter(contactAdapter);
 
