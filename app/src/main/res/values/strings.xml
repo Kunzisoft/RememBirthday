@@ -19,7 +19,7 @@
     <string name="activity_list_contacts_error_add_birthday">Error when adding birthday</string>
     <string name="activity_list_contacts_success_add_birthday">Successful addition of birthday</string>
 
-    <!-- permissions -->
+    <!-- Permissions -->
     <string name="permission_read_contacts_rationale">Read contact permissions are required for their display</string>
     <string name="permission_read_contacts_denied">The application will not be able to display contacts.</string>
     <string name="permission_write_contacts_rationale">Write contact permissions are required for their save in database</string>
@@ -28,6 +28,12 @@
 
     <string name="button_allow">OK</string>
     <string name="button_deny">Deny</string>
+
+    <!-- Notifications -->
+    <string name="notifications_anniversary_title">Anniversary</string>
+    <string name="notifications_anniversary_today">This is John\'s birthday today.</string>
+    <string name="notifications_anniversary_tomorrow">This will be John\'s birthday tomorrow.</string>
+    <string name="notifications_anniversary_later">This will be John\'s birthday in 5 days.</string>
 
     <!-- Preferences -->
     <string name="pref_category_notifications_title">Notifications</string>

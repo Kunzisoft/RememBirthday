@@ -59,13 +59,11 @@ public class NotificationIntentService extends IntentService {
     }
 
     private void processStartNotification() {
-        // Do something. For example, fetch fresh data from backend to create a rich notification?
-
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setContentTitle("Scheduled Notification")
+        builder.setContentTitle(getString(R.string.notifications_anniversary_title))
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setContentText("This notification has been triggered by Notification Service")
+                .setContentText(getString(R.string.notifications_anniversary_today))
                 .setSmallIcon(R.drawable.ic_notification_24dp);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this,

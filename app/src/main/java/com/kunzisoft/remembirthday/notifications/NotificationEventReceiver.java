@@ -13,7 +13,6 @@ import java.util.Date;
 /**
  * Created by joker on 17/04/17.
  */
-
 public class NotificationEventReceiver extends WakefulBroadcastReceiver {
 
     private static final String ACTION_START_NOTIFICATION_SERVICE = "ACTION_START_NOTIFICATION_SERVICE";
