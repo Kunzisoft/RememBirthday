@@ -1,8 +1,10 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,12 +13,17 @@ import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
 import com.squareup.picasso.Picasso;
 
 /**
  * Activity that displays the details of a buddy
  */
-public class DetailsBuddyActivity extends AppCompatActivity {
+public class DetailsBuddyActivity extends AppCompatActivity
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday {
+
+    private Contact contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +39,7 @@ public class DetailsBuddyActivity extends AppCompatActivity {
         }
 
         // Retrieve contact
-        Contact contact = getIntent().getExtras().getParcelable(BuddyActivity.EXTRA_BUDDY);
+        contact = getIntent().getExtras().getParcelable(BuddyActivity.EXTRA_BUDDY);
 
         // Add name in title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,12 +90,37 @@ public class DetailsBuddyActivity extends AppCompatActivity {
 
                 break;
             case R.id.action_settings:
-
                 break;
             case R.id.action_delete:
+
+                AlertDialog.Builder builderDialog = new AlertDialog.Builder(this);
+                builderDialog.setTitle(R.string.dialog_select_birthday_title);
+                builderDialog.setMessage(R.string.dialog_delete_birthday_message);
+                builderDialog.setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Delete anniversary in database
+                        RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
+                                new RemoveBirthdayFromContactTask(contact.getId(),
+                                        contact.getBirthday(),
+                                        DetailsBuddyActivity.this);
+                        removeBirthdayFromContactTask.setCallbackActionBirthday(DetailsBuddyActivity.this);
+                        removeBirthdayFromContactTask.execute();
+                        finish();
+                    }
+                });
+                builderDialog.setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                builderDialog.create().show();
 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void afterActionBirthdayInDatabase(Exception exception) {
     }
 }

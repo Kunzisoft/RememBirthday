@@ -10,11 +10,15 @@
     <string name="action_modify">Modify</string>
     <string name="action_delete">Delete</string>
 
+    <!-- Dialogs -->
     <string name="dialog_select_birthday_title">Select Birthday</string>
-
     <string name="dialog_select_birthday_zero_day_left">Happy Birthday!</string>
     <string name="dialog_select_birthday_one_day_left">Birthday in only 1 day!</string>
     <string name="dialog_select_birthday_number_days_left">Birthday in %1$d days.</string>
+
+    <string name="dialog_delete_birthday_title">Delete Birthday</string>
+    <string name="dialog_delete_birthday_message">Are you sure you want to delete the anniversary date and related events ?</string>
+
 
     <string name="activity_list_contacts_error_add_birthday">Error when adding birthday</string>
     <string name="activity_list_contacts_success_add_birthday">Successful addition of birthday</string>
@@ -26,6 +30,8 @@
     <string name="permission_write_contacts_denied">The application will not be able to save birthdays in contacts.</string>
     <string name="permission_contacts_neverask">Never Ask</string>
 
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
     <string name="button_allow">OK</string>
     <string name="button_deny">Deny</string>
 

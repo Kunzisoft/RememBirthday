@@ -16,13 +16,14 @@ import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
 
 /**
  * Created by joker on 19/01/17.
  */
 public class ListContactsActivity extends AppCompatActivity
-        implements AddBirthdayToContactTask.CallbackAddBirthdayToContact{
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday {
 
     private static final String TAG = "ListContactsActivity";
 
@@ -63,7 +64,7 @@ public class ListContactsActivity extends AppCompatActivity
             @Override
             public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
                 AddBirthdayToContactTask addBirthdayToContactTask = new AddBirthdayToContactTask(contactId, dateUnknownYear, ListContactsActivity.this);
-                addBirthdayToContactTask.setCallbackAddBirthdayToContact(ListContactsActivity.this);
+                addBirthdayToContactTask.setCallbackActionBirthday(ListContactsActivity.this);
                 addBirthdayToContactTask.execute();
             }
 
@@ -118,7 +119,7 @@ public class ListContactsActivity extends AppCompatActivity
     }
 
     @Override
-    public void afterAddBirthdayInDatabase(Exception exception) {
+    public void afterActionBirthdayInDatabase(Exception exception) {
         String message;
         if(exception == null)
             message = getString(R.string.activity_list_contacts_success_add_birthday);
