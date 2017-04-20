@@ -37,9 +37,9 @@
 
     <!-- Notifications -->
     <string name="notifications_anniversary_title">Anniversary</string>
-    <string name="notifications_anniversary_today">This is John\'s birthday today.</string>
-    <string name="notifications_anniversary_tomorrow">This will be John\'s birthday tomorrow.</string>
-    <string name="notifications_anniversary_later">This will be John\'s birthday in 5 days.</string>
+    <string name="notifications_anniversary_today">This is %1$s\'s birthday today.</string>
+    <string name="notifications_anniversary_tomorrow">This will be %1$s\'s birthday tomorrow.</string>
+    <string name="notifications_anniversary_later">This will be %1$s\'s birthday in 5 days.</string>
 
     <!-- Preferences -->
     <string name="pref_category_notifications_title">Notifications</string>

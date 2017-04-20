@@ -88,6 +88,21 @@ public class DateUnknownYear implements Parcelable {
         return daysBetweenTodayAnd(this.date);
     }
 
+    //TODO TEST
+    public Date getNextAnniversary() {
+        MonthDay monthDayNow = MonthDay.now();
+        MonthDay monthDayOfNextDate = MonthDay.fromDateFields(date);
+        if(monthDayNow.isEqual(monthDayOfNextDate))
+            return new DateTime().toDate();
+        if(monthDayNow.isBefore(monthDayOfNextDate))
+            return new DateTime(date).toDate();
+        else {
+            DateTime dateTimeNow = DateTime.now();
+            DateTime dateTimeOfNextDate = new DateTime(date).withYear(dateTimeNow.getYear()).plusYears(1);
+            return dateTimeOfNextDate.toDate();
+        }
+    }
+
     /**
      * Number of years between a date and today
      * @param date Date: Year for calculate number

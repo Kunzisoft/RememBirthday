@@ -43,9 +43,6 @@ public class BuddyActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.anniversaries_title));
         setSupportActionBar(toolbar);
 
-        // Launch Notification Manager TODO if preference OK and elements
-        NotificationEventReceiver.setupAlarm(getApplicationContext());
-
         // Button add
         FloatingActionButton addEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
         addEventButton.setOnClickListener(new View.OnClickListener() {

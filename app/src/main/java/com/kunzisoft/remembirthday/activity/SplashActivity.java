@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.notifications.ContactsProviderIntentService;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -33,6 +34,9 @@ public class SplashActivity extends AppCompatActivity {
 
     @NeedsPermission(Manifest.permission.READ_CONTACTS)
     public void showRationalForContacts() {
+        Intent intentService = new Intent(this, ContactsProviderIntentService.class);
+        startService(intentService);
+
         Intent intent = new Intent(this, BuddyActivity.class);
         startActivity(intent);
         finish();

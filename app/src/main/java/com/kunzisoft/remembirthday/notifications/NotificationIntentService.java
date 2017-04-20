@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.activity.NotificationActivity;
+import com.kunzisoft.remembirthday.element.Contact;
 
 /**
  * Service for send notifications of each anniversary
@@ -22,12 +23,16 @@ public class NotificationIntentService extends IntentService {
     private static final String ACTION_START = "ACTION_START";
     private static final String ACTION_DELETE = "ACTION_DELETE";
 
+    private static final String EXTRA_CONTACT_NOTIFICATION = "EXTRA_CONTACT_NOTIFICATION_SERVICE";
+
+
     public NotificationIntentService() {
         super(NotificationIntentService.class.getSimpleName());
     }
 
-    public static Intent createIntentStartNotificationService(Context context) {
+    public static Intent createIntentStartNotificationService(Context context, Contact contact) {
         Intent intent = new Intent(context, NotificationIntentService.class);
+        intent.putExtra(EXTRA_CONTACT_NOTIFICATION, contact);
         intent.setAction(ACTION_START);
         return intent;
     }
@@ -44,7 +49,8 @@ public class NotificationIntentService extends IntentService {
         try {
             String action = intent.getAction();
             if (ACTION_START.equals(action)) {
-                processStartNotification();
+                Contact contact = intent.getParcelableExtra(EXTRA_CONTACT_NOTIFICATION);
+                processStartNotification(contact);
             }
             if (ACTION_DELETE.equals(action)) {
                 processDeleteNotification(intent);
@@ -54,16 +60,17 @@ public class NotificationIntentService extends IntentService {
         }
     }
 
-    private void processDeleteNotification(Intent intent) {
-        // Log something?
-    }
+    private void processStartNotification(Contact contact) {
 
-    private void processStartNotification() {
+        //TODO in future
+        String textMessage
+                = getString(R.string.notifications_anniversary_today, contact.getName());
+
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle(getString(R.string.notifications_anniversary_title))
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setContentText(getString(R.string.notifications_anniversary_today))
+                .setContentText(textMessage)
                 .setSmallIcon(R.drawable.ic_notification_24dp);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -75,5 +82,9 @@ public class NotificationIntentService extends IntentService {
 
         final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private void processDeleteNotification(Intent intent) {
+        // Log something?
     }
 }

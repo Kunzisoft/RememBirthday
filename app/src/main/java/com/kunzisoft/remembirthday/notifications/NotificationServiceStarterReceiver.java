@@ -12,6 +12,7 @@ public class NotificationServiceStarterReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationEventReceiver.setupAlarm(context);
+        // TODO changement de fuseau horaire
+        //NotificationEventReceiver.setupAlarm(context);
     }
 }
