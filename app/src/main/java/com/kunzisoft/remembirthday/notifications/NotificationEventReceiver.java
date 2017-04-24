@@ -23,7 +23,7 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
 
     public static void setupAlarm(Context context, Contact contact) {
 
-        Log.d("NotificationEvtReceiver", contact.getBirthday().getNextAnniversary().toString());
+        Log.e("NotificationEvtReceiver", contact.getBirthday().getNextAnniversary().toString());
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent alarmIntent = getStartPendingIntent(context, contact);

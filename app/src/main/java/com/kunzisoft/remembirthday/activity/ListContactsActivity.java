@@ -23,7 +23,7 @@ import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
  * Created by joker on 19/01/17.
  */
 public class ListContactsActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday {
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, SelectBirthdayDialogOpen {
 
     private static final String TAG = "ListContactsActivity";
 
@@ -66,6 +66,7 @@ public class ListContactsActivity extends AppCompatActivity
                 AddBirthdayToContactTask addBirthdayToContactTask = new AddBirthdayToContactTask(contactId, dateUnknownYear, ListContactsActivity.this);
                 addBirthdayToContactTask.setCallbackActionBirthday(ListContactsActivity.this);
                 addBirthdayToContactTask.execute();
+                finish();
             }
 
             @Override
@@ -74,10 +75,7 @@ public class ListContactsActivity extends AppCompatActivity
         });
     }
 
-    /**
-     * Displays the event selection dialog
-     * @param contactId Id of contact defined in ContactsContract.Data.RAW_CONTACT_ID
-     */
+    @Override
     public void openDialogSelection(long contactId) {
         this.contactId = contactId;
         dialogSelection.show(getSupportFragmentManager(), TAG_SELECT_DIALOG);

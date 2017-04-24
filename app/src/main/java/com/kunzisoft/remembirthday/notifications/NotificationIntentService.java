@@ -73,15 +73,16 @@ public class NotificationIntentService extends IntentService {
                 .setContentText(textMessage)
                 .setSmallIcon(R.drawable.ic_notification_24dp);
 
+        // TODO contact.getID() with anniversary
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                NOTIFICATION_ID,
+                (int) (contact.getId()),
                 new Intent(this, NotificationActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
 
         final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(NOTIFICATION_ID, builder.build());
+        manager.notify((int) (contact.getId()), builder.build());
     }
 
     private void processDeleteNotification(Intent intent) {

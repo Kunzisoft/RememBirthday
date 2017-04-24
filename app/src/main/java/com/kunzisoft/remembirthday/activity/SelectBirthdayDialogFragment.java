@@ -48,6 +48,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
 
     private OnClickBirthdayListener onClickListener;
 
+    private DateUnknownYear dateUnknownYearDefault;
     private DateUnknownYear dateUnknownYearSelected;
 
     @Override
@@ -64,10 +65,22 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         spinnerDay = (Spinner) root.findViewById(R.id.fragment_birthday_select_day);
         spinnerYear = (Spinner) root.findViewById(R.id.fragment_birthday_select_year);
         switchYear = (SwitchCompat) root.findViewById(R.id.fragment_birthday_select_enable_year);
+        switchYear.setChecked(false);
+        spinnerYear.setEnabled(false);
+        switchYear.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                spinnerYear.setEnabled(b);
+            }
+        });
         textViewDaysRemaining = (TextView) root.findViewById(R.id.fragment_birthday_select_days_left);
 
+        Calendar calendar = new GregorianCalendar();
         // Create a calendar object and set year and month
-        final Calendar calendar = new GregorianCalendar();
+        if(dateUnknownYearDefault != null) {
+            switchYear.setChecked(dateUnknownYearDefault.containsYear());
+            calendar.setTime(dateUnknownYearDefault.getDate());
+        }
 
         // MONTHS
         String[] months = new DateFormatSymbols().getMonths();
@@ -86,12 +99,13 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         // YEARS
-        // Current year
-        int currentYear = calendar.get(Calendar.YEAR);
+        int year = (new GregorianCalendar()).get(Calendar.YEAR);
         List<Integer> listYears = new ArrayList<>();
-        for(int i = currentYear-YEAR_DELTA; i<=currentYear; i++) {
+        for(int i = year-YEAR_DELTA; i<=year; i++) {
             listYears.add(i);
         }
+        // Current year
+        int currentYear = calendar.get(Calendar.YEAR);
 
         // Spinners and Adapters
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getContext(),
@@ -129,8 +143,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
         ArrayAdapter<Integer> yearsAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_item_year, listYears);
         spinnerYear.setAdapter(yearsAdapter);
-        spinnerYear.setSelection(YEAR_DELTA);
-        spinnerYear.setEnabled(false);
+        spinnerYear.setSelection(currentYear - (year-YEAR_DELTA));
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -140,13 +153,6 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-        switchYear.setChecked(false);
-        switchYear.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                spinnerYear.setEnabled(b);
             }
         });
 
@@ -170,6 +176,14 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
                 });
         // Create the AlertDialog object and return it
         return builder.create();
+    }
+
+    /**
+     * Define a default value for birthday, must be called before the "show"
+     * @param birthday Default date
+     */
+    public void setDefaultBirthday(DateUnknownYear birthday) {
+        this.dateUnknownYearDefault = birthday;
     }
 
     /**

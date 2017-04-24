@@ -13,17 +13,22 @@ import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
+import com.kunzisoft.remembirthday.task.UpdateBirthdayToContactTask;
 import com.squareup.picasso.Picasso;
 
 /**
  * Activity that displays the details of a buddy
  */
 public class DetailsBuddyActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday {
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, SelectBirthdayDialogOpen {
 
     private Contact contact;
+
+    private SelectBirthdayDialogFragment dialogSelection;
+    private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,29 @@ public class DetailsBuddyActivity extends AppCompatActivity
             details.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().add(R.id.activity_details_buddy_fragment_details_buddy, details).commit();
         }
+
+        // Initialize dialog for birthday selection
+        dialogSelection = (SelectBirthdayDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
+        if(dialogSelection == null)
+            dialogSelection = new SelectBirthdayDialogFragment();
+
+        dialogSelection.setDefaultBirthday(contact.getBirthday());
+        dialogSelection.setOnClickListener(new SelectBirthdayDialogFragment.OnClickBirthdayListener() {
+            @Override
+            public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
+                UpdateBirthdayToContactTask updateBirthdayToContactTask =
+                        new UpdateBirthdayToContactTask(contact.getId(), contact.getBirthday(), dateUnknownYear, DetailsBuddyActivity.this);
+                updateBirthdayToContactTask.setCallbackActionBirthday(DetailsBuddyActivity.this);
+                updateBirthdayToContactTask.execute();
+                //TODO remove notification after update
+
+                finish();
+            }
+
+            @Override
+            public void onClickNegativeButton(DateUnknownYear selectedDate) {
+            }
+        });
     }
 
     @Override
@@ -87,9 +115,7 @@ public class DetailsBuddyActivity extends AppCompatActivity
                 finish();
                 break;
             case R.id.action_modify:
-
-                break;
-            case R.id.action_settings:
+                openDialogSelection(contact.getId());
                 break;
             case R.id.action_delete:
 
@@ -121,6 +147,10 @@ public class DetailsBuddyActivity extends AppCompatActivity
     }
 
     @Override
-    public void afterActionBirthdayInDatabase(Exception exception) {
+    public void afterActionBirthdayInDatabase(Exception exception) {}
+
+    @Override
+    public void openDialogSelection(long contactId) {
+        dialogSelection.show(getSupportFragmentManager(), TAG_SELECT_DIALOG);
     }
 }

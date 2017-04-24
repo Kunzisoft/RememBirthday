@@ -1,0 +1,14 @@
+package com.kunzisoft.remembirthday.activity;
+
+/**
+ * Created by joker on 24/04/17.
+ */
+
+public interface SelectBirthdayDialogOpen {
+
+    /**
+     * Displays the event selection dialog
+     * @param contactId Id of contact defined in ContactsContract.Data.RAW_CONTACT_ID
+     */
+    void openDialogSelection(long contactId);
+}

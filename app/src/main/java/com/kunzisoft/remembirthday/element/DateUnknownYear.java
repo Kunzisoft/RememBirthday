@@ -18,8 +18,8 @@ import java.util.Locale;
  */
 public class DateUnknownYear implements Parcelable {
 
-    private static String YEAR_FORMAT = "yy-MM-dd";
-    private static String WITHOUT_YEAR_FORMAT = "MM-dd";
+    private static String YEAR_FORMAT = "yyyy-MM-dd";
+    private static String WITHOUT_YEAR_FORMAT = "--MM-dd";
     private static SimpleDateFormat YEAR_SDF = new SimpleDateFormat(YEAR_FORMAT, Locale.getDefault());
     private static SimpleDateFormat WITHOUT_YEAR_SDF = new SimpleDateFormat(WITHOUT_YEAR_FORMAT, Locale.getDefault());
 

@@ -9,17 +9,13 @@
         android:icon="@drawable/ic_create_white_24dp"
         app:showAsAction="ifRoom"/>
     <!--
+    // TODO
     <item
         android:id="@+id/action_favorite"
         android:orderInCategory="100"
         android:title="@string/action_favorite"
         app:showAsAction="never"/>
     -->
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
     <item
         android:id="@+id/action_delete"
         android:orderInCategory="100"

@@ -43,25 +43,27 @@ public class DetailsBuddyFragment extends Fragment {
             contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
         if(contact != null) {
-            // Display date
-            Date currentBuddyBirthday = contact.getBirthday().getDate();
-            SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.getDefault());
-            SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+            if(contact.hasBirthday()) {
+                // Display date
+                Date currentBuddyBirthday = contact.getBirthday().getDate();
+                SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.getDefault());
+                SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
 
-            dayAndMonthTextView.setText(dayAndMonthSimpleDateFormat.format(currentBuddyBirthday));
+                dayAndMonthTextView.setText(dayAndMonthSimpleDateFormat.format(currentBuddyBirthday));
 
-            if(contact.getBirthday().containsYear()) {
-                yearTextView.setVisibility(View.VISIBLE);
-                yearTextView.setText(yearSimpleDateFormat.format(currentBuddyBirthday));
+                if (contact.getBirthday().containsYear()) {
+                    yearTextView.setVisibility(View.VISIBLE);
+                    yearTextView.setText(yearSimpleDateFormat.format(currentBuddyBirthday));
+                } else {
+                    yearTextView.setVisibility(View.GONE);
+                    yearTextView.setText("");
+                    //TODO Add button for year
+                }
+                // Number days left before birthday
+                Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
             } else {
-                yearTextView.setVisibility(View.GONE);
-                yearTextView.setText("");
-                //TODO Add button for year
+                //TODO Error
             }
-
-            // Number days left before birthday
-            Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
-
         }
         return root;
     }

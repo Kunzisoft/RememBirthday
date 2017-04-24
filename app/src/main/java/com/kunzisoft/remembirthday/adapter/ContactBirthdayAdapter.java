@@ -22,8 +22,6 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
 
     private int contactStartDateColIdx;
     private int contactTypeColIdx;
-    private final int contactTypeBirthdayDataIdx = ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
-    private final int contactTypeAnniversaryDataIdx = ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY;
 
     public ContactBirthdayAdapter(Context context) {
         super(context);
@@ -48,10 +46,10 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
         DateUnknownYear dateUnknownYear = null;
         try {
             switch(cursor.getInt(contactTypeColIdx)) {
-                case contactTypeBirthdayDataIdx:
+                case ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY:
                     dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactStartDateColIdx));
                     break;
-                case contactTypeAnniversaryDataIdx:
+                case ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY:
                     dateUnknownYear = DateUnknownYear.stringToDateWithUnknownYear(cursor.getString(contactStartDateColIdx));
                     break;
             }
@@ -69,15 +67,21 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
     protected void assignDataToView(ContactBirthdayViewHolder holder, Contact contact) {
         super.assignDataToView(holder, contact);
 
-        if(contact.getBirthday().containsYear()) {
-            holder.age.setVisibility(View.VISIBLE);
-            holder.age.setText(String.valueOf(contact.getAge()));
+        if(contact.hasBirthday()) {
+            if (contact.getBirthday().containsYear()) {
+                holder.age.setVisibility(View.VISIBLE);
+                holder.age.setText(String.valueOf(contact.getAge()));
+            } else {
+                holder.age.setVisibility(View.INVISIBLE);
+                holder.age.setText("");
+            }
+            holder.birthday.setText(contact.getBirthday().toString());
+            Utility.assignDaysRemainingInTextView(holder.daysLeft, contact.getBirthdayDaysRemaining());
         } else {
             holder.age.setVisibility(View.INVISIBLE);
             holder.age.setText("");
+            holder.birthday.setText("");
+            holder.daysLeft.setText("");
         }
-        holder.birthday.setText(contact.getBirthday().toString());
-        Utility.assignDaysRemainingInTextView(holder.daysLeft, contact.getBirthdayDaysRemaining());
     }
-
 }

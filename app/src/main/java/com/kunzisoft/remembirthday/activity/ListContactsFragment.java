@@ -52,14 +52,12 @@ public class ListContactsFragment extends AbstractListContactsFragment
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
         long contactId = contact.getId();
 
-        if(contact.hasBirthday()) {
-            // TODO Show details activity
-        } else {
-            try {
-                ((ListContactsActivity) getActivity()).openDialogSelection(contactId);
-            } catch(ClassCastException e) {
-                Log.e(TAG, "Wrong activity, must be 'ListContactsActivity'");
-            }
+        // TODO Verify if already a birthday
+
+        try {
+            ((SelectBirthdayDialogOpen) getActivity()).openDialogSelection(contactId);
+        } catch(ClassCastException e) {
+            Log.e(TAG, "Wrong activity, must be 'SelectBirthdayDialogOpen'");
         }
     }
 }
