@@ -8,6 +8,7 @@ import org.joda.time.Days;
 import org.joda.time.MonthDay;
 import org.joda.time.Years;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,10 +19,8 @@ import java.util.Locale;
  */
 public class DateUnknownYear implements Parcelable {
 
-    private static String YEAR_FORMAT = "yyyy-MM-dd";
-    private static String WITHOUT_YEAR_FORMAT = "--MM-dd";
-    private static SimpleDateFormat YEAR_SDF = new SimpleDateFormat(YEAR_FORMAT, Locale.getDefault());
-    private static SimpleDateFormat WITHOUT_YEAR_SDF = new SimpleDateFormat(WITHOUT_YEAR_FORMAT, Locale.getDefault());
+    private static String WITH_YEAR_FORMAT_DEFAULT = "yyyy-MM-dd";
+    private static String WITHOUT_YEAR_FORMAT_DEFAULT = "--MM-dd";
 
     private boolean containsYear;
     private Date date;
@@ -41,22 +40,41 @@ public class DateUnknownYear implements Parcelable {
         this.date = (Date) in.readSerializable();
     }
 
+    /**
+     * @return Return the default unknown date
+     */
     public static DateUnknownYear getDefault() {
-        return new DateUnknownYear(new Date(), false);
+        return new DateUnknownYear(new Date(0), false);
     }
 
+    /**
+     * Determines whether the year is present in the date
+     * @return true is is present
+     */
     public boolean containsYear() {
         return containsYear;
     }
 
+    /**
+     * Determines whether the year is present or not.
+     * @param containsYear true if the year is present
+     */
     public void setContainsYear(boolean containsYear) {
         this.containsYear = containsYear;
     }
 
+    /**
+     * @return The corresponding date, <br />
+     * Caution: Hours, minutes and seconds are random, the year is random if not determined.
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Assign a new date, only day, month and year are used.
+     * @param date The new date
+     */
     public void setDate(Date date) {
         this.date = date;
     }
@@ -120,42 +138,83 @@ public class DateUnknownYear implements Parcelable {
         return yearsBetweenTodayAnd(this.date);
     }
 
+    /**
+     * String for backup in a database
+     * @return The string for backup
+     */
+    public String toBackupString() {
+        if (!containsYear()){
+            SimpleDateFormat datePattern = new SimpleDateFormat(WITHOUT_YEAR_FORMAT_DEFAULT, Locale.getDefault());
+            return datePattern.format(date);
+        } else {
+            SimpleDateFormat datePattern = new SimpleDateFormat(WITH_YEAR_FORMAT_DEFAULT, Locale.getDefault());
+            return datePattern.format(date);
+        }
+    }
+
     @Override
     public String toString() {
-        if(!containsYear())
-            return toStringWithoutYear();
-        else
-            return toStringWithYear();
-    }
-
-    private String toStringWithYear() {
-        SimpleDateFormat datePattern = new SimpleDateFormat (YEAR_FORMAT, Locale.getDefault());
-        return datePattern.format(date);
-    }
-
-    private String toStringWithoutYear() {
-        SimpleDateFormat datePattern = new SimpleDateFormat (WITHOUT_YEAR_FORMAT, Locale.getDefault());
-        return datePattern.format(date);
+        int dateFormat = DateFormat.MEDIUM;
+        if(containsYear()) {
+            DateFormat df = DateFormat.getDateInstance(dateFormat, Locale.getDefault());
+            return df.format(date);
+        } else {
+            return toStringMonthAndDay(dateFormat);
+        }
     }
 
     /**
-     * Convert string formatted in "MM-dd" to DateUnknownYear
-     * @param string
-     * @return
-     * @throws ParseException
+     * @return Formatted string only see the year, must be used with {@link DateUnknownYear#containsYear()} <br />
+     * WARNING : If the date does not contain a year, returns a random number.
      */
-    public static DateUnknownYear stringToDateWithUnknownYear(String string) throws ParseException {
-        return new DateUnknownYear(WITHOUT_YEAR_SDF.parse(string), false);
+    public String toStringYear() {
+        SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+        return yearSimpleDateFormat.format(date);
     }
 
     /**
-     * Convert string formatted in "yy-MM-dd" to DateUnknownYear
-     * @param string
-     * @return
-     * @throws ParseException
+     * Formatted string only see the month and the day
+     * @param dateFormat can be {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM} or {@link DateFormat#LONG}
+     * @return Formatted string
      */
-    public static DateUnknownYear stringToDateWithKnownYear(String string) throws ParseException {
-        return new DateUnknownYear(YEAR_SDF.parse(string), true);
+    public String toStringMonthAndDay(int dateFormat) {
+        SimpleDateFormat sdf = (SimpleDateFormat) DateFormat.getDateInstance(dateFormat);
+        sdf.applyPattern(sdf.toPattern().replaceAll(
+                "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
+                ""));
+        return sdf.format(date);
+    }
+
+    /**
+     * Convert string formatted to DateUnknownYear
+     * @param string The string formatted
+     * @return The date corresponding to the string
+     * @throws ParseException If the string can not be parsed
+     */
+    public static DateUnknownYear stringToDate(String string) throws ParseException {
+        String patternWithYear = "^\\d{4}-\\d{1,2}-\\d{1,2}$";
+        String patternWithoutYearA = "^--\\d{1,2}-\\d{1,2}$";
+        String patternWithoutYearB = "^\\d{1,2}-\\d{1,2}$";
+
+        // Default value
+        DateUnknownYear dateUnknownYear = DateUnknownYear.getDefault();
+
+        if(string.matches(patternWithYear)) {
+            dateUnknownYear.setDate(
+                    new SimpleDateFormat(WITH_YEAR_FORMAT_DEFAULT, Locale.getDefault()).parse(string));
+            dateUnknownYear.setContainsYear(true);
+        } else if(string.matches(patternWithoutYearA)) {
+            dateUnknownYear.setDate(
+                    new SimpleDateFormat(WITHOUT_YEAR_FORMAT_DEFAULT, Locale.getDefault()).parse(string));
+            dateUnknownYear.setContainsYear(false);
+        } else if(string.matches(patternWithoutYearB)) {
+            String WITHOUT_YEAR_FORMAT_B = "MM-dd";
+            dateUnknownYear.setDate(
+                    new SimpleDateFormat(WITHOUT_YEAR_FORMAT_B, Locale.getDefault()).parse(string));
+            dateUnknownYear.setContainsYear(false);
+        }
+
+        return dateUnknownYear;
     }
 
     @Override

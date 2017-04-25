@@ -47,10 +47,10 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
         try {
             switch(cursor.getInt(contactTypeColIdx)) {
                 case ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY:
-                    dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(cursor.getString(contactStartDateColIdx));
+                    dateUnknownYear = DateUnknownYear.stringToDate(cursor.getString(contactStartDateColIdx));
                     break;
                 case ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY:
-                    dateUnknownYear = DateUnknownYear.stringToDateWithUnknownYear(cursor.getString(contactStartDateColIdx));
+                    //TODO Anniversary
                     break;
             }
         } catch (Exception e) {

@@ -11,10 +11,7 @@ import android.widget.TextView;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 /**
  * Activity who show the details of buddy selected
@@ -45,15 +42,15 @@ public class DetailsBuddyFragment extends Fragment {
         if(contact != null) {
             if(contact.hasBirthday()) {
                 // Display date
-                Date currentBuddyBirthday = contact.getBirthday().getDate();
-                SimpleDateFormat dayAndMonthSimpleDateFormat = new SimpleDateFormat("dd MMMM", Locale.getDefault());
-                SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+                DateUnknownYear currentBuddyBirthday = contact.getBirthday();
 
-                dayAndMonthTextView.setText(dayAndMonthSimpleDateFormat.format(currentBuddyBirthday));
+                // Assign text for day and month
+                dayAndMonthTextView.setText(currentBuddyBirthday.toStringMonthAndDay(java.text.DateFormat.FULL));
 
+                // Assign text for year
                 if (contact.getBirthday().containsYear()) {
                     yearTextView.setVisibility(View.VISIBLE);
-                    yearTextView.setText(yearSimpleDateFormat.format(currentBuddyBirthday));
+                    yearTextView.setText(currentBuddyBirthday.toStringYear());
                 } else {
                     yearTextView.setVisibility(View.GONE);
                     yearTextView.setText("");

@@ -39,9 +39,9 @@ public class UpdateBirthdayToContactTask extends ActionBirthdayInDatabaseTask{
                                     ContactsContract.CommonDataKinds.Event.TYPE + " =?"
                             , new String[]{String.valueOf(contactId),
                                     ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
-                                    birthday.toString(),
+                                    birthday.toBackupString(),
                                     typeString})
-                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, newBirthday.toString());
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, newBirthday.toBackupString());
             ops.add(contentBuilder.build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
 

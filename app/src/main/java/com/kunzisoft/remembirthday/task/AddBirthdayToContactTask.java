@@ -25,13 +25,8 @@ public class AddBirthdayToContactTask extends ActionBirthdayInDatabaseTask {
             ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValue(ContactsContract.Data.RAW_CONTACT_ID, contactId)
                     .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toString());
-            if(birthday.containsYear())
-                contentBuilder
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString())
                     .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
-            else
-                contentBuilder
-                    .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY);
             ops.add(contentBuilder.build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
 

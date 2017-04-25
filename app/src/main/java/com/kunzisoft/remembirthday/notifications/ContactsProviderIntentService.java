@@ -70,15 +70,13 @@ public class ContactsProviderIntentService extends IntentService implements Load
                     cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
             DateUnknownYear dateUnknownYear = null;
             try {
-                // TODO Change anniversary
                 switch(cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE))) {
                     case ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY:
-                        dateUnknownYear = DateUnknownYear.stringToDateWithKnownYear(
+                        dateUnknownYear = DateUnknownYear.stringToDate(
                                 cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE)));
                         break;
                     case ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY:
-                        dateUnknownYear = DateUnknownYear.stringToDateWithUnknownYear(
-                                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE)));
+                        // TODO Change anniversary
                         break;
                 }
             } catch (Exception e) {

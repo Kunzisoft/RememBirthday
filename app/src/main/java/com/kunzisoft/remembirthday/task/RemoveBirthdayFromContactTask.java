@@ -21,12 +21,6 @@ public class RemoveBirthdayFromContactTask extends ActionBirthdayInDatabaseTask 
     @Override
     protected Exception doInBackground(Void... params) {
         try {
-            String typeString;
-            if(birthday.containsYear())
-                typeString = String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
-            else
-                typeString = String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY);
-
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newDelete(ContactsContract.Data.CONTENT_URI)
                     .withSelection(
@@ -36,8 +30,8 @@ public class RemoveBirthdayFromContactTask extends ActionBirthdayInDatabaseTask 
                             ContactsContract.CommonDataKinds.Event.TYPE + " =?"
                             , new String[]{String.valueOf(contactId),
                                 ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
-                                birthday.toString(),
-                                typeString});
+                                birthday.toBackupString(),
+                                String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)});
             ops.add(contentBuilder.build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
         } catch(Exception e) {

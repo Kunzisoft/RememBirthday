@@ -48,9 +48,9 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         selection =
                 ContactsContract.Data.MIMETYPE + "= ? AND (" +
                         ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + " OR " +
-                        ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
+                        ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + //" OR " +
+                        //ContactsContract.CommonDataKinds.Event.TYPE + "=" +
+                        //ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
                         " ) ";
         selectionArgs = new String[] {
                 ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
