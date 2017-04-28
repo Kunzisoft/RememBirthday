@@ -54,7 +54,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Chocolate_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ChocolateTheme_Dialog);
         builder.setTitle(getString(R.string.dialog_select_birthday_title));
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();

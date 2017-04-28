@@ -23,8 +23,8 @@
 
         <item name="android:windowBackground">@color/background</item>
 
-        <item name="android:textAppearance">@style/Chocolate.TextAppearance</item>
-        <item name="android:textAppearanceMedium">@style/Chocolate.TextAppearance</item>
+        <item name="android:textAppearance">@style/ChocolateTheme.TextAppearance</item>
+        <item name="android:textAppearanceMedium">@style/ChocolateTheme.TextAppearance</item>
 
         <!-- Text colors -->
         <item name="android:textColorPrimary">@color/colorPrimary</item>
@@ -33,7 +33,7 @@
         <item name="android:textColorSecondaryInverse">@color/colorPrimaryDarkInverse</item>
     </style>
 
-    <style name="Chocolate.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ChocolateTheme.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
@@ -41,7 +41,7 @@
         <item name="actionMenuTextColor">@android:color/white</item>
         <item name="android:background">@color/colorPrimary</item>
     </style>
-    <style name="Chocolate.Toolbar.Transparent" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ChocolateTheme.Toolbar.Transparent" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
@@ -49,29 +49,29 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="Chocolate.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="ChocolateTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/background</item>
     </style>
 
-    <style name="Chocolate.Expanded.TextAppearance.Title" parent="@android:style/TextAppearance">
+    <style name="ChocolateTheme.Expanded.TextAppearance.Title" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorPrimaryDarkInverse</item>
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="Chocolate.Collapsed.TextAppearance.Title" parent="@android:style/TextAppearance">
+    <style name="ChocolateTheme.Collapsed.TextAppearance.Title" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="Chocolate.TextAppearance" parent="@android:style/TextAppearance">
+    <style name="ChocolateTheme.TextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="Chocolate.TextAppearance.Inverse" parent="@android:style/TextAppearance">
+    <style name="ChocolateTheme.TextAppearance.Inverse" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorPrimaryInverse</item>
     </style>
 
-    <style name="Chocolate.CardView" parent="CardView">
+    <style name="ChocolateTheme.CardView" parent="CardView">
         <!-- Card background color -->
         <item name="cardBackgroundColor">@color/backgroundElement</item>
         <!-- Ripple for API 21 of android, and regular selector on older -->
@@ -84,7 +84,7 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <style name="Chocolate.CardView.Alternative" parent="CardView">
+    <style name="ChocolateTheme.CardView.Alternative" parent="CardView">
         <!-- Card background color -->
         <item name="cardBackgroundColor">@color/backgroundElementInverse</item>
         <!-- Ripple for API 21 of android, and regular selector on older -->
@@ -98,8 +98,12 @@
         <item name="android:textColor">@color/colorPrimaryInverse</item>
     </style>
 
-    <style name="Chocolate.Spinner" parent="Widget.AppCompat.Spinner">
+    <style name="ChocolateTheme.Spinner" parent="Widget.AppCompat.Spinner">
         <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="ChocolateTheme.Settings" parent="ChocolateTheme">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
 </resources>

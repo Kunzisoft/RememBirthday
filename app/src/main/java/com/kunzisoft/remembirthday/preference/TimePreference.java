@@ -1,102 +1,132 @@
 package com.kunzisoft.remembirthday.preference;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.preference.DialogPreference;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.TimePicker;
 
 public class TimePreference extends DialogPreference {
-    private int lastHour=0;
-    private int lastMinute=0;
-    private TimePicker picker=null;
 
-    public static int getHour(String time) {
-        String[] pieces=time.split(":");
+    private static final String TIME_TAG_SUMMARY = "[time]";
+    private static final String TIME_SEPARATOR = ":";
 
-        return(Integer.parseInt(pieces[0]));
+    private int hour = 0;
+    private int minute = 0;
+
+    private CharSequence summaryPreference;
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public TimePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initialize(context, attrs);
     }
 
-    public static int getMinute(String time) {
-        String[] pieces=time.split(":");
-
-        return(Integer.parseInt(pieces[1]));
+    public TimePreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialize(context, attrs);
     }
 
-    public TimePreference(Context ctxt, AttributeSet attrs) {
-        super(ctxt, attrs);
-
-        setPositiveButtonText("Set");
-        setNegativeButtonText("Cancel");
+    public TimePreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initialize(context, attrs);
     }
 
-    @Override
-    protected View onCreateDialogView() {
-        picker=new TimePicker(getContext());
-
-        return(picker);
+    public TimePreference(Context context) {
+        super(context);
+        initialize(context, null);
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    protected void onBindDialogView(View v) {
-        super.onBindDialogView(v);
-
-        if (Build.VERSION.SDK_INT < 23) {
-            picker.setCurrentHour(lastHour);
-            picker.setCurrentMinute(lastMinute);
-        } else {
-            picker.setHour(lastHour);
-            picker.setMinute(lastMinute);
-        }
+    private void initialize(Context context, AttributeSet attrs) {
+        summaryPreference = getSummary();
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
+    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+        super.onSetInitialValue(restorePersistedValue, defaultValue);
 
-        if (positiveResult) {
-            if (Build.VERSION.SDK_INT < 23) {
-                lastHour = picker.getCurrentHour();
-                lastMinute = picker.getCurrentMinute();
+        String time;
+        if (restorePersistedValue) {
+            if (defaultValue==null) {
+                time = getPersistedString("00:00");
             } else {
-                lastHour = picker.getHour();
-                lastMinute = picker.getMinute();
+                time = getPersistedString(defaultValue.toString());
             }
-
-            String time=String.valueOf(lastHour)+":"+String.valueOf(lastMinute);
-
-            if (callChangeListener(time)) {
-                persistString(time);
-            }
+        } else {
+            time = defaultValue.toString();
         }
+
+        hour = parseHour(time);
+        minute = parseMinute(time);
+    }
+
+    @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        updatePreview();
+    }
+
+    @Override
+    public void onAttached() {
+        super.onAttached();
+        updatePreview();
+    }
+
+    synchronized private void updatePreview() {
+        setSummary(summaryPreference);
+    }
+
+    @Override
+    protected boolean persistString(String value) {
+        updatePreview();
+        return super.persistString(value);
     }
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        return(a.getString(index));
+        return a.getString(index);
     }
 
+    /**
+     * {@inheritDoc}
+     * If [time] is present in summary, it's replaced by string of time
+     */
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        String time=null;
-
-        if (restoreValue) {
-            if (defaultValue==null) {
-                time=getPersistedString("00:00");
-            }
-            else {
-                time=getPersistedString(defaultValue.toString());
-            }
+    public void setSummary(CharSequence summary) {
+        String summaryWithTime = null;
+        if(summary != null) {
+            summaryWithTime = summary.toString().replace(TIME_TAG_SUMMARY, timeToString(hour, minute));
         }
-        else {
-            time=defaultValue.toString();
-        }
+        super.setSummary(summaryWithTime);
+    }
 
-        lastHour=getHour(time);
-        lastMinute=getMinute(time);
+    public int getHour() {
+        return hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    private static int parseHour(String time) {
+        return(Integer.parseInt(time.split(TIME_SEPARATOR)[0]));
+    }
+
+    private static int parseMinute(String time) {
+        return(Integer.parseInt(time.split(TIME_SEPARATOR)[1]));
+    }
+
+    public static String timeToString(int hour, int minute) {
+        return String.valueOf(hour) + TIME_SEPARATOR + String.valueOf(minute);
     }
 }

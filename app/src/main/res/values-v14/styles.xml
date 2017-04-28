@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="ChocolateTheme.Settings" parent="ChocolateTheme">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+</resources>

@@ -13,7 +13,7 @@
             android:id="@+id/fragment_details_buddy_container_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Chocolate.CardView">
+            style="@style/ChocolateTheme.CardView">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -42,7 +42,7 @@
             android:id="@+id/fragment_details_buddy_container_days_left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Chocolate.CardView" >
+            style="@style/ChocolateTheme.CardView" >
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -71,13 +71,13 @@
             android:id="@+id/fragment_details_buddy_container_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Chocolate.CardView.Alternative" >
+            style="@style/ChocolateTheme.CardView.Alternative" >
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:text="Create new auto SMS"
-                style="@style/Chocolate.TextAppearance.Inverse"/>
+                style="@style/ChocolateTheme.TextAppearance.Inverse"/>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

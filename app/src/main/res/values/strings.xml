@@ -45,17 +45,17 @@
     <string name="pref_category_notifications_title">Notifications</string>
 
     <string name="pref_notifications_service_title">Enable Notifications</string>
-    <string name="pref_notifications_service_summary">Enables and disables notifications and associated services</string>
+    <string name="pref_notifications_service_summary">Receive notifications on this device.</string>
     <string name="pref_notifications_service_key" translatable="false">notifications_service_enable</string>
     <string name="pref_notifications_service_default" translatable="false">true</string>
 
-    <string name="pref_notifications_days_title">Notifications in event day</string>
+    <string name="pref_notifications_days_title">Days of notifications</string>
     <string name="pref_notifications_days_summary">Enables notifications for the day and days before the event. (Ex : "0|2|7" A notification will be visible on the day of the event, 2 days before the event and 7 days before the event.)</string>
     <string name="pref_notifications_days_key" translatable="false">notifications_day_enable</string>
     <string name="pref_notifications_days_default" translatable="false">true</string>
 
     <string name="pref_notifications_time_title">Time of Notifications</string>
-    <string name="pref_notifications_time_summary">The default time for notifications</string>
+    <string name="pref_notifications_time_summary">The default time for notifications : [time]</string>
     <string name="pref_notifications_time_key" translatable="false">notifications_time_enable</string>
     <string name="pref_notifications_time_default" translatable="false">10:00</string>
 
