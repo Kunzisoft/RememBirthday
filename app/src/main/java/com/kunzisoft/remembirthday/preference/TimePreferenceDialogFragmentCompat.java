@@ -11,8 +11,6 @@ import android.widget.TimePicker;
  */
 public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
 
-    private static final String TAG_FRAGMENT_DIALOG = "TAG_FRAGMENT_DIALOG";
-
     private TimePicker timePicker = null;
 
     @Override

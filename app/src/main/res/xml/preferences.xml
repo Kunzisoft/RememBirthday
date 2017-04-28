@@ -41,6 +41,7 @@
             android:entries="@array/pref_theme_array"
             android:entryValues="@array/pref_theme_values" />
     </PreferenceCategory>
+    <!--
     <PreferenceCategory
         android:title="@string/pref_category_advanced_preferences_title"
         android:key="pref_key_storage_settings">
@@ -53,5 +54,6 @@
             android:summary="@string/pref_advanced_preferences_store_birthday_summary"
             android:key="@string/pref_advanced_preferences_store_birthday_key" />
     </PreferenceCategory>
+    -->
 
 </PreferenceScreen>
