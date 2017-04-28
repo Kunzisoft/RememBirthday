@@ -2,11 +2,12 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -61,7 +62,15 @@ public class DetailsBuddyActivity extends AppCompatActivity
             if (contact != null && contact.containsImage()) {
                 Picasso.with(this).load(contact.getImageUri()).into(avatarImageView);
             } else {
-                avatarImageView.setColorFilter(ContextCompat.getColor(this, R.color.colorSecondary));
+                // Get the sec text color of the theme
+                //TODO color secondary
+                TypedValue typedValueSecondary = new TypedValue();
+                getTheme().resolveAttribute(android.R.attr.textColorPrimaryInverse, typedValueSecondary, true);
+                TypedArray arr = obtainStyledAttributes(
+                        typedValueSecondary.data, new int[]{android.R.attr.textColorPrimaryInverse});
+                int colorSecondary = arr.getColor(0, -1);
+                arr.recycle();
+                avatarImageView.setColorFilter(colorSecondary);
             }
         }
 

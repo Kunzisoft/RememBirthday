@@ -1,15 +1,18 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +103,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @param holder The ViewHolder
      * @param contact The item
      */
+    @SuppressWarnings("deprecation")
     protected void assignDataToView(final T holder, Contact contact) {
         if(contact.containsImage()) {
             Picasso.with(context).load(contact.getImageThumbnailUri())
@@ -112,8 +116,30 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
                         public void onError() {}
                     });
         } else {
-            holder.icon.setColorFilter(
-                    ContextCompat.getColor(context, R.color.colorPrimary));
+            // Get colors from theme
+            TypedValue typedValuePrimary = new TypedValue();
+            context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValuePrimary, true);
+            int colorPrimary = typedValuePrimary.data;
+
+            // Get the sec text color of the theme
+            //TODO color secondary
+            TypedValue typedValueSecondary = new TypedValue();
+            context.getTheme().resolveAttribute(android.R.attr.textColorPrimaryInverse, typedValueSecondary, true);
+            TypedArray arr = context.obtainStyledAttributes(
+                    typedValueSecondary.data, new int[]{android.R.attr.textColorPrimaryInverse});
+            int colorSecondary = arr.getColor(0, -1);
+            arr.recycle();
+
+            // Colorize content of icon
+            holder.icon.setColorFilter(colorPrimary);
+            // Colorize background of icon
+            Drawable background = holder.icon.getBackground().mutate();
+            background.setColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP);
+            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                holder.icon.setBackgroundDrawable(background);
+            } else {
+                holder.icon.setBackground(background);
+            }
         }
 
         holder.name.setText(contact.getName());

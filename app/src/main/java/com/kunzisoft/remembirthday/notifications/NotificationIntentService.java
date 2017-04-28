@@ -5,10 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
+import android.content.res.TypedArray;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.activity.NotificationActivity;
@@ -68,8 +69,13 @@ public class NotificationIntentService extends IntentService {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle(getString(R.string.notifications_anniversary_title))
-                .setAutoCancel(true)
-                .setColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setAutoCancel(true);
+        // Get ColorAccent for notification
+        TypedValue typedValue = new TypedValue();
+        TypedArray a = obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+        int color = a.getColor(0, 0);
+        a.recycle();
+        builder.setColor(color)
                 .setContentText(textMessage)
                 .setSmallIcon(R.drawable.ic_notification_24dp);
 
