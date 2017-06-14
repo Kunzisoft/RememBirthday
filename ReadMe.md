@@ -1,8 +1,8 @@
 # Android RememBirthday
 
-<img src="https://raw.githubusercontent.com/RememBirthday/master/art/logo.png"> RememBirthday is a project to manage birthays on phone and tablet, it is completely free and open.
+<img src="https://raw.githubusercontent.com/Kunzisoft/RememBirthday/master/art/logo.png" /> RememBirthday is a project to manage birthays on phone and tablet, it is completely free and open.
 
-<img src="https://raw.githubusercontent.com/Kunzisoft/RememBirthday/master/art/screen1.jpg" width="320">
+<img src="https://raw.githubusercontent.com/Kunzisoft/RememBirthday/master/art/screen1.jpg" width="320" />
 
 ## Donation
 
