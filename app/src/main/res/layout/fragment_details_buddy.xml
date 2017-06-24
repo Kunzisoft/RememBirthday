@@ -47,23 +47,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="12dp">
-                <!-- TODO Dimens -->
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/fragment_details_buddy_cake"
-                    android:layout_width="wrap_content"
-                    android:layout_height="120dp"
-                    android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/img_cake"/>
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/fragment_details_buddy_days_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_below="@id/fragment_details_buddy_cake"
-                    android:text=""
-                    android:layout_centerHorizontal="true" />
+                    android:text="" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -72,12 +62,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/ChocolateTheme.CardView.Alternative" >
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="Create new auto SMS"
-                style="@style/ChocolateTheme.TextAppearance.Inverse"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/smsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/auto_sms_title"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorPrimaryInverse" />
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_close_white_24dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/smsContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="SMS Content"
+                    android:layout_below="@+id/smsTitle"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/smsContent"
+                    android:paddingTop="12dp">
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryInverse"
+                        android:text="At 10h06 The day of the anniversary"/>
+                </RelativeLayout>
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

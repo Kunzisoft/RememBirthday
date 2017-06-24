@@ -51,7 +51,7 @@ public class NotificationIntentService extends IntentService {
             String action = intent.getAction();
             if (ACTION_START.equals(action)) {
                 Contact contact = intent.getParcelableExtra(EXTRA_CONTACT_NOTIFICATION);
-                processStartNotification(contact);
+                //TODO processStartNotification(contact);
             }
             if (ACTION_DELETE.equals(action)) {
                 processDeleteNotification(intent);

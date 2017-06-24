@@ -66,7 +66,9 @@ public class ContactsProviderIntentService extends IntentService implements Load
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Contact contact = new Contact(cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)),
+            Contact contact = new Contact(
+                    cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)),
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)),
                     cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
             DateUnknownYear dateUnknownYear = null;
             try {

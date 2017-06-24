@@ -1,9 +1,12 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -123,8 +126,14 @@ public class DetailsBuddyActivity extends AppCompatActivity
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_modify:
+            case R.id.action_change_anniversary:
                 openDialogSelection(contact.getId());
+                break;
+            case R.id.action_modify_contact:
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                Uri contactUri = ContactsContract.Contacts.getLookupUri(contact.getId(), contact.getLookUp());
+                editIntent.setDataAndType(contactUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                startActivity(editIntent);
                 break;
             case R.id.action_delete:
 
@@ -135,7 +144,8 @@ public class DetailsBuddyActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int id) {
                         // Delete anniversary in database
                         RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
-                                new RemoveBirthdayFromContactTask(contact.getId(),
+                                new RemoveBirthdayFromContactTask(
+                                        contact.getId(),
                                         contact.getBirthday(),
                                         DetailsBuddyActivity.this);
                         removeBirthdayFromContactTask.setCallbackActionBirthday(DetailsBuddyActivity.this);

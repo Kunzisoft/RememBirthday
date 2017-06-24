@@ -34,7 +34,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     private OnClickItemContactListener onClickItemContactListener;
 
     private Cursor cursor;
-    protected int contactIdColIdx, contactNameColIdx, contactThumbnailImageUriColIdx, contactImageUriColIdx;
+    protected int contactIdColIdx, contactLookupColIdx, contactNameColIdx, contactThumbnailImageUriColIdx, contactImageUriColIdx;
 
     public ContactAdapter(Context context) {
         this.context = context;
@@ -48,6 +48,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     public void swapCursor(Cursor cursor) {
         this.cursor = cursor;
         this.contactIdColIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+        this.contactLookupColIdx = cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY);
         this.contactNameColIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
         this.contactThumbnailImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
         this.contactImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI);
@@ -83,7 +84,9 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @return The new item created
      */
     protected Contact getItemFromCursor(Cursor cursor) {
-        Contact contact = new Contact(cursor.getLong(contactIdColIdx),
+        Contact contact = new Contact(
+                cursor.getLong(contactIdColIdx),
+                cursor.getString(contactLookupColIdx),
                 cursor.getString(contactNameColIdx));
         // Thumbnail
         String uriThumbnailString = cursor.getString(contactThumbnailImageUriColIdx);

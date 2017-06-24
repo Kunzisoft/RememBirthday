@@ -3,11 +3,13 @@
     <string name="anniversaries_title">Birthdays</string>
     <string name="settings_title">Settings</string>
     <string name="select_contact_title">Select a contact</string>
+    <string name="auto_sms_title">Auto SMS</string>
 
     <!-- Menus -->
     <string name="action_settings">Settings</string>
     <string name="action_favorite">Favorite</string>
-    <string name="action_modify">Modify</string>
+    <string name="action_modify_contact">Modify contact</string>
+    <string name="action_change_anniversary">Change Anniversary</string>
     <string name="action_delete">Delete</string>
 
     <!-- Dialogs -->

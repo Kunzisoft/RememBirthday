@@ -13,17 +13,19 @@ public class Contact implements Parcelable{
     public static final long ID_UNDEFINED = -1;
 
     private long id;
+    private String lookup;
     private String name;
     private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
 
-    public Contact(long id, String name) {
-        this(id, name, null);
+    public Contact(long id, String lookup, String name) {
+        this(id, lookup, name, null);
     }
 
-    public Contact(long id, String name, DateUnknownYear birthday) {
+    public Contact(long id, String lookup, String name, DateUnknownYear birthday) {
         this.id = id;
+        this.lookup = lookup;
         this.name = name;
         this.imageThumbnailUri = null;
         this.imageUri = null;
@@ -31,15 +33,16 @@ public class Contact implements Parcelable{
     }
 
     public Contact(String name) {
-        this(ID_UNDEFINED, name, null);
+        this(ID_UNDEFINED, "", name, null);
     }
 
     public Contact(String name, DateUnknownYear birthday) {
-        this(ID_UNDEFINED, name, birthday);
+        this(ID_UNDEFINED, "", name, birthday);
     }
 
     private Contact(Parcel in) {
         id = in.readLong();
+        lookup = in.readString();
         name = in.readString();
         imageThumbnailUri = in.readParcelable(Uri.class.getClassLoader());
         imageUri = in.readParcelable(Uri.class.getClassLoader());
@@ -52,6 +55,14 @@ public class Contact implements Parcelable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getLookUp() {
+        return lookup;
+    }
+
+    public void setLookUp(String lookup) {
+        this.lookup = lookup;
     }
 
     public String getName() {
@@ -122,6 +133,7 @@ public class Contact implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
+        parcel.writeString(lookup);
         parcel.writeString(name);
         parcel.writeParcelable(imageThumbnailUri, i);
         parcel.writeParcelable(imageUri, i);
