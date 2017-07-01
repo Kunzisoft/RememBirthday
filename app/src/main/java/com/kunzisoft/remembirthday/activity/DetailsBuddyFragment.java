@@ -13,7 +13,8 @@ import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
-import com.kunzisoft.remembirthday.adapter.AutoMessagesAdapter;
+import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
+import com.kunzisoft.remembirthday.adapter.ReminderAdapter;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
@@ -25,7 +26,10 @@ public class DetailsBuddyFragment extends Fragment {
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
 
     protected RecyclerView autoMessagesListView;
-    protected AutoMessagesAdapter autoMessagesAdapter;
+    protected AutoMessageAdapter autoMessagesAdapter;
+
+    protected RecyclerView remindersListView;
+    protected ReminderAdapter remindersAdapter;
 
     public void setBuddy(Contact currentContact) {
         Bundle args = new Bundle();
@@ -42,19 +46,37 @@ public class DetailsBuddyFragment extends Fragment {
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
 
-        FloatingActionButton buttonAddAutoMessage = (FloatingActionButton) root.findViewById(R.id.fragment_details_buddy_button_add_auto_message);
-        autoMessagesListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_auto_messages);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        autoMessagesListView.setLayoutManager(linearLayoutManager);
-        buttonAddAutoMessage.setOnClickListener(new View.OnClickListener() {
+        // List of reminders elements
+        FloatingActionButton buttonAddReminder = (FloatingActionButton) root.findViewById(R.id.fragment_details_buddy_button_add_reminder);
+
+        remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
+        LinearLayoutManager linearLayoutManagerReminder = new LinearLayoutManager(getContext());
+        linearLayoutManagerReminder.setOrientation(LinearLayoutManager.VERTICAL);
+        remindersListView.setLayoutManager(linearLayoutManagerReminder);
+
+        buttonAddReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO add new item in list of messages
-                autoMessagesAdapter.addDefaultAutoMessage();
+                remindersAdapter.addDefaultItem();
             }
         });
 
+        // List of auto messages elements
+        FloatingActionButton buttonAddAutoMessage = (FloatingActionButton) root.findViewById(R.id.fragment_details_buddy_button_add_auto_message);
+
+        autoMessagesListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_auto_messages);
+        LinearLayoutManager linearLayoutManagerAutoMessage = new LinearLayoutManager(getContext());
+        linearLayoutManagerAutoMessage.setOrientation(LinearLayoutManager.VERTICAL);
+        autoMessagesListView.setLayoutManager(linearLayoutManagerAutoMessage);
+
+        buttonAddAutoMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                autoMessagesAdapter.addDefaultItem();
+            }
+        });
+
+        // Contact attributes
         Contact contact = null;
         if(getArguments()!=null) {
             contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
@@ -89,7 +111,10 @@ public class DetailsBuddyFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        autoMessagesAdapter = new AutoMessagesAdapter();
+        autoMessagesAdapter = new AutoMessageAdapter();
         autoMessagesListView.setAdapter(autoMessagesAdapter);
+
+        remindersAdapter = new ReminderAdapter();
+        remindersListView.setAdapter(remindersAdapter);
     }
 }

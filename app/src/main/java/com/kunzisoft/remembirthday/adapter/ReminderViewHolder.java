@@ -11,17 +11,14 @@ import com.kunzisoft.remembirthday.R;
  * Created by joker on 01/07/17.
  */
 
-public class AutoMessagesViewHolder extends RecyclerView.ViewHolder {
+public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
-    TextView messageContent;
-    TextView dateNotification;
     ImageView deleteButton;
+    TextView dateNotification;
 
-    public AutoMessagesViewHolder(View itemView) {
+    public ReminderViewHolder(View itemView) {
         super(itemView);
-
-        messageContent = (TextView) itemView.findViewById(R.id.item_list_auto_message_content);
+        deleteButton = (ImageView) itemView.findViewById(R.id.item_list_reminder_button_delete);
         dateNotification = (TextView) itemView.findViewById(R.id.item_list_auto_message_date_notification);
-        deleteButton = (ImageView) itemView.findViewById(R.id.item_list_auto_message_button_delete);
     }
 }
