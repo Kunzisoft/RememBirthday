@@ -2,7 +2,10 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
+import com.kunzisoft.remembirthday.adapter.AutoMessagesAdapter;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
@@ -19,6 +23,9 @@ import com.kunzisoft.remembirthday.element.DateUnknownYear;
 public class DetailsBuddyFragment extends Fragment {
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
+
+    protected RecyclerView autoMessagesListView;
+    protected AutoMessagesAdapter autoMessagesAdapter;
 
     public void setBuddy(Contact currentContact) {
         Bundle args = new Bundle();
@@ -34,6 +41,19 @@ public class DetailsBuddyFragment extends Fragment {
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
+
+        FloatingActionButton buttonAddAutoMessage = (FloatingActionButton) root.findViewById(R.id.fragment_details_buddy_button_add_auto_message);
+        autoMessagesListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_auto_messages);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        autoMessagesListView.setLayoutManager(linearLayoutManager);
+        buttonAddAutoMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO add new item in list of messages
+                autoMessagesAdapter.addDefaultAutoMessage();
+            }
+        });
 
         Contact contact = null;
         if(getArguments()!=null) {
@@ -63,5 +83,13 @@ public class DetailsBuddyFragment extends Fragment {
             }
         }
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        autoMessagesAdapter = new AutoMessagesAdapter();
+        autoMessagesListView.setAdapter(autoMessagesAdapter);
     }
 }
