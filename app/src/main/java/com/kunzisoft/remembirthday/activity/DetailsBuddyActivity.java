@@ -126,14 +126,12 @@ public class DetailsBuddyActivity extends AppCompatActivity
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_change_anniversary:
-                openDialogSelection(contact.getId());
-                break;
             case R.id.action_modify_contact:
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
                 Uri contactUri = ContactsContract.Contacts.getLookupUri(contact.getId(), contact.getLookUp());
                 editIntent.setDataAndType(contactUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
                 startActivity(editIntent);
+                finish();
                 break;
             case R.id.action_delete:
 
