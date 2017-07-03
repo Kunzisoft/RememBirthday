@@ -25,12 +25,6 @@ public class UpdateBirthdayToContactTask extends ActionBirthdayInDatabaseTask{
     @Override
     protected Exception doInBackground(Void... voids) {
         try {
-            String typeString;
-            if(birthday.containsYear())
-                typeString = String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
-            else
-                typeString = String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY);
-
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
                     .withSelection(ContactsContract.Data._ID + " =? AND " +
@@ -40,7 +34,7 @@ public class UpdateBirthdayToContactTask extends ActionBirthdayInDatabaseTask{
                             , new String[]{String.valueOf(contactId),
                                     ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
                                     birthday.toBackupString(),
-                                    typeString})
+                                    String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)})
                     .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, newBirthday.toBackupString());
             ops.add(contentBuilder.build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);

@@ -25,6 +25,8 @@ public class DetailsBuddyFragment extends Fragment {
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
 
+    private Contact contact;
+
     protected RecyclerView autoMessagesListView;
     protected AutoMessageAdapter autoMessagesAdapter;
 
@@ -45,6 +47,7 @@ public class DetailsBuddyFragment extends Fragment {
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
+        View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_container_date);
 
         // List of reminders elements
         remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
@@ -78,11 +81,19 @@ public class DetailsBuddyFragment extends Fragment {
         });
 
         // Contact attributes
-        Contact contact = null;
+        contact = null;
         if(getArguments()!=null) {
             contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
         if(contact != null) {
+            selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO better way to call method of activity
+                    ((DetailsBuddyActivity) getActivity()).openDialogSelection(contact.getId());
+                }
+            });
+
             if(contact.hasBirthday()) {
                 // Display date
                 DateUnknownYear currentBuddyBirthday = contact.getBirthday();
