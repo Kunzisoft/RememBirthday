@@ -13,6 +13,7 @@
     <string name="action_change_anniversary">Change Anniversary</string>
     <string name="action_delete">Delete</string>
 
+
     <!-- Dialogs -->
     <string name="dialog_select_birthday_title">Select Birthday</string>
     <string name="dialog_select_birthday_zero_day_left">Happy Birthday!</string>

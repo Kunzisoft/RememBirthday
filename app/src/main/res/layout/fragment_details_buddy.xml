@@ -74,26 +74,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fragment_details_buddy_button_add_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_add_alarm_white_24dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_details_buddy_list_auto_messages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fragment_details_buddy_button_add_auto_message"
+        <com.joaquimley.faboptions.FabOptions
+            android:id="@+id/fragment_details_buddy_fab_options"
+            app:button_menu="@menu/menu_reminders"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_message_white_24dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"/>
+            android:layout_gravity="bottom|center" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

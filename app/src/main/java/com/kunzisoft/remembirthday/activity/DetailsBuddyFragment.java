@@ -2,7 +2,6 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.joaquimley.faboptions.FabOptions;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
@@ -47,32 +47,33 @@ public class DetailsBuddyFragment extends Fragment {
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
 
         // List of reminders elements
-        FloatingActionButton buttonAddReminder = (FloatingActionButton) root.findViewById(R.id.fragment_details_buddy_button_add_reminder);
-
         remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
         LinearLayoutManager linearLayoutManagerReminder = new LinearLayoutManager(getContext());
         linearLayoutManagerReminder.setOrientation(LinearLayoutManager.VERTICAL);
         remindersListView.setLayoutManager(linearLayoutManagerReminder);
 
-        buttonAddReminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                remindersAdapter.addDefaultItem();
-            }
-        });
-
         // List of auto messages elements
-        FloatingActionButton buttonAddAutoMessage = (FloatingActionButton) root.findViewById(R.id.fragment_details_buddy_button_add_auto_message);
-
         autoMessagesListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_auto_messages);
         LinearLayoutManager linearLayoutManagerAutoMessage = new LinearLayoutManager(getContext());
         linearLayoutManagerAutoMessage.setOrientation(LinearLayoutManager.VERTICAL);
         autoMessagesListView.setLayoutManager(linearLayoutManagerAutoMessage);
 
-        buttonAddAutoMessage.setOnClickListener(new View.OnClickListener() {
+        FabOptions fabOptions = (FabOptions) root.findViewById(R.id.fragment_details_buddy_fab_options);
+        fabOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                autoMessagesAdapter.addDefaultItem();
+                switch (view.getId()) {
+                    case R.id.faboptions_reminder:
+                        remindersAdapter.addDefaultItem();
+                        break;
+
+                    case R.id.faboptions_auto_message:
+                        autoMessagesAdapter.addDefaultItem();
+                        break;
+
+                    default:
+                        // no-op
+                }
             }
         });
 

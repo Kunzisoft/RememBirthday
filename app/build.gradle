@@ -41,4 +41,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Unit Tests
     testCompile 'junit:junit:4.12'
+    // FAB
+    compile 'com.github.joaquimley:faboptions:1.1.2'
+
+
 }
