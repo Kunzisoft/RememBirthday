@@ -1,5 +1,7 @@
 package com.kunzisoft.remembirthday.element;
 
+import java.util.Date;
+
 /**
  * Created by joker on 01/07/17.
  */
@@ -12,7 +14,8 @@ public class AutoMessage extends Reminder {
     /**
      * Create default auto message
      */
-    public AutoMessage() {
+    public AutoMessage(Date anniversary) {
+        super(anniversary);
         type = Type.SMS;
         content = "";
     }

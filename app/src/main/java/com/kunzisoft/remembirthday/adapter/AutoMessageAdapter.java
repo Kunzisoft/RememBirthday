@@ -1,11 +1,13 @@
 package com.kunzisoft.remembirthday.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.AutoMessage;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 
 /**
@@ -13,9 +15,13 @@ import com.kunzisoft.remembirthday.element.AutoMessage;
  */
 public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, AutoMessageViewHolder> {
 
+    public AutoMessageAdapter(Context context, DateUnknownYear anniversary) {
+        super(context, anniversary);
+    }
+
     @Override
     public void addDefaultItem() {
-        addReminder(new AutoMessage());
+        addReminder(new AutoMessage(anniversary.getDate()));
     }
 
     @Override

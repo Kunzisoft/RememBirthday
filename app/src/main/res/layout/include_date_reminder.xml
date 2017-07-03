@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundElement"
+    android:padding="12dp">
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_list_reminder_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/at"
+        android:layout_marginRight="6dp"
+        android:layout_marginEnd="6dp" />
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_list_reminder_hour_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/item_list_reminder_units_before"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_list_reminder_days_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/days_before"
+        android:textSize="16sp" />
+</LinearLayout>

@@ -3,6 +3,7 @@ package com.kunzisoft.remembirthday.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
@@ -15,10 +16,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     ImageView deleteButton;
     TextView dateNotification;
+    Spinner unitsBefore;
 
     public ReminderViewHolder(View itemView) {
         super(itemView);
         deleteButton = (ImageView) itemView.findViewById(R.id.item_list_reminder_button_delete);
-        dateNotification = (TextView) itemView.findViewById(R.id.item_list_auto_message_date_notification);
+        dateNotification = (TextView) itemView.findViewById(R.id.item_list_reminder_hour_notification);
+        unitsBefore = (Spinner) itemView.findViewById(R.id.item_list_reminder_units_before);
     }
 }

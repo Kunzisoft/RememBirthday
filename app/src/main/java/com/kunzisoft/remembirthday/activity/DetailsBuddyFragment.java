@@ -61,25 +61,6 @@ public class DetailsBuddyFragment extends Fragment {
         linearLayoutManagerAutoMessage.setOrientation(LinearLayoutManager.VERTICAL);
         autoMessagesListView.setLayoutManager(linearLayoutManagerAutoMessage);
 
-        FabOptions fabOptions = (FabOptions) root.findViewById(R.id.fragment_details_buddy_fab_options);
-        fabOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.faboptions_reminder:
-                        remindersAdapter.addDefaultItem();
-                        break;
-
-                    case R.id.faboptions_auto_message:
-                        autoMessagesAdapter.addDefaultItem();
-                        break;
-
-                    default:
-                        // no-op
-                }
-            }
-        });
-
         // Contact attributes
         contact = null;
         if(getArguments()!=null) {
@@ -108,10 +89,27 @@ public class DetailsBuddyFragment extends Fragment {
                 } else {
                     yearTextView.setVisibility(View.GONE);
                     yearTextView.setText("");
-                    //TODO Add button for year
                 }
                 // Number days left before birthday
                 Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
+
+                FabOptions fabOptions = (FabOptions) root.findViewById(R.id.fragment_details_buddy_fab_options);
+                fabOptions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.faboptions_reminder:
+                                remindersAdapter.addDefaultItem();
+                                break;
+
+                            case R.id.faboptions_auto_message:
+                                autoMessagesAdapter.addDefaultItem();
+                                break;
+
+                            default:
+                        }
+                    }
+                });
             } else {
                 //TODO Error
             }
@@ -123,10 +121,12 @@ public class DetailsBuddyFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        autoMessagesAdapter = new AutoMessageAdapter();
-        autoMessagesListView.setAdapter(autoMessagesAdapter);
+        if(contact != null && contact.hasBirthday()) {
+            autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
+            autoMessagesListView.setAdapter(autoMessagesAdapter);
 
-        remindersAdapter = new ReminderAdapter();
-        remindersListView.setAdapter(remindersAdapter);
+            remindersAdapter = new ReminderAdapter(getContext(), contact.getBirthday());
+            remindersListView.setAdapter(remindersAdapter);
+        }
     }
 }

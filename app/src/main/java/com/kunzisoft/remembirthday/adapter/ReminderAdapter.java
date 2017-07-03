@@ -1,10 +1,12 @@
 package com.kunzisoft.remembirthday.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
 
 
@@ -13,9 +15,13 @@ import com.kunzisoft.remembirthday.element.Reminder;
  */
 public class ReminderAdapter extends AbstractReminderAdapter<Reminder, ReminderViewHolder> {
 
+    public ReminderAdapter(Context context, DateUnknownYear anniversary) {
+        super(context, anniversary);
+    }
+
     @Override
     public void addDefaultItem() {
-        addReminder(new Reminder());
+        addReminder(new Reminder(anniversary.getDate()));
     }
 
     @Override

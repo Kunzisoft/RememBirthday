@@ -69,8 +69,8 @@
                     android:id="@+id/fragment_details_buddy_days_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
                     android:text=""
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
