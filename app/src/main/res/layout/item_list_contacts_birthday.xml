@@ -22,7 +22,7 @@
             android:layout_width="@dimen/buddy_list_height_icon"
             android:layout_height="@dimen/buddy_list_height_icon"
             app:srcCompat="@drawable/ic_person_white_24dp"
-            android:background="@drawable/background_circle"/>
+            android:background="@drawable/background_circle" />
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/item_list_contact_age"
             android:layout_width="wrap_content"

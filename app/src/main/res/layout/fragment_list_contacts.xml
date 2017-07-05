@@ -6,7 +6,6 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_list_contacts_recyclerview_contacts"
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

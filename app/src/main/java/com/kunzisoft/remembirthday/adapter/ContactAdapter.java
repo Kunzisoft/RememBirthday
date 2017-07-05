@@ -9,9 +9,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +26,6 @@ import com.kunzisoft.remembirthday.element.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -47,6 +49,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     public ContactAdapter(Context context) {
         this.context = context;
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     /**
@@ -143,7 +146,16 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      */
     @SuppressWarnings("deprecation")
     protected void assignDataToView(final T holder, Contact contact) {
+
         if(contact.containsImage()) {
+            // ReInit image and background
+            holder.icon.setColorFilter(null);
+            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                holder.icon.setBackgroundDrawable(null);
+            } else {
+                holder.icon.setBackground(null);
+            }
+            // Load Image and crop circle
             Picasso.with(context).load(contact.getImageThumbnailUri())
                     .into(holder.icon, new Callback() {
                         @Override
@@ -154,6 +166,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
                         public void onError() {}
                     });
         } else {
+
             // Get colors from theme
             TypedValue typedValuePrimary = new TypedValue();
             context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValuePrimary, true);
@@ -169,9 +182,10 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
             arr.recycle();
 
             // Colorize content of icon
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person_white_24dp));
             holder.icon.setColorFilter(colorPrimary);
             // Colorize background of icon
-            Drawable background = holder.icon.getBackground().mutate();
+            Drawable background = ContextCompat.getDrawable(context, R.drawable.background_circle);
             background.setColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP);
             if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 holder.icon.setBackgroundDrawable(background);

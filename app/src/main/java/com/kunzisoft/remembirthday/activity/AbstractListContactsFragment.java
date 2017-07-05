@@ -45,7 +45,7 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
     protected String[] selectionArgs = null;
     protected String sortOrder = null;
 
-    protected ContactSort contactSort;
+    protected ContactSort contactSort = ContactSort.CONTACT_SORT_BY_NAME;
 
     // A UI Fragment must inflate its View
     @Override
