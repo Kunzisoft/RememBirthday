@@ -14,9 +14,10 @@ import com.joaquimley.faboptions.FabOptions;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
-import com.kunzisoft.remembirthday.adapter.ReminderAdapter;
+import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 /**
  * Activity who show the details of buddy selected
@@ -31,7 +32,7 @@ public class DetailsBuddyFragment extends Fragment {
     protected AutoMessageAdapter autoMessagesAdapter;
 
     protected RecyclerView remindersListView;
-    protected ReminderAdapter remindersAdapter;
+    protected ReminderNotificationsAdapter remindersAdapter;
 
     public void setBuddy(Contact currentContact) {
         Bundle args = new Bundle();
@@ -122,11 +123,18 @@ public class DetailsBuddyFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if(contact != null && contact.hasBirthday()) {
+            // Add default reminders and link view to adapter
+            remindersAdapter = new ReminderNotificationsAdapter(getContext(), contact.getBirthday());
+            int[] defaultDays = PreferencesManager.getDefaultDays(getContext());
+            // TODO get items from saved element
+            for(int day : defaultDays) {
+                remindersAdapter.addDefaultItem(day);
+            }
+            remindersListView.setAdapter(remindersAdapter);
+
+            // Link auto messages view to adapter
             autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
             autoMessagesListView.setAdapter(autoMessagesAdapter);
-
-            remindersAdapter = new ReminderAdapter(getContext(), contact.getBirthday());
-            remindersListView.setAdapter(remindersAdapter);
         }
     }
 }

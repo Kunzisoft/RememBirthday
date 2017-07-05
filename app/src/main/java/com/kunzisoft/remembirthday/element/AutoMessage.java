@@ -14,10 +14,14 @@ public class AutoMessage extends Reminder {
     /**
      * Create default auto message
      */
-    public AutoMessage(Date anniversary) {
-        super(anniversary);
+    public AutoMessage(Date anniversary, int hourOfDay, int minuteOfHour, int deltaDay) {
+        super(anniversary, hourOfDay, minuteOfHour, deltaDay);
         type = Type.SMS;
         content = "";
+    }
+
+    public AutoMessage(Date anniversary, int hourOfDay, int minuteOfHour) {
+        this(anniversary, hourOfDay, minuteOfHour, 0);
     }
 
     public Type getType() {

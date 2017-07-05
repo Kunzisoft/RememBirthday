@@ -1,8 +1,8 @@
 package com.kunzisoft.remembirthday.element;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
+
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by joker on 01/07/17.
@@ -11,25 +11,32 @@ import java.util.GregorianCalendar;
 public class Reminder {
     public static final long ID_UNDEFINED = -1;
 
-    public static final int DEFAULT_HOUR = 10;
-    public static final int DEFAULT_MINUTE = 0;
-
-    protected long id;
-    protected Date date;
+    private long id;
+    protected Date anniversary;
+    protected int hourOfDay;
+    protected int minuteOfHour;
+    protected int daysBefore;
 
     /**
      * Create default auto message
      */
-    public Reminder(Date anniversary) {
-        id = ID_UNDEFINED;
-        // TODO create delta date
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(anniversary);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, DEFAULT_MINUTE);
-        calendar.set(Calendar.HOUR_OF_DAY, DEFAULT_HOUR);
-        date = calendar.getTime();
+    public Reminder(Date anniversary, int hourOfDay, int minuteOfHour, int deltaDay) {
+        this.id = ID_UNDEFINED;
+        this.anniversary = anniversary;
+        this.anniversary = new DateTime(this.anniversary)
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .toDate();
+        this.hourOfDay = hourOfDay;
+        this.minuteOfHour = minuteOfHour;
+        this.daysBefore = deltaDay;
+    }
+
+    /**
+     * Create default auto message for date of anniversary
+     */
+    public Reminder(Date anniversary, int hourOfDay, int minuteOfHour) {
+        this(anniversary, hourOfDay, minuteOfHour, 0);
     }
 
     public long getId() {
@@ -41,10 +48,34 @@ public class Reminder {
     }
 
     public Date getDate() {
-        return date;
+        return new DateTime(anniversary)
+                .withMinuteOfHour(minuteOfHour)
+                .withHourOfDay(hourOfDay)
+                .minusDays(daysBefore)
+                .toDate();
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public int getDeltaDay() {
+        return daysBefore;
+    }
+
+    public void setDeltaDay(int deltaDay) {
+        this.daysBefore = deltaDay;
+    }
+
+    public int getHourOfDay() {
+        return hourOfDay;
+    }
+
+    public void setHourOfDay(int hour) {
+        this.hourOfDay = hour;
+    }
+
+    public int getMinuteOfHour() {
+        return minuteOfHour;
+    }
+
+    public void setMinuteOfHour(int minute) {
+        this.minuteOfHour = minute;
     }
 }

@@ -17,10 +17,7 @@ import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
-import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.ContactSort;
-
-import java.util.Comparator;
 
 /**
  * Fragment that retrieves and displays the list of contacts

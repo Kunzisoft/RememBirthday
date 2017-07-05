@@ -8,6 +8,8 @@ import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
+import java.util.Locale;
+
 public class TimePreference extends DialogPreference {
 
     private static final String TIME_TAG_SUMMARY = "[time]";
@@ -118,15 +120,15 @@ public class TimePreference extends DialogPreference {
         this.minute = minute;
     }
 
-    private static int parseHour(String time) {
+    public static int parseHour(String time) {
         return(Integer.parseInt(time.split(TIME_SEPARATOR)[0]));
     }
 
-    private static int parseMinute(String time) {
+    public static int parseMinute(String time) {
         return(Integer.parseInt(time.split(TIME_SEPARATOR)[1]));
     }
 
-    public static String timeToString(int hour, int minute) {
-        return String.valueOf(hour) + TIME_SEPARATOR + String.valueOf(minute);
+    public static String timeToString(int hours, int minutes) {
+        return String.format(Locale.getDefault(), "%02d"+TIME_SEPARATOR+"%02d", hours, minutes);
     }
 }

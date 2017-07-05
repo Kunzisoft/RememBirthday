@@ -8,26 +8,33 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 
 /**
  * Adapter who manage list of reminders
  */
-public class ReminderAdapter extends AbstractReminderAdapter<Reminder, ReminderViewHolder> {
+public class ReminderNotificationsAdapter extends AbstractReminderAdapter<Reminder, ReminderViewHolder> {
 
-    public ReminderAdapter(Context context, DateUnknownYear anniversary) {
+    public ReminderNotificationsAdapter(Context context, DateUnknownYear anniversary) {
         super(context, anniversary);
     }
 
     @Override
+    public void addDefaultItem(int deltaDay) {
+        int[] defaultTime = PreferencesManager.getDefaultTime(context);
+        addReminder(new Reminder(anniversary.getDate(), defaultTime[0], defaultTime[1], deltaDay));
+    }
+
+    @Override
     public void addDefaultItem() {
-        addReminder(new Reminder(anniversary.getDate()));
+        addDefaultItem(0);
     }
 
     @Override
     public ReminderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_reminders, parent, false);
+                .inflate(R.layout.item_list_reminder_notifs, parent, false);
         return new AutoMessageViewHolder(itemView);
     }
 }

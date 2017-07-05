@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.AutoMessage;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 
 /**
@@ -20,8 +21,14 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
     }
 
     @Override
+    public void addDefaultItem(int deltaDay) {
+        int[] defaultTime = PreferencesManager.getDefaultTime(context);
+        addReminder(new AutoMessage(anniversary.getDate(), defaultTime[0], defaultTime[1], deltaDay));
+    }
+
+    @Override
     public void addDefaultItem() {
-        addReminder(new AutoMessage(anniversary.getDate()));
+        addDefaultItem(0);
     }
 
     @Override

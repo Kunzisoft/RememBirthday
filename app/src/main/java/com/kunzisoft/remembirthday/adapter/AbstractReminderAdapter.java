@@ -12,6 +12,7 @@ import android.widget.TimePicker;
 
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -39,7 +40,18 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
         this.context = context;
         this.anniversary = anniversary;
         listReminders = new ArrayList<>();
-        //TODO Init list of messages
+    }
+
+    /**
+     * Add list of reminders at the end of current list
+     * @param reminders
+     */
+    public void addReminders(List<E> reminders) {
+        int start = listReminders.size();
+        if(!reminders.isEmpty()) {
+            listReminders.addAll(reminders);
+            this.notifyItemRangeChanged(start, reminders.size() - 1);
+        }
     }
 
     /**
@@ -50,6 +62,11 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
         listReminders.add(reminder);
         this.notifyItemChanged(listReminders.size() - 1);
     }
+
+    /**
+     * Add a default reminder to the list, init day with delta of anniversary, hour and minute to default
+     */
+    public abstract void addDefaultItem(int deltaDay);
 
     /**
      * Add a default reminder to the list with the day of anniversary, init hour and minute to default
@@ -82,10 +99,7 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
                 listDays);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.unitsBefore.setAdapter(adapter);
-        holder.unitsBefore.setSelection(
-                Days.daysBetween(
-                        new DateTime(anniversary.getDate()),
-                        new DateTime(currentReminder.getDate())).getDays());
+        holder.unitsBefore.setSelection(currentReminder.getDeltaDay());
         holder.unitsBefore.setOnItemSelectedListener(new OnDaySelected(currentReminder, listDays));
 
         holder.deleteButton.setOnClickListener(new OnClickRemoveButton(position));
@@ -127,25 +141,19 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
 
         @Override
         public void onClick(final View view) {
-            final Calendar calendar = GregorianCalendar.getInstance();
-            calendar.setTime(reminder.getDate());
-
             TimePickerDialog timePickerDialog;
             timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                    // Change hour in reminder
-                    calendar.set(Calendar.SECOND, 0);
-                    calendar.set(Calendar.MILLISECOND, 0);
-                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    calendar.set(Calendar.MINUTE, minute);
-                    reminder.setDate(calendar.getTime());
+                    // Change hours and minutes in reminder
+                    reminder.setHourOfDay(hourOfDay);
+                    reminder.setMinuteOfHour(minute);
                     Log.d(this.getClass().getSimpleName(), "Assign new hour for reminder : " + reminder.getDate().toString());
 
                     // Set text in view
                     ((TextView) view).setText(reminderDateFormatter.format(reminder.getDate()));
                 }
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+            }, reminder.getHourOfDay(), reminder.getMinuteOfHour(), true);
             timePickerDialog.show();
         }
     }
@@ -166,13 +174,7 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
             // New Date when delta days is selected
-            DateTime anniversaryDate = new DateTime(anniversary.getDate());
-            DateTime initDate = new DateTime(reminder.getDate());
-            initDate = initDate.withDate(anniversaryDate.getYear(), anniversaryDate.getMonthOfYear(), anniversaryDate.getDayOfMonth());
-            reminder.setDate(
-                    (initDate)
-                            .minusDays(listDays.get(position))
-                            .toDate());
+            reminder.setDeltaDay(listDays.get(position));
             Log.d(this.getClass().getSimpleName(), "Assign new date for reminder : " + reminder.getDate().toString());
         }
 

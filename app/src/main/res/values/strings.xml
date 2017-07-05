@@ -4,8 +4,9 @@
     <string name="settings_title">Settings</string>
     <string name="at">At</string>
     <string name="select_contact_title">Select a contact</string>
-    <string name="auto_sms_title">Auto SMS</string>
     <string name="reminder_title">Reminder</string>
+    <string name="reminder_notification_title">Notification</string>
+    <string name="auto_sms_title">Auto SMS</string>
     <string name="auto_sms_content">SMS Content</string>
     <string name="days_before">Day(s) before</string>
 
@@ -59,7 +60,7 @@
     <string name="pref_notifications_days_title">Default days</string>
     <string name="pref_notifications_days_summary">Ex : "0#2#7" Notification visible on the day, 2 and 7 days before the event.</string>
     <string name="pref_notifications_days_key" translatable="false">notifications_day_enable</string>
-    <string name="pref_notifications_days_default" translatable="false">0#2#7</string>
+    <string name="pref_notifications_days_default" translatable="false">0</string>
 
     <string name="pref_notifications_time_title">Default time</string>
     <string name="pref_notifications_time_summary">Hour of notifications : [time]</string>

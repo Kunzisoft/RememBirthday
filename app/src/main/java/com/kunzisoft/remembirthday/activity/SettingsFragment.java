@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.preference.TimePreference;
 import com.kunzisoft.remembirthday.preference.TimePreferenceDialogFragmentCompat;
 
@@ -78,18 +79,29 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     {
         if(key.equals(getString(R.string.pref_notifications_days_key))) {
             // Only for 99 days maximum before the event
-            Pattern p = Pattern.compile("^\\d{1,2}+(#\\d{1,2})*$");
+            Pattern p = Pattern.compile(PreferencesManager.PATTERN_REMINDER_PREF);
             Matcher m = p.matcher(notificationsDaysEditTextPreference.getText());
+
+            SharedPreferences.Editor sharedPreferenceEditor = sharedPreferences.edit();
             if(!m.matches()) {
+                // If error in value
                 Log.e(getClass().getSimpleName(), notificationsDaysEditTextPreference.getText()
                         + " not matches " + p);
                 Toast.makeText(getContext(), R.string.error_pref_notifications_days, Toast.LENGTH_LONG).show();
-                SharedPreferences.Editor sharedPreferenceEditor = sharedPreferences.edit();
                 sharedPreferenceEditor.putString(
                         getString(R.string.pref_notifications_days_key),
                         getString(R.string.pref_notifications_days_default));
-                sharedPreferenceEditor.apply();
+            } else {
+                // Save value
+                sharedPreferenceEditor.putString(
+                        getString(R.string.pref_notifications_days_key),
+                        notificationsDaysEditTextPreference.getText());
             }
+            sharedPreferenceEditor.apply();
+        }
+        else if(key.equals(getString(R.string.pref_notifications_time_key))) {
+
+
         }
     }
 }

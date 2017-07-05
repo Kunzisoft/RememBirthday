@@ -2,6 +2,8 @@ package com.kunzisoft.remembirthday.element;
 
 import android.provider.ContactsContract;
 
+import com.kunzisoft.remembirthday.element.Contact;
+
 import java.util.Comparator;
 
 /**
