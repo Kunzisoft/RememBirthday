@@ -17,6 +17,10 @@ import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
+import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.element.ContactSort;
+
+import java.util.Comparator;
 
 /**
  * Fragment that retrieves and displays the list of contacts
@@ -40,6 +44,8 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
     protected String selection = null;
     protected String[] selectionArgs = null;
     protected String sortOrder = null;
+
+    protected ContactSort contactSort;
 
     // A UI Fragment must inflate its View
     @Override
@@ -68,6 +74,10 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        if(contactSort != null && contactSort.getSortOrder() != null) {
+            sortOrder = contactSort.getSortOrder();
+        }
         // Starts the query
         return new CursorLoader(
                 getActivity(),
@@ -82,6 +92,8 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         contactAdapter.swapCursor(cursor);
+        if(contactSort != null && contactSort.getContactComparator() != null)
+            contactAdapter.sortElements(contactSort.getContactComparator());
         contactAdapter.notifyDataSetChanged();
     }
 

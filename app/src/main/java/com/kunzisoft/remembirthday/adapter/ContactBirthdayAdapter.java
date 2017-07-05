@@ -13,6 +13,8 @@ import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
+import java.util.LinkedList;
+
 /**
  * Adapter linked to contacts with birthday for data feeding
  */

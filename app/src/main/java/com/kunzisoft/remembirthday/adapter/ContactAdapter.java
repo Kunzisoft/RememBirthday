@@ -23,6 +23,12 @@ import com.kunzisoft.remembirthday.element.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Adapter linked to contacts with birthday for data feeding
  */
@@ -35,6 +41,9 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     private Cursor cursor;
     protected int contactIdColIdx, contactLookupColIdx, contactNameColIdx, contactThumbnailImageUriColIdx, contactImageUriColIdx;
+
+    // Only used for specific sort of contacts
+    protected List<Contact> listContacts;
 
     public ContactAdapter(Context context) {
         this.context = context;
@@ -54,6 +63,26 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         this.contactImageUriColIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI);
     }
 
+    /**
+     * Sort the elements according to a comparator by constructing an intermediate list from the cursor. <br />
+     * The cursor must be initialized, so you must call {@link #swapCursor(Cursor)} before using {@link #sortElements(Comparator)} <br />
+     * WARNING, may take long time if the list contains many elements
+     * @param comparator The comparator to sort the list
+     */
+    public void sortElements(Comparator<Contact> comparator) {
+        // TODO make sort
+        listContacts = new LinkedList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listContacts.add(getItemFromCursor(cursor));
+            cursor.moveToNext();
+        }
+        Collections.sort(listContacts, comparator);
+    }
+
+    /**
+     * Reset the cursor add with {@link #swapCursor(Cursor)}
+     */
     public void resetCursor() {
         cursor.close();
     }
@@ -67,9 +96,15 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     @Override
     public void onBindViewHolder(T holder, int position) {
-        cursor.moveToPosition(position);
-
-        Contact currentContact = getItemFromCursor(cursor);
+        Contact currentContact;
+        if(listContacts != null) {
+            // Get contact from list if specific sort is defined
+            currentContact = listContacts.get(position);
+        } else {
+            // Else get contact directly from cursor
+            cursor.moveToPosition(position);
+            currentContact = getItemFromCursor(cursor);
+        }
         assignDataToView(holder, currentContact);
 
         if(onClickItemContactListener != null) {
