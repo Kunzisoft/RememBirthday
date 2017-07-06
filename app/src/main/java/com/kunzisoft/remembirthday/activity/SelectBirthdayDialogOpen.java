@@ -8,7 +8,7 @@ public interface SelectBirthdayDialogOpen {
 
     /**
      * Displays the event selection dialog
-     * @param contactId Id of contact defined in ContactsContract.Data.RAW_CONTACT_ID
+     * @param rawContactId Id of contact defined in ContactsContract.Data.RAW_CONTACT_ID
      */
-    void openDialogSelection(long contactId);
+    void openDialogSelection(long rawContactId);
 }

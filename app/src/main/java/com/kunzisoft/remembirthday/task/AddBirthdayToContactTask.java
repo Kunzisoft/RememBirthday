@@ -2,6 +2,7 @@ package com.kunzisoft.remembirthday.task;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -14,8 +15,11 @@ import java.util.ArrayList;
  */
 public class AddBirthdayToContactTask extends ActionBirthdayInDatabaseTask {
 
-    public AddBirthdayToContactTask(long contactId, DateUnknownYear birthday, Activity context) {
-        super(contactId, birthday, context);
+    private long rawContactId;
+
+    public AddBirthdayToContactTask(Activity context, long rawContactId, DateUnknownYear birthday) {
+        super(context, birthday);
+        this.rawContactId = rawContactId;
     }
 
     @Override
@@ -23,12 +27,14 @@ public class AddBirthdayToContactTask extends ActionBirthdayInDatabaseTask {
         try {
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValue(ContactsContract.Data.RAW_CONTACT_ID, contactId)
+                    .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactId)
                     .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
                     .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString())
                     .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
             ops.add(contentBuilder.build());
-            context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            ContentProviderResult[] contentProviderResults = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+
+            int dataId = Integer.parseInt(contentProviderResults[0].uri.getLastPathSegment());
 
         } catch(Exception e) {
             Log.e(getClass().getSimpleName(), e.getMessage()+" ");

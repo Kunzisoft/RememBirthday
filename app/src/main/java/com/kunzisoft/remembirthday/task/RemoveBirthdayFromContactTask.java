@@ -14,8 +14,11 @@ import java.util.ArrayList;
  */
 public class RemoveBirthdayFromContactTask extends ActionBirthdayInDatabaseTask {
 
-    public RemoveBirthdayFromContactTask(long contactId, DateUnknownYear birthday, Activity context) {
-        super(contactId, birthday, context);
+    protected long dataId;
+
+    public RemoveBirthdayFromContactTask(Activity context, long dataId, DateUnknownYear birthday) {
+        super(context, birthday);
+        this.dataId = dataId;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class RemoveBirthdayFromContactTask extends ActionBirthdayInDatabaseTask 
                             ContactsContract.Data.MIMETYPE + " =? AND " +
                             ContactsContract.CommonDataKinds.Event.START_DATE + " =? AND " +
                             ContactsContract.CommonDataKinds.Event.TYPE + " =?"
-                            , new String[]{String.valueOf(contactId),
+                            , new String[]{String.valueOf(dataId),
                                 ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
                                 birthday.toBackupString(),
                                 String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)});

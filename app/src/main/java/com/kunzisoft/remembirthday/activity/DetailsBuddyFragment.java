@@ -15,6 +15,7 @@ import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
+import com.kunzisoft.remembirthday.database.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
@@ -68,11 +69,14 @@ public class DetailsBuddyFragment extends Fragment {
             contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
         if(contact != null) {
+            // For save memory get RawId only when show details
+            ContactBuild.assignRawContactIdToContact(getContext(), contact);
+
             selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // TODO better way to call method of activity
-                    ((DetailsBuddyActivity) getActivity()).openDialogSelection(contact.getId());
+                    ((DetailsBuddyActivity) getActivity()).openDialogSelection(contact.getRawId());
                 }
             });
 

@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
+import com.kunzisoft.remembirthday.database.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 
 /**
@@ -50,12 +52,12 @@ public class ListContactsFragment extends AbstractListContactsFragment
 
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
-        long contactId = contact.getId();
-
+        // Get raw contact id if undefined
+        long contactRawId = ContactBuild.assignRawContactIdToContact(getContext(), contact);
         // TODO Verify if already a birthday
 
         try {
-            ((SelectBirthdayDialogOpen) getActivity()).openDialogSelection(contactId);
+            ((SelectBirthdayDialogOpen) getActivity()).openDialogSelection(contactRawId);
         } catch(ClassCastException e) {
             Log.e(TAG, "Wrong activity, must be 'SelectBirthdayDialogOpen'");
         }

@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -122,6 +123,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @return The new item created
      */
     protected Contact getItemFromCursor(Cursor cursor) {
+        //TODO get rawcontact id when click
         Contact contact = new Contact(
                 cursor.getLong(contactIdColIdx),
                 cursor.getString(contactLookupColIdx),

@@ -43,6 +43,7 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
                 ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
                 ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
                 ContactsContract.Contacts.PHOTO_URI,
+                ContactsContract.Contacts.Data._ID,
                 ContactsContract.CommonDataKinds.Event.START_DATE,
                 ContactsContract.CommonDataKinds.Event.TYPE
         };

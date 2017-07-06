@@ -11,14 +11,12 @@ import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 public abstract class ActionBirthdayInDatabaseTask extends AsyncTask<Void, Void, Exception> {
 
-    protected long contactId;
     protected DateUnknownYear birthday;
     protected Activity context;
 
     protected CallbackActionBirthday callbackActionBirthday;
 
-    public ActionBirthdayInDatabaseTask(long contactId, DateUnknownYear birthday, Activity context) {
-        this.contactId = contactId;
+    public ActionBirthdayInDatabaseTask(Activity context, DateUnknownYear birthday) {
         this.birthday = birthday;
         this.context = context;
     }

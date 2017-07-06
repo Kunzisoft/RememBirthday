@@ -3,6 +3,7 @@ package com.kunzisoft.remembirthday.element;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 
 /**
  * Model for contact with birthday manager <br />
@@ -13,19 +14,26 @@ public class Contact implements Parcelable{
     public static final long ID_UNDEFINED = -1;
 
     private long id;
-    private String lookup;
+    private String lookupKey;
+    private long rawId;
+    private long dataAnniversaryId;
     private String name;
     private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
 
-    public Contact(long id, String lookup, String name) {
-        this(id, lookup, name, null);
+    public Contact(long id, String lookupKey, String name) {
+        this(id, lookupKey, ID_UNDEFINED, name, null);
     }
 
-    public Contact(long id, String lookup, String name, DateUnknownYear birthday) {
+    public Contact(long id, String lookupKey, long rawId, String name) {
+        this(id, lookupKey, rawId, name, null);
+    }
+
+    public Contact(long id, String lookupKey, long rawId, String name, DateUnknownYear birthday) {
         this.id = id;
-        this.lookup = lookup;
+        this.lookupKey = lookupKey;
+        this.rawId = rawId;
         this.name = name;
         this.imageThumbnailUri = null;
         this.imageUri = null;
@@ -33,16 +41,18 @@ public class Contact implements Parcelable{
     }
 
     public Contact(String name) {
-        this(ID_UNDEFINED, "", name, null);
+        this(ID_UNDEFINED, "", ID_UNDEFINED, name, null);
     }
 
     public Contact(String name, DateUnknownYear birthday) {
-        this(ID_UNDEFINED, "", name, birthday);
+        this(ID_UNDEFINED, "", ID_UNDEFINED, name, birthday);
     }
 
     private Contact(Parcel in) {
         id = in.readLong();
-        lookup = in.readString();
+        lookupKey = in.readString();
+        rawId = in.readLong();
+        dataAnniversaryId = in.readLong();
         name = in.readString();
         imageThumbnailUri = in.readParcelable(Uri.class.getClassLoader());
         imageUri = in.readParcelable(Uri.class.getClassLoader());
@@ -53,16 +63,36 @@ public class Contact implements Parcelable{
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getLookUp() {
-        return lookup;
+    public String getLookUpKey() {
+        return lookupKey;
     }
 
-    public void setLookUp(String lookup) {
-        this.lookup = lookup;
+    public void setLookUpKey(String lookupKey) {
+        this.lookupKey = lookupKey;
+    }
+
+    public long getRawId() {
+        return rawId;
+    }
+
+    public void setRawId(long rawId) {
+        this.rawId = rawId;
+    }
+
+    public long getDataAnniversaryId() {
+        return dataAnniversaryId;
+    }
+
+    public void setDataAnniversaryId(long dataAnniversaryId) {
+        this.dataAnniversaryId = dataAnniversaryId;
+    }
+
+    public Uri getUri() {
+        return ContactsContract.Contacts.getLookupUri(id, lookupKey);
     }
 
     public String getName() {
@@ -133,7 +163,9 @@ public class Contact implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeString(lookup);
+        parcel.writeString(lookupKey);
+        parcel.writeLong(rawId);
+        parcel.writeLong(dataAnniversaryId);
         parcel.writeString(name);
         parcel.writeParcelable(imageThumbnailUri, i);
         parcel.writeParcelable(imageUri, i);
@@ -157,19 +189,23 @@ public class Contact implements Parcelable{
 
         Contact contact = (Contact) o;
 
-        return id == contact.id;
+        if (id != contact.id) return false;
+        return lookupKey != null ? lookupKey.equals(contact.lookupKey) : contact.lookupKey == null;
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (lookupKey != null ? lookupKey.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "Contact{" +
                 "id='" + id + '\'' +
+                "lookupKey='" + lookupKey + '\'' +
                 ", name='" + name + '\'' +
                 ", birthday=" + birthday +
                 '}';

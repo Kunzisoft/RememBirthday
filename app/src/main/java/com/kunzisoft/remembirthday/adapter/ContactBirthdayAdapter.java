@@ -22,6 +22,7 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
 
     private static final String TAG = "ContactBirthdayAdapter";
 
+    private int contactDataColIdx;
     private int contactStartDateColIdx;
     private int contactTypeColIdx;
 
@@ -32,6 +33,7 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
     @Override
     public void swapCursor(Cursor cursor) {
         super.swapCursor(cursor);
+        this.contactDataColIdx = cursor.getColumnIndex(ContactsContract.Contacts.Data._ID);
         this.contactStartDateColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
         this.contactTypeColIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE);
     }
@@ -47,6 +49,9 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
         Contact contact = super.getItemFromCursor(cursor);
         DateUnknownYear dateUnknownYear = null;
         try {
+            contact.setDataAnniversaryId(cursor.getLong(contactDataColIdx));
+            // TODO remove log
+            Log.d(this.getClass().getSimpleName(), cursor.getLong(contactDataColIdx) + "");
             switch(cursor.getInt(contactTypeColIdx)) {
                 case ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY:
                     dateUnknownYear = DateUnknownYear.stringToDate(cursor.getString(contactStartDateColIdx));

@@ -32,7 +32,7 @@ public class ListContactsActivity extends AppCompatActivity
     // Dialog for birthday selection
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
     private SelectBirthdayDialogFragment dialogSelection;
-    private long contactId;
+    private long rawContactId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,11 @@ public class ListContactsActivity extends AppCompatActivity
         dialogSelection.setOnClickListener(new SelectBirthdayDialogFragment.OnClickBirthdayListener() {
             @Override
             public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
-                AddBirthdayToContactTask addBirthdayToContactTask = new AddBirthdayToContactTask(contactId, dateUnknownYear, ListContactsActivity.this);
+                AddBirthdayToContactTask addBirthdayToContactTask =
+                        new AddBirthdayToContactTask(
+                                ListContactsActivity.this,
+                                rawContactId,
+                                dateUnknownYear);
                 addBirthdayToContactTask.setCallbackActionBirthday(ListContactsActivity.this);
                 addBirthdayToContactTask.execute();
                 finish();
@@ -76,8 +80,8 @@ public class ListContactsActivity extends AppCompatActivity
     }
 
     @Override
-    public void openDialogSelection(long contactId) {
-        this.contactId = contactId;
+    public void openDialogSelection(long rawContactId) {
+        this.rawContactId = rawContactId;
         dialogSelection.show(getSupportFragmentManager(), TAG_SELECT_DIALOG);
     }
 
@@ -107,7 +111,7 @@ public class ListContactsActivity extends AppCompatActivity
                     Uri contactData = data.getData();
                     Cursor cursor =  getContentResolver().query(contactData, null, null, null, null);
                     if (cursor.moveToFirst()) {
-                        contactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID));
+                        rawContactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID));
                         // TODO Change to Uri
                     }
                     cursor.close();
