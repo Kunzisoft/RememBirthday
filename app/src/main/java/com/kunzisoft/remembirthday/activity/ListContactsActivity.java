@@ -9,10 +9,8 @@ import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
@@ -23,13 +21,13 @@ import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
  * Created by joker on 19/01/17.
  */
 public class ListContactsActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, SelectBirthdayDialogOpen {
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, BirthdayDialogOpen {
 
     private static final int INSERT_RESULT_CODE = 1567;
 
     // Dialog for birthday selection
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
-    private SelectBirthdayDialogFragment dialogSelection;
+    private BirthdayDialogFragment dialogSelection;
     private long rawContactId;
 
     @Override
@@ -54,13 +52,14 @@ public class ListContactsActivity extends AppCompatActivity
         });
 
         // Initialize dialog for birthday selection
-        dialogSelection = (SelectBirthdayDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
+        dialogSelection = (BirthdayDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
         if(dialogSelection == null)
-            dialogSelection = new SelectBirthdayDialogFragment();
+            dialogSelection = new BirthdayDialogFragment();
 
-        dialogSelection.setOnClickListener(new SelectBirthdayDialogFragment.OnClickBirthdayListener() {
+        dialogSelection.setOnClickListener(new BirthdayDialogFragment.OnClickBirthdayListener() {
             @Override
             public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
+                // Add new birthday in database
                 AddBirthdayToContactTask addBirthdayToContactTask =
                         new AddBirthdayToContactTask(
                                 ListContactsActivity.this,
@@ -120,18 +119,6 @@ public class ListContactsActivity extends AppCompatActivity
 
     @Override
     public void afterActionBirthdayInDatabase(Action action, Exception exception) {
-        String message = "";
-        switch(action) {
-            case ADD:
-                if(exception == null)
-                    message = getString(R.string.activity_list_contacts_success_add);
-                else {
-                    Log.e(this.getClass().getSimpleName(), exception.getMessage());
-                    message = getString(R.string.activity_list_contacts_error_add);
-                }
-                break;
-        }
-        Toast infoToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        infoToast.show();
+        CallbackAction.showMessage(this, action, exception);
     }
 }

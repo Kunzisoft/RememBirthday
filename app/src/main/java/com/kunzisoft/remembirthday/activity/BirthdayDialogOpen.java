@@ -4,7 +4,7 @@ package com.kunzisoft.remembirthday.activity;
  * Created by joker on 24/04/17.
  */
 
-public interface SelectBirthdayDialogOpen {
+public interface BirthdayDialogOpen {
 
     /**
      * Displays the event selection dialog

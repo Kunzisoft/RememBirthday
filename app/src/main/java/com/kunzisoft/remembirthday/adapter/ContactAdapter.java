@@ -14,7 +14,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -42,15 +40,52 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     private Context context;
     private OnClickItemContactListener onClickItemContactListener;
 
-    private Cursor cursor;
+    protected Cursor cursor;
     protected int contactIdColIdx, contactLookupColIdx, contactNameColIdx, contactThumbnailImageUriColIdx, contactImageUriColIdx;
 
     // Only used for specific sort of contacts
     protected List<Contact> listContacts;
 
+    private int positionContactChecked = -1;
+    private Drawable circleBackground;
+    private int colorPrimary;
+    private int colorSecondary;
+
     public ContactAdapter(Context context) {
         this.context = context;
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+        // Get colors from theme
+        TypedValue typedValuePrimary = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValuePrimary, true);
+        colorPrimary = typedValuePrimary.data;
+
+        // Init color secondary
+        TypedValue typedValueSecondary = new TypedValue();
+        TypedArray arr = context.obtainStyledAttributes(
+                typedValueSecondary.data, new int[]{android.R.attr.textColorPrimaryInverse});
+        colorSecondary = arr.getColor(0, -1);
+        arr.recycle();
+        context.getTheme().resolveAttribute(android.R.attr.textColorPrimaryInverse, typedValueSecondary, true);
+
+        // Init circle background
+        circleBackground = ContextCompat.getDrawable(context, R.drawable.background_circle);
+        circleBackground.setColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP);
+    }
+
+    /**
+     * Get the first element in adapter
+     * @return First contact
+     */
+    public Contact getFirst() {
+        if(listContacts!= null && !listContacts.isEmpty())
+            return listContacts.get(0);
+        else if(cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast())
+                return getItemFromCursor(cursor);
+        }
+        return null;
     }
 
     /**
@@ -109,7 +144,8 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
             cursor.moveToPosition(position);
             currentContact = getItemFromCursor(cursor);
         }
-        assignDataToView(holder, currentContact);
+
+        assignDataToView(holder, currentContact, position);
 
         if(onClickItemContactListener != null) {
             holder.container.setOnClickListener(new BufferContactClickListener(currentContact, position));
@@ -147,8 +183,18 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @param contact The item
      */
     @SuppressWarnings("deprecation")
-    protected void assignDataToView(final T holder, Contact contact) {
+    protected void assignDataToView(final T holder, Contact contact, int position) {
 
+        // Highlight the contact
+        if(position == positionContactChecked) {
+            holder.container.setBackgroundColor(colorSecondary);
+        } else if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            holder.container.setBackgroundDrawable(null);
+        } else {
+            holder.container.setBackground(null);
+        }
+
+        // Assign Icon
         if(contact.containsImage()) {
             // ReInit image and background
             holder.icon.setColorFilter(null);
@@ -168,34 +214,19 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
                         public void onError() {}
                     });
         } else {
-
-            // Get colors from theme
-            TypedValue typedValuePrimary = new TypedValue();
-            context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValuePrimary, true);
-            int colorPrimary = typedValuePrimary.data;
-
-            // Get the sec text color of the theme
-            //TODO color secondary
-            TypedValue typedValueSecondary = new TypedValue();
-            context.getTheme().resolveAttribute(android.R.attr.textColorPrimaryInverse, typedValueSecondary, true);
-            TypedArray arr = context.obtainStyledAttributes(
-                    typedValueSecondary.data, new int[]{android.R.attr.textColorPrimaryInverse});
-            int colorSecondary = arr.getColor(0, -1);
-            arr.recycle();
-
             // Colorize content of icon
             holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person_white_24dp));
             holder.icon.setColorFilter(colorPrimary);
             // Colorize background of icon
-            Drawable background = ContextCompat.getDrawable(context, R.drawable.background_circle);
-            background.setColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP);
+
             if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.icon.setBackgroundDrawable(background);
+                holder.icon.setBackgroundDrawable(circleBackground);
             } else {
-                holder.icon.setBackground(background);
+                holder.icon.setBackground(circleBackground);
             }
         }
 
+        // Assign name
         holder.name.setText(contact.getName());
     }
 
@@ -226,8 +257,15 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         this.onClickItemContactListener = onClickItemContactListener;
     }
 
-    public void setItemChecked(Contact contact) {
-        // TODO highlight
+    /**
+     * Determines which item is highlighted
+     * @param position Position
+     */
+    public void setItemChecked(int position) {
+        int oldPositionChecked = positionContactChecked;
+        this.positionContactChecked = position;
+        notifyItemChanged(oldPositionChecked);
+        notifyItemChanged(position);
     }
 
     @Override

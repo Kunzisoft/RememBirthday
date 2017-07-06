@@ -13,8 +13,6 @@ import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
-import java.util.LinkedList;
-
 /**
  * Adapter linked to contacts with birthday for data feeding
  */
@@ -69,8 +67,8 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
     }
 
     @Override
-    protected void assignDataToView(ContactBirthdayViewHolder holder, Contact contact) {
-        super.assignDataToView(holder, contact);
+    protected void assignDataToView(ContactBirthdayViewHolder holder, Contact contact, int position) {
+        super.assignDataToView(holder, contact, position);
 
         if(contact.hasBirthday()) {
             if (contact.getBirthday().containsYear()) {

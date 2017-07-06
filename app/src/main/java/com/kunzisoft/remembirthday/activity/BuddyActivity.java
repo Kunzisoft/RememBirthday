@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.notifications.NotificationEventReceiver;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -25,10 +23,10 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 /**
- * Activity for show list and details (depend of screen) of buddies
+ * Activity for showMessage list and details (depend of screen) of buddies
  */
 @RuntimePermissions
-public class BuddyActivity extends AppCompatActivity {
+public class BuddyActivity extends AbstractBuddyActivity {
 
     private static final String TAG = "BuddyActivity";
     public final static String EXTRA_BUDDY = "EXTRA_BUDDY";
@@ -51,6 +49,9 @@ public class BuddyActivity extends AppCompatActivity {
                 BuddyActivityPermissionsDispatcher.showRationalForContactsWithCheck(BuddyActivity.this);
             }
         });
+
+        //TODO BUG
+        initDialogSelection();
     }
 
     @Override
@@ -69,7 +70,7 @@ public class BuddyActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_buddy, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -88,6 +89,40 @@ public class BuddyActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case (DetailsBuddyFragment.MODIFY_RESULT_CODE) :
+                //if (resultCode == Activity.RESULT_OK) {
+                /*
+                    Uri contactData = data.getData();
+                    Cursor cursor =  getContentResolver().query(contactData, null, null, null, null);
+                    if (cursor.moveToFirst()) {
+                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID));
+                        // TODO Update View
+                    }
+                    cursor.close();
+                    */
+                //}
+                break;
+        }
+    }
+
+    @Override
+    public void afterActionBirthdayInDatabase(Action action, Exception exception) {
+        super.afterActionBirthdayInDatabase(action, exception);
+        switch (action) {
+            case REMOVE:
+                ListBuddiesFragment listBuddiesFragment =
+                        (ListBuddiesFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
+                if(listBuddiesFragment!=null)
+                    listBuddiesFragment.showFirstContact();
+                break;
+        }
+    }
 
     @OnShowRationale(Manifest.permission.WRITE_CONTACTS)
     public void showRationaleForContacts(final PermissionRequest request) {

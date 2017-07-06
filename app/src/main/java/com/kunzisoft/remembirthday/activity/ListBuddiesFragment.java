@@ -3,9 +3,11 @@ package com.kunzisoft.remembirthday.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -102,8 +104,35 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         outState.putParcelable(EXTRA_DUAL_PANEL, currentCheckContact);
     }
 
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        super.onLoadFinished(loader, cursor);
+
+        // Check the first element in new thread
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(currentCheckContact == null) {
+                    showFirstContact();
+                }
+            }
+        });
+    }
+
     /**
-     * Helper function to show the details of a selected item, either by
+     * Show the first contact by select them on the list and show its details
+     */
+    public void showFirstContact() {
+        // init currentContact to first in the list if we are un dualPane
+        if (mDualPane) {
+            currentCheckContact = contactAdapter.getFirst();
+            contactAdapter.setItemChecked(0);
+            showDetails(currentCheckContact);
+        }
+    }
+
+    /**
+     * Helper function to showMessage the details of a selected item, either by
      * displaying a fragment in-place in the current UI, or starting a
      * whole new activity in which it is displayed.
      */
@@ -111,17 +140,15 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         currentCheckContact = contact;
 
         if (mDualPane) {
-            // We can display everything in-place with fragments, so update
-            // the list to highlight the selected item and show the data.
-            contactAdapter.setItemChecked(contact);
+            // Assign currentContact to activity
+            ((AbstractBuddyActivity) getActivity()).setContactSelected(contact);
 
-            // Make new fragment to show this selection.
+            // Make new fragment to showMessage this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
             detailsFragment.setBuddy(contact);
 
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
-
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             if(getFragmentManager().findFragmentByTag(TAG_FRAGMENT) == null)
                 fragmentTransaction.add(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_FRAGMENT);
@@ -141,6 +168,8 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
 
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
+        if(mDualPane)
+            contactAdapter.setItemChecked(position);
         showDetails(contact);
     }
 }

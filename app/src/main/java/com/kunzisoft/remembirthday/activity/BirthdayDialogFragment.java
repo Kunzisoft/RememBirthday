@@ -34,7 +34,7 @@ import java.util.Locale;
 /**
  * DialogFragment used for selecting birthday, with day, month and year. Displays the delta between the current date and the date selected.
  */
-public class SelectBirthdayDialogFragment extends DialogFragment {
+public class BirthdayDialogFragment extends DialogFragment {
 
     private final static String TAG = "SelectBirthdayDialogFrg";
 
@@ -179,7 +179,7 @@ public class SelectBirthdayDialogFragment extends DialogFragment {
     }
 
     /**
-     * Define a default value for birthday, must be called before the "show"
+     * Define a default value for birthday, must be called before the "showMessage"
      * @param birthday Default date
      */
     public void setDefaultBirthday(DateUnknownYear birthday) {
