@@ -76,14 +76,29 @@
     <string name="pref_contacts_sort_list_summary">Select the sort mode of contacts</string>
     <string name="pref_contacts_sort_list_key" translatable="false">contacts_sort_list</string>
     <string-array name="pref_contacts_sort_list_array">
-        <item>By Birthday</item> <!-- todo and by year -->
         <item>By Name</item>
+        <item>By Name (desc)</item>
+        <item>By Anniversary</item>
+        <item>By Anniversary (desc)</item>
+        <item>By days left</item>
+        <item>By days left (desc)</item>
         <!-- <item>By Favorite</item> -->
+        <!-- <item>By Favorite (desc)</item> -->
     </string-array>
-    <string name="pref_contacts_sort_list_values_default">by_birthday</string>
-    <string-array name="pref_contacts_sort_list_values">
-        <item>@string/pref_contacts_sort_list_values_default</item>
-        <item>by_name</item>
+    <string name="pref_contacts_sort_list_value_name" translatable="false">by_name</string>
+    <string name="pref_contacts_sort_list_value_name_desc" translatable="false">by_name_desc</string>
+    <string name="pref_contacts_sort_list_value_anniversary" translatable="false">by_anniversary</string>
+    <string name="pref_contacts_sort_list_value_anniversary_desc" translatable="false">by_anniversary_desc</string>
+    <string name="pref_contacts_sort_list_value_days_left" translatable="false">by_days_left</string>
+    <string name="pref_contacts_sort_list_value_days_left_desc" translatable="false">by_days_left_desc</string>
+    <string name="pref_contacts_sort_list_value_default" translatable="false">@string/pref_contacts_sort_list_value_days_left</string>
+    <string-array name="pref_contacts_sort_list_values" translatable="false">
+        <item>@string/pref_contacts_sort_list_value_name</item>
+        <item>@string/pref_contacts_sort_list_value_name_desc</item>
+        <item>@string/pref_contacts_sort_list_value_anniversary</item>
+        <item>@string/pref_contacts_sort_list_value_anniversary_desc</item>
+        <item>@string/pref_contacts_sort_list_value_days_left</item>
+        <item>@string/pref_contacts_sort_list_value_days_left_desc</item>
     </string-array>
 
     <string name="pref_category_theme_title">Theme</string>

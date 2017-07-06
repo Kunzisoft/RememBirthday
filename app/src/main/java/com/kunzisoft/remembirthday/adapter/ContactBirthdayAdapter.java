@@ -50,8 +50,6 @@ public class ContactBirthdayAdapter extends ContactAdapter<ContactBirthdayViewHo
         DateUnknownYear dateUnknownYear = null;
         try {
             contact.setDataAnniversaryId(cursor.getLong(contactDataColIdx));
-            // TODO remove log
-            Log.d(this.getClass().getSimpleName(), cursor.getLong(contactDataColIdx) + "");
             switch(cursor.getInt(contactTypeColIdx)) {
                 case ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY:
                     dateUnknownYear = DateUnknownYear.stringToDate(cursor.getString(contactStartDateColIdx));

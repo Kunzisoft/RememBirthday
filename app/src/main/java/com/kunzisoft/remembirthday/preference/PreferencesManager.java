@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.element.ContactSort;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,5 +57,17 @@ public class PreferencesManager {
         time[0] = TimePreference.parseHour(prefNotificationsTime);
         time[1] = TimePreference.parseMinute(prefNotificationsTime);
         return time;
+    }
+
+    /**
+     * Get default contactSort for sort the list of buddies
+     * @param context Context to call
+     * @return the sort
+     */
+    public static ContactSort getDefaultContactSort(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String prefContactSort = prefs.getString(context.getString(R.string.pref_contacts_sort_list_key),
+                context.getString(R.string.pref_contacts_sort_list_value_default));
+        return ContactSort.findContactSortByResourceValueString(context.getResources(), prefContactSort);
     }
 }

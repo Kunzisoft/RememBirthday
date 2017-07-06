@@ -1,8 +1,9 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.content.res.Resources;
 import android.provider.ContactsContract;
 
-import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.R;
 
 import java.util.Comparator;
 
@@ -13,11 +14,21 @@ import java.util.Comparator;
  */
 public enum ContactSort {
 
-    CONTACT_SORT_BY_NAME(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY),
-    CONTACT_SORT_BY_NAME_DESC(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " DESC"),
-    CONTACT_SORT_BY_ANNIVERSARY(ContactsContract.CommonDataKinds.Event.START_DATE),
-    CONTACT_SORT_BY_ANNIVERSARY_DESC(ContactsContract.CommonDataKinds.Event.START_DATE + " DESC"),
-    CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT(new Comparator<Contact>() {
+    CONTACT_SORT_BY_NAME(
+            R.string.pref_contacts_sort_list_value_name,
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY),
+    CONTACT_SORT_BY_NAME_DESC(
+            R.string.pref_contacts_sort_list_value_name_desc,
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " DESC"),
+    CONTACT_SORT_BY_ANNIVERSARY(
+            R.string.pref_contacts_sort_list_value_anniversary,
+            ContactsContract.CommonDataKinds.Event.START_DATE),
+    CONTACT_SORT_BY_ANNIVERSARY_DESC(
+            R.string.pref_contacts_sort_list_value_anniversary_desc,
+            ContactsContract.CommonDataKinds.Event.START_DATE + " DESC"),
+    CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT(
+            R.string.pref_contacts_sort_list_value_days_left,
+            new Comparator<Contact>() {
         @Override
         public int compare(Contact contactA, Contact contactB) {
             if(contactA.getBirthdayDaysRemaining() < contactB.getBirthdayDaysRemaining())
@@ -28,7 +39,9 @@ public enum ContactSort {
                 return 1;
         }
     }),
-    CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT_DESC(new Comparator<Contact>() {
+    CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT_DESC(
+            R.string.pref_contacts_sort_list_value_days_left_desc,
+            new Comparator<Contact>() {
         @Override
         public int compare(Contact contactA, Contact contactB) {
             if(contactA.getBirthdayDaysRemaining() > contactB.getBirthdayDaysRemaining())
@@ -40,6 +53,7 @@ public enum ContactSort {
         }
     });
 
+    private int resourceValueString = -1;
     private String sortOrder = null;
     private Comparator<Contact> contactComparator = null;
 
@@ -47,17 +61,24 @@ public enum ContactSort {
      * Define the last parameter 'sortOrder' of CursorLoader @see <a href="https://developer.android.com/reference/android/content/CursorLoader.html">CursorLoader Doc</a>
      * @param sortOrder part of "ORDER BY" SQL query
      */
-    ContactSort(String sortOrder) {
+    ContactSort(int resourceValueString, String sortOrder) {
+        this.resourceValueString = resourceValueString;
         this.sortOrder = sortOrder;
     }
 
-    ContactSort(Comparator<Contact> contactComparator) {
+    ContactSort(int resourceValueString, Comparator<Contact> contactComparator) {
+        this.resourceValueString = resourceValueString;
         this.contactComparator = contactComparator;
     }
 
-    ContactSort(String sortOrder, Comparator<Contact> contactComparator) {
+    ContactSort(int resourceValueString, String sortOrder, Comparator<Contact> contactComparator) {
+        this.resourceValueString = resourceValueString;
         this.sortOrder = sortOrder;
         this.contactComparator = contactComparator;
+    }
+
+    public int getResourceValueString() {
+        return resourceValueString;
     }
 
     public String getSortOrder() {
@@ -66,5 +87,20 @@ public enum ContactSort {
 
     public Comparator<Contact> getContactComparator() {
         return contactComparator;
+    }
+
+    /**
+     * Find the ContactSort with resource value associated
+     * @param resources Resources for retrieve String
+     * @param value String defined in strings.xml and begins with "pref_contacts_sort_list_value_"
+     * @return ContactSort associated
+     */
+    public static ContactSort findContactSortByResourceValueString(Resources resources, String value) {
+        for(ContactSort currentContactSort : values()){
+            if(resources.getString(currentContactSort.resourceValueString).equals(value)){
+                return currentContactSort;
+            }
+        }
+        return null;
     }
 }

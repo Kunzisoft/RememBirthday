@@ -16,7 +16,7 @@ import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.element.ContactSort;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 /**
  * Created by joker on 08/01/17.
@@ -57,8 +57,8 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         selectionArgs = new String[] {
                 ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
         };
-
-        contactSort = ContactSort.CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT;
+        // Define the default sort
+        contactSort = PreferencesManager.getDefaultContactSort(getContext());
 
         View rootView = inflater.inflate(R.layout.fragment_list_buddies, container, false);
 

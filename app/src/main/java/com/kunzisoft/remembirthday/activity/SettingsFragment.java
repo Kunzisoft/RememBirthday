@@ -75,8 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key)
-    {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
         if(key.equals(getString(R.string.pref_notifications_days_key))) {
             // Only for 99 days maximum before the event
             Pattern p = Pattern.compile(PreferencesManager.PATTERN_REMINDER_PREF);
@@ -98,10 +97,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                         notificationsDaysEditTextPreference.getText());
             }
             sharedPreferenceEditor.apply();
-        }
-        else if(key.equals(getString(R.string.pref_notifications_time_key))) {
-
-
         }
     }
 }
