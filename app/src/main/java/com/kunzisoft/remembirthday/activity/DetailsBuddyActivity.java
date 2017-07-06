@@ -9,10 +9,12 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.Contact;
@@ -27,6 +29,9 @@ import com.squareup.picasso.Picasso;
  */
 public class DetailsBuddyActivity extends AppCompatActivity
         implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, SelectBirthdayDialogOpen {
+
+    private static final int UPDATE_DATABASE_RESULT_CODE = 1777;
+    private static final int REMOVE_DATABASE_RESULT_CODE = 1778;
 
     private Contact contact;
 
@@ -165,7 +170,29 @@ public class DetailsBuddyActivity extends AppCompatActivity
     }
 
     @Override
-    public void afterActionBirthdayInDatabase(Exception exception) {}
+    public void afterActionBirthdayInDatabase(Action action, Exception exception) {
+        String message = "";
+        switch(action) {
+            case UPDATE:
+                if(exception == null)
+                    message = getString(R.string.activity_list_contacts_success_update);
+                else {
+                    Log.e(this.getClass().getSimpleName(), exception.getMessage());
+                    message = getString(R.string.activity_list_contacts_error_update);
+                }
+                break;
+            case REMOVE:
+                if(exception == null)
+                    message = getString(R.string.activity_list_contacts_success_remove);
+                else {
+                    Log.e(this.getClass().getSimpleName(), exception.getMessage());
+                    message = getString(R.string.activity_list_contacts_error_remove);
+                }
+                break;
+        }
+        Toast infoToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        infoToast.show();
+    }
 
     @Override
     public void openDialogSelection(long rawContactId) {

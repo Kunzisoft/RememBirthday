@@ -27,9 +27,12 @@
     <string name="dialog_delete_birthday_title">Delete Birthday</string>
     <string name="dialog_delete_birthday_message">Are you sure you want to delete the anniversary date and related events ?</string>
 
-
-    <string name="activity_list_contacts_error_add_birthday">Error when adding birthday</string>
-    <string name="activity_list_contacts_success_add_birthday">Successful addition of birthday</string>
+    <string name="activity_list_contacts_error_add">Error when adding</string>
+    <string name="activity_list_contacts_success_add">Successful addition</string>
+    <string name="activity_list_contacts_error_update">Error when adding</string>
+    <string name="activity_list_contacts_success_update">Successful update</string>
+    <string name="activity_list_contacts_error_remove">Error when removing</string>
+    <string name="activity_list_contacts_success_remove">Successful removal</string>
 
     <!-- Permissions -->
     <string name="permission_read_contacts_rationale">Read contact permissions are required for their display</string>

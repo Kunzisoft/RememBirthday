@@ -19,6 +19,7 @@ public class RemoveBirthdayFromContactTask extends ActionBirthdayInDatabaseTask 
     public RemoveBirthdayFromContactTask(Activity context, long dataId, DateUnknownYear birthday) {
         super(context, birthday);
         this.dataId = dataId;
+        this.action = CallbackActionBirthday.Action.REMOVE;
     }
 
     @Override

@@ -15,16 +15,18 @@ public abstract class ActionBirthdayInDatabaseTask extends AsyncTask<Void, Void,
     protected Activity context;
 
     protected CallbackActionBirthday callbackActionBirthday;
+    protected CallbackActionBirthday.Action action;
 
     public ActionBirthdayInDatabaseTask(Activity context, DateUnknownYear birthday) {
         this.birthday = birthday;
         this.context = context;
+        this.action = CallbackActionBirthday.Action.UNDEFINED;
     }
 
     @Override
     protected void onPostExecute(Exception exception) {
         if(callbackActionBirthday != null)
-            callbackActionBirthday.afterActionBirthdayInDatabase(exception);
+            callbackActionBirthday.afterActionBirthdayInDatabase(action, exception);
     }
 
     public CallbackActionBirthday getCallbackActionBirthday() {
@@ -39,6 +41,14 @@ public abstract class ActionBirthdayInDatabaseTask extends AsyncTask<Void, Void,
      * Callback for do action after insert/update/delete birthday of contact in database
      */
     public interface CallbackActionBirthday {
-        void afterActionBirthdayInDatabase(Exception exception);
+
+        enum Action {
+            UNDEFINED,
+            ADD,
+            UPDATE,
+            REMOVE
+        }
+
+        void afterActionBirthdayInDatabase(Action action, Exception exception);
     }
 }

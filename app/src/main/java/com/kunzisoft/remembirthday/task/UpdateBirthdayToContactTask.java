@@ -22,6 +22,7 @@ public class UpdateBirthdayToContactTask extends ActionBirthdayInDatabaseTask{
         super(context, oldBirthday);
         this.dataId = dataId;
         this.newBirthday = newBirthday;
+        this.action = CallbackActionBirthday.Action.UPDATE;
     }
 
     @Override

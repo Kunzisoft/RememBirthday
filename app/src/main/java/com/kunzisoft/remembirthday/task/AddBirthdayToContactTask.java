@@ -20,6 +20,7 @@ public class AddBirthdayToContactTask extends ActionBirthdayInDatabaseTask {
     public AddBirthdayToContactTask(Activity context, long rawContactId, DateUnknownYear birthday) {
         super(context, birthday);
         this.rawContactId = rawContactId;
+        this.action = CallbackActionBirthday.Action.ADD;
     }
 
     @Override

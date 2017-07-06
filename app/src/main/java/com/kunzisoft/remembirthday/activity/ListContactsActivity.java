@@ -25,8 +25,6 @@ import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
 public class ListContactsActivity extends AppCompatActivity
         implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, SelectBirthdayDialogOpen {
 
-    private static final String TAG = "ListContactsActivity";
-
     private static final int INSERT_RESULT_CODE = 1567;
 
     // Dialog for birthday selection
@@ -121,15 +119,18 @@ public class ListContactsActivity extends AppCompatActivity
     }
 
     @Override
-    public void afterActionBirthdayInDatabase(Exception exception) {
-        String message;
-        if(exception == null)
-            message = getString(R.string.activity_list_contacts_success_add_birthday);
-        else {
-            Log.e(TAG, exception.getMessage());
-            message = getString(R.string.activity_list_contacts_error_add_birthday);
+    public void afterActionBirthdayInDatabase(Action action, Exception exception) {
+        String message = "";
+        switch(action) {
+            case ADD:
+                if(exception == null)
+                    message = getString(R.string.activity_list_contacts_success_add);
+                else {
+                    Log.e(this.getClass().getSimpleName(), exception.getMessage());
+                    message = getString(R.string.activity_list_contacts_error_add);
+                }
+                break;
         }
-
         Toast infoToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         infoToast.show();
     }
