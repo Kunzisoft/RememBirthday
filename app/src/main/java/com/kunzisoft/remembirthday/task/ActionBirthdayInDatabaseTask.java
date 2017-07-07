@@ -26,7 +26,7 @@ public abstract class ActionBirthdayInDatabaseTask extends AsyncTask<Void, Void,
     @Override
     protected void onPostExecute(Exception exception) {
         if(callbackActionBirthday != null)
-            callbackActionBirthday.afterActionBirthdayInDatabase(action, exception);
+            callbackActionBirthday.afterActionBirthdayInDatabase(birthday, action, exception);
     }
 
     public CallbackActionBirthday getCallbackActionBirthday() {
@@ -49,6 +49,6 @@ public abstract class ActionBirthdayInDatabaseTask extends AsyncTask<Void, Void,
             REMOVE
         }
 
-        void afterActionBirthdayInDatabase(Action action, Exception exception);
+        void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception);
     }
 }

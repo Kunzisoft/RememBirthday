@@ -1,11 +1,14 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,6 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -52,6 +57,12 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
         //TODO BUG
         initDialogSelection();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showFirstContact();
     }
 
     @Override
@@ -95,7 +106,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
         switch (requestCode) {
             case (DetailsBuddyFragment.MODIFY_RESULT_CODE) :
-                //if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                 /*
                     Uri contactData = data.getData();
                     Cursor cursor =  getContentResolver().query(contactData, null, null, null, null);
@@ -105,21 +116,39 @@ public class BuddyActivity extends AbstractBuddyActivity {
                     }
                     cursor.close();
                     */
-                //}
+                }
                 break;
         }
     }
 
+    private void updateDetails() {
+        DetailsBuddyFragment fragment = new DetailsBuddyFragment();
+        fragment.setBuddy(contactSelected);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, fragment, ListBuddiesFragment.TAG_DETAILS_FRAGMENT);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
+    }
+
+    private void showFirstContact() {
+        ListBuddiesFragment listBuddiesFragment =
+                (ListBuddiesFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
+        if(listBuddiesFragment!=null)
+            listBuddiesFragment.showFirstContact();
+    }
+
     @Override
-    public void afterActionBirthdayInDatabase(Action action, Exception exception) {
-        super.afterActionBirthdayInDatabase(action, exception);
+    public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
+        super.afterActionBirthdayInDatabase(birthday, action, exception);
         switch (action) {
+            case UPDATE:
+                contactSelected.setBirthday(birthday);
+                updateDetails();
+                //TODO BUG when move after update
+                break;
             case REMOVE:
-                ListBuddiesFragment listBuddiesFragment =
-                        (ListBuddiesFragment) getSupportFragmentManager()
-                                .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
-                if(listBuddiesFragment!=null)
-                    listBuddiesFragment.showFirstContact();
+                showFirstContact();
                 break;
         }
     }

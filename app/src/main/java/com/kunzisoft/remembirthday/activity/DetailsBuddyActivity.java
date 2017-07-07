@@ -5,16 +5,20 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.squareup.picasso.Picasso;
 
 /**
  * Activity that displays the details of a buddy
  */
 public class DetailsBuddyActivity extends AbstractBuddyActivity {
+
+    private static final String TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +63,18 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
             }
         }
 
+        // Build dialog
+        initDialogSelection();
+
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.
             DetailsBuddyFragment details = new DetailsBuddyFragment();
             details.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().add(R.id.activity_details_buddy_fragment_details_buddy, details).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.activity_details_buddy_fragment_details_buddy, details, TAG_DETAILS_FRAGMENT)
+                    .commit();
         }
-
-        initDialogSelection();
     }
 
     @Override
@@ -92,10 +100,23 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
     }
 
     @Override
-    public void afterActionBirthdayInDatabase(Action action, Exception exception) {
-        super.afterActionBirthdayInDatabase(action, exception);
+    public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
+        super.afterActionBirthdayInDatabase(birthday, action, exception);
 
         switch (action) {
+            case UPDATE:
+                /*
+                contactSelected.setBirthday(birthday);
+                DetailsBuddyFragment details = new DetailsBuddyFragment();
+                details.setBuddy(contactSelected);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.activity_details_buddy_fragment_details_buddy, details, TAG_DETAILS_FRAGMENT)
+                        .commit();
+                        */
+                // TODO Change when new version of FABOptions
+                finish();
+                break;
             case REMOVE:
                 finish();
                 break;

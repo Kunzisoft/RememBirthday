@@ -25,8 +25,8 @@ import com.kunzisoft.remembirthday.preference.PreferencesManager;
  */
 public class ListBuddiesFragment extends AbstractListContactsFragment implements OnClickItemContactListener {
 
+    public final static String TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT";
     private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
-    private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private static final String TAG = "ListBuddiesFragment";
     private Contact currentCheckContact;
 
@@ -141,7 +141,9 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
 
         if (mDualPane) {
             // Assign currentContact to activity
-            ((AbstractBuddyActivity) getActivity()).setContactSelected(contact);
+            AbstractBuddyActivity abstractBuddyActivity = (AbstractBuddyActivity) getActivity();
+            abstractBuddyActivity.setContactSelected(contact);
+            abstractBuddyActivity.attachDialogListener(contact);
 
             // Make new fragment to showMessage this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
@@ -150,10 +152,10 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            if(getFragmentManager().findFragmentByTag(TAG_FRAGMENT) == null)
-                fragmentTransaction.add(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_FRAGMENT);
+            if(getFragmentManager().findFragmentByTag(TAG_DETAILS_FRAGMENT) == null)
+                fragmentTransaction.add(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_DETAILS_FRAGMENT);
             else
-                fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_FRAGMENT);
+                fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_DETAILS_FRAGMENT);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragmentTransaction.commit();
         } else {
@@ -168,8 +170,9 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
 
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
-        if(mDualPane)
+        if(mDualPane) {
             contactAdapter.setItemChecked(position);
+        }
         showDetails(contact);
     }
 }

@@ -118,7 +118,7 @@ public class ListContactsActivity extends AppCompatActivity
     }
 
     @Override
-    public void afterActionBirthdayInDatabase(Action action, Exception exception) {
+    public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
         CallbackAction.showMessage(this, action, exception);
     }
 }

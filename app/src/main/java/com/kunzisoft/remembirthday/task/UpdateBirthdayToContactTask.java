@@ -16,12 +16,12 @@ import java.util.ArrayList;
 public class UpdateBirthdayToContactTask extends ActionBirthdayInDatabaseTask{
 
     private long dataId;
-    private DateUnknownYear newBirthday;
+    private DateUnknownYear oldBirthday;
 
     public UpdateBirthdayToContactTask(Activity context, long dataId, DateUnknownYear oldBirthday, DateUnknownYear newBirthday) {
-        super(context, oldBirthday);
+        super(context, newBirthday);
         this.dataId = dataId;
-        this.newBirthday = newBirthday;
+        this.oldBirthday = oldBirthday;
         this.action = CallbackActionBirthday.Action.UPDATE;
     }
 
@@ -36,9 +36,9 @@ public class UpdateBirthdayToContactTask extends ActionBirthdayInDatabaseTask{
                                     ContactsContract.CommonDataKinds.Event.TYPE + " =?"
                             , new String[]{String.valueOf(dataId),
                                     ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
-                                    birthday.toBackupString(),
+                                    oldBirthday.toBackupString(),
                                     String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)})
-                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, newBirthday.toBackupString());
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString());
             ops.add(contentBuilder.build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
 

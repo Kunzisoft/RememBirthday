@@ -32,24 +32,34 @@ public class AbstractBuddyActivity extends AppCompatActivity
             dialogSelection = (BirthdayDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
             if (dialogSelection == null)
                 dialogSelection = new BirthdayDialogFragment();
-
-            dialogSelection.setDefaultBirthday(contactSelected.getBirthday());
-            dialogSelection.setOnClickListener(onClickDialogListener);
+            attachDialogListener(contactSelected);
         } catch(NullPointerException e) {
             Log.e(this.getClass().getSimpleName(), "'contactSelected' must be initialized");
         }
     }
 
+    /**
+     * Assign new current contact selected for Activity
+     * @param contactSelected New current contact
+     */
     public void setContactSelected(Contact contactSelected) {
         this.contactSelected = contactSelected;
+    }
+
+    /**
+     * Attach dialog listener with a new contact
+     * @param contactSelected New contact
+     */
+    public void attachDialogListener(Contact contactSelected) {
         this.onClickDialogListener.setContact(contactSelected);
         this.dialogSelection.setOnClickListener(onClickDialogListener);
+        if(contactSelected != null)
+            this.dialogSelection.setDefaultBirthday(contactSelected.getBirthday());
     }
 
     @Override
     public void openDialogSelection(long rawContactId) {
         try {
-            Log.e("OK", contactSelected.toString());
             dialogSelection.show(getSupportFragmentManager(), TAG_SELECT_DIALOG);
         } catch(NullPointerException e) {
             Log.e(this.getClass().getSimpleName(), "'dialogSelection' must be initialized with 'initDialogSelection'");
@@ -57,7 +67,8 @@ public class AbstractBuddyActivity extends AppCompatActivity
     }
 
     @Override
-    public void afterActionBirthdayInDatabase(ActionBirthdayInDatabaseTask.CallbackActionBirthday.Action action, Exception exception) {
+    public void afterActionBirthdayInDatabase(
+            DateUnknownYear birthday, ActionBirthdayInDatabaseTask.CallbackActionBirthday.Action action, Exception exception) {
         CallbackAction.showMessage(this, action, exception);
     }
 
