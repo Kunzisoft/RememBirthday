@@ -26,11 +26,14 @@ import com.kunzisoft.remembirthday.preference.PreferencesManager;
 public class ListBuddiesFragment extends AbstractListContactsFragment implements OnClickItemContactListener {
 
     public final static String TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT";
-    private final static String EXTRA_DUAL_PANEL = "EXTRA_DUAL_PANEL";
+    private final static String CONTACT_KEY = "CONTACT_KEY";
+    private final static String CONTACT_POSITION_KEY = "CONTACT_POSITION_KEY";
     private static final String TAG = "ListBuddiesFragment";
-    private Contact currentCheckContact;
 
-    private boolean mDualPane;
+    private Contact currentContact;
+    private int currentContactPosition = -1;
+
+    private boolean dualPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,23 +88,22 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
 
         // Manage dual panel
         View detailsFrame = getActivity().findViewById(R.id.activity_buddy_container_details_fragment);
-        mDualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
+        dualPanel = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            currentCheckContact = savedInstanceState.getParcelable(EXTRA_DUAL_PANEL);
+            currentContact = savedInstanceState.getParcelable(CONTACT_KEY);
+            currentContactPosition = savedInstanceState.getInt(CONTACT_POSITION_KEY);
         }
-
-        if (mDualPane) {
-            // Make sure our UI is in the correct state.
-            showDetails(currentCheckContact);
-        }
+        if(dualPanel && currentContactPosition >= 0 && currentContact != null)
+            showDetails(currentContact, currentContactPosition);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(EXTRA_DUAL_PANEL, currentCheckContact);
+        outState.putParcelable(CONTACT_KEY, currentContact);
+        outState.putInt(CONTACT_POSITION_KEY, currentContactPosition);
     }
 
     @Override
@@ -112,7 +114,7 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                if(currentCheckContact == null) {
+                if(currentContact == null) {
                     showFirstContact();
                 }
             }
@@ -123,11 +125,10 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
      * Show the first contact by select them on the list and show its details
      */
     public void showFirstContact() {
-        // init currentContact to first in the list if we are un dualPane
-        if (mDualPane) {
-            currentCheckContact = contactAdapter.getFirst();
-            contactAdapter.setItemChecked(0);
-            showDetails(currentCheckContact);
+        // init currentContact to first in the list if we are un dualPanel
+        if (dualPanel) {
+            currentContact = contactAdapter.getFirst();
+            showDetails(currentContact, 0);
         }
     }
 
@@ -136,14 +137,17 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
      * displaying a fragment in-place in the current UI, or starting a
      * whole new activity in which it is displayed.
      */
-    private void showDetails(Contact contact) {
-        currentCheckContact = contact;
-
-        if (mDualPane) {
-            // Assign currentContact to activity
+    private void showDetails(Contact contact, int position) {
+        currentContact = contact;
+        currentContactPosition = position;
+        if (dualPanel) {
+            // Assign currentContact to activity and attach dialog
             AbstractBuddyActivity abstractBuddyActivity = (AbstractBuddyActivity) getActivity();
             abstractBuddyActivity.setContactSelected(contact);
             abstractBuddyActivity.attachDialogListener(contact);
+
+            // Checked the position
+            contactAdapter.setItemChecked(position);
 
             // Make new fragment to showMessage this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
@@ -170,9 +174,6 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
 
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
-        if(mDualPane) {
-            contactAdapter.setItemChecked(position);
-        }
-        showDetails(contact);
+        showDetails(contact, position);
     }
 }

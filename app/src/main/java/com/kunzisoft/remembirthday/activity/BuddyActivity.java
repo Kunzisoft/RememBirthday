@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,10 +38,15 @@ public class BuddyActivity extends AbstractBuddyActivity {
     private static final String TAG = "BuddyActivity";
     public final static String EXTRA_BUDDY = "EXTRA_BUDDY";
 
+    private boolean dualPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buddy);
+
+        View detailsFrame = findViewById(R.id.activity_buddy_container_details_fragment);
+        dualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
 
         // Toolbar generation
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,7 +69,14 @@ public class BuddyActivity extends AbstractBuddyActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        showFirstContact();
+        if (!dualPane) {
+            // If in landscape remove all details
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ListBuddiesFragment.TAG_DETAILS_FRAGMENT);
+            if(fragment != null) {
+                fragment.setHasOptionsMenu(false);
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
     }
 
     @Override
@@ -121,34 +135,32 @@ public class BuddyActivity extends AbstractBuddyActivity {
         }
     }
 
-    private void updateDetails() {
-        DetailsBuddyFragment fragment = new DetailsBuddyFragment();
-        fragment.setBuddy(contactSelected);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, fragment, ListBuddiesFragment.TAG_DETAILS_FRAGMENT);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
-    }
-
-    private void showFirstContact() {
-        ListBuddiesFragment listBuddiesFragment =
-                (ListBuddiesFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
-        if(listBuddiesFragment!=null)
-            listBuddiesFragment.showFirstContact();
-    }
-
     @Override
     public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
         super.afterActionBirthdayInDatabase(birthday, action, exception);
         switch (action) {
             case UPDATE:
                 contactSelected.setBirthday(birthday);
-                updateDetails();
+                // Update details
+                if(dualPane) {
+                    DetailsBuddyFragment fragment = new DetailsBuddyFragment();
+                    fragment.setBuddy(contactSelected);
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, fragment, ListBuddiesFragment.TAG_DETAILS_FRAGMENT);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    fragmentTransaction.commit();
+                }
                 //TODO BUG when move after update
                 break;
             case REMOVE:
-                showFirstContact();
+                // Select the first contact after deletion
+                if(dualPane) {
+                    ListBuddiesFragment listBuddiesFragment =
+                            (ListBuddiesFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
+                    if(listBuddiesFragment!=null)
+                        listBuddiesFragment.showFirstContact();
+                }
                 break;
         }
     }
