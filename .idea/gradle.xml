@@ -9,7 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/RemenBirthday-UI" />
+            <option value="$PROJECT_DIR$/RememBirthday-UI" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
