@@ -2,12 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/faboptions_reminder"
+        android:orderInCategory="310"
         android:icon="@drawable/ic_add_alarm_white_24dp"
         android:title="@string/reminder_title" />
 
 
     <item
         android:id="@+id/faboptions_auto_message"
+        android:orderInCategory="320"
         android:icon="@drawable/ic_message_white_24dp"
         android:title="@string/auto_sms_title" />
 </menu>

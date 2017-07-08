@@ -22,6 +22,7 @@
             android:theme="@style/SplashChocolateTheme"
             android:label="@string/app_name">
             <intent-filter>
+                <!-- TODO https://developer.android.com/training/app-indexing/deep-linking.html -->
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -46,6 +47,10 @@
         <activity
             android:name=".activity.NotificationActivity"
             android:label="@string/settings_title">
+        </activity>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/about_title">
         </activity>
 
         <service

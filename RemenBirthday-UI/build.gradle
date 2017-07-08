@@ -43,6 +43,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // FAB
     compile 'com.github.joaquimley:faboptions:1.1.2'
+    // HTML
+    compile 'org.sufficientlysecure:html-textview:3.4'
 
 
 }
