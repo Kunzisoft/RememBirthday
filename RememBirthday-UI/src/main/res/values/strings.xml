@@ -81,13 +81,9 @@
     <string name="pref_contacts_sort_list_key" translatable="false">contacts_sort_list</string>
     <string-array name="pref_contacts_sort_list_array">
         <item>By Name</item>
-        <item>By Name (desc)</item>
         <item>By Anniversary</item>
-        <item>By Anniversary (desc)</item>
-        <item>By days left</item>
-        <item>By days left (desc)</item>
+        <item>By Days Remaining</item>
         <!-- <item>By Favorite</item> -->
-        <!-- <item>By Favorite (desc)</item> -->
     </string-array>
     <string name="pref_contacts_sort_list_value_name" translatable="false">by_name</string>
     <string name="pref_contacts_sort_list_value_anniversary" translatable="false">by_anniversary</string>

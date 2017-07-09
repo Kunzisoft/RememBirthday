@@ -1,5 +1,6 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import java.util.regex.Pattern;
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG_FRAGMENT_DIALOG = "com.kunzisoft.remembirthday.TAG_FRAGMENT_DIALOG";
+
+    public static final int SETTING_REQUEST_CODE = 1647;
 
     private EditTextPreference notificationsDaysEditTextPreference;
 
@@ -104,6 +107,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // Update list after change sort or order
         if(key.equals(getString(R.string.pref_contacts_sort_list_key))
                 || key.equals(getString(R.string.pref_contacts_order_list_key))) {
+            getActivity().setResult(Activity.RESULT_OK);
         }
     }
 }

@@ -86,7 +86,9 @@ public class BuddyActivity extends AbstractBuddyActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivityForResult(
+                        new Intent(this, SettingsActivity.class),
+                        SettingsFragment.SETTING_REQUEST_CODE);
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
@@ -111,6 +113,16 @@ public class BuddyActivity extends AbstractBuddyActivity {
                     }
                     cursor.close();
                     */
+                }
+                break;
+            case (SettingsFragment.SETTING_REQUEST_CODE) :
+                if (resultCode == Activity.RESULT_OK) {
+                    // Restart after change settings
+                    finish();
+                    Intent intent = getBaseContext().getPackageManager()
+                            .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
                 break;
         }
