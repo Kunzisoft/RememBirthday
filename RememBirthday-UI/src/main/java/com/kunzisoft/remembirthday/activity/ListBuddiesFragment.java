@@ -108,8 +108,9 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
     /**
      * Deselect any contact, by the way hide details because no contact information
      */
-    public void deselect() {
-        showDetails(null, ContactAdapter.POSITION_UNDEFINED);
+    public void deselectForDualPanel() {
+        if(dualPanel)
+            showDetails(null, ContactAdapter.POSITION_UNDEFINED);
     }
 
     /**

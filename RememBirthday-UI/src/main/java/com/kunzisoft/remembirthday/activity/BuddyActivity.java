@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,8 +32,6 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
     private static final String TAG = "BuddyActivity";
     public final static String EXTRA_BUDDY = "EXTRA_BUDDY";
-
-    private static final int ADD_BIRTHDAY_RESULT_CODE = 1946;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +64,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
     @NeedsPermission(Manifest.permission.WRITE_CONTACTS)
     public void showRationalForContacts() {
-        deselectContactInList();
+        deselectContactInListForDualPanel();
         Intent intent = new Intent(BuddyActivity.this, ListContactsActivity.class);
         startActivity(intent);
     }
@@ -122,20 +119,19 @@ public class BuddyActivity extends AbstractBuddyActivity {
     @Override
     public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
         super.afterActionBirthdayInDatabase(birthday, action, exception);
-        // After remove and update deselect
-        deselectContactInList();
+        // After remove and update deselectForDualPanel
+        deselectContactInListForDualPanel();
     }
 
     /**
      * Deselect any contact in ListBuddiesFragment
      */
-    private void deselectContactInList() {
+    private void deselectContactInListForDualPanel() {
         ListBuddiesFragment listBuddiesFragment =
                 (ListBuddiesFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
         if(listBuddiesFragment!=null) {
-            Log.e(TAG, listBuddiesFragment + "");
-            listBuddiesFragment.deselect();
+            listBuddiesFragment.deselectForDualPanel();
         }
     }
 
