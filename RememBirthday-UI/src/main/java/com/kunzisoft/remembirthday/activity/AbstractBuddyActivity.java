@@ -1,5 +1,6 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -17,25 +18,34 @@ public class AbstractBuddyActivity extends AppCompatActivity
 
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
 
+    private final static String CONTACT_KEY = "CONTACT_KEY";
+
     protected Contact contactSelected;
     protected BirthdayDialogFragment dialogSelection;
 
     private OnClickDialogListener onClickDialogListener =
             new OnClickDialogListener(contactSelected);
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(CONTACT_KEY, contactSelected);
+    }
+
     /**
      * Initialize Dialog for selection of date, must be called only if "contactSelected" is initialized
      */
-    protected void initDialogSelection() {
-        try {
-            // Initialize dialog for birthday selection
-            dialogSelection = (BirthdayDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
-            if (dialogSelection == null)
-                dialogSelection = new BirthdayDialogFragment();
-            attachDialogListener(contactSelected);
-        } catch(NullPointerException e) {
-            Log.e(this.getClass().getSimpleName(), "'contactSelected' must be initialized");
+    protected void initDialogSelection(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            contactSelected = savedInstanceState.getParcelable(CONTACT_KEY);
         }
+        onClickDialogListener = new OnClickDialogListener(contactSelected);
+        // Initialize dialog for birthday selection
+        dialogSelection = (BirthdayDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_SELECT_DIALOG);
+        if (dialogSelection == null)
+            dialogSelection = new BirthdayDialogFragment();
+        attachDialogListener(contactSelected);
+
     }
 
     /**

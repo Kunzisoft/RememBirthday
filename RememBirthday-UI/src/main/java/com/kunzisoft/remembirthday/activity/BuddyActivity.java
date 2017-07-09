@@ -53,7 +53,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
         });
 
         //TODO BUG
-        initDialogSelection();
+        initDialogSelection(savedInstanceState);
     }
 
     @Override
@@ -64,7 +64,6 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
     @NeedsPermission(Manifest.permission.WRITE_CONTACTS)
     public void showRationalForContacts() {
-        deselectContactInListForDualPanel();
         Intent intent = new Intent(BuddyActivity.this, ListContactsActivity.class);
         startActivity(intent);
     }
@@ -102,7 +101,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case (DetailsBuddyFragment.MODIFY_RESULT_CODE) :
+            case (DetailsBuddyFragment.MODIFY_CONTACT_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
                 /*
                     Uri contactData = data.getData();
@@ -113,6 +112,11 @@ public class BuddyActivity extends AbstractBuddyActivity {
                     }
                     cursor.close();
                     */
+                }
+                break;
+            case (DetailsBuddyActivity.UPDATE_BIRTHDAY_RESULT_CODE) :
+                if (resultCode == Activity.RESULT_OK) {
+                    deselectContactInListForDualPanel();
                 }
                 break;
             case (SettingsFragment.SETTING_REQUEST_CODE) :
@@ -141,7 +145,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
     private void deselectContactInListForDualPanel() {
         ListBuddiesFragment listBuddiesFragment =
                 (ListBuddiesFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
+                        .findFragmentByTag(getString(R.string.tag_list_birthdays));
         if(listBuddiesFragment!=null) {
             listBuddiesFragment.deselectForDualPanel();
         }

@@ -22,6 +22,9 @@
     <!-- About -->
     <string name="about_version">Version:</string>
 
+    <!-- Tags -->
+    <string name="tag_list_birthdays" translatable="false">TAG_LIST_BIRTHDAYS</string>
+
     <!-- Dialogs -->
     <string name="dialog_select_birthday_title">Select Birthday</string>
     <string name="dialog_select_birthday_zero_day_left">Happy Birthday!</string>

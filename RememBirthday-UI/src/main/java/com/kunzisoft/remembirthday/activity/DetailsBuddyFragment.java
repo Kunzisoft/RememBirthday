@@ -36,7 +36,7 @@ public class DetailsBuddyFragment extends Fragment {
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
 
-    public static final int MODIFY_RESULT_CODE = 1518;
+    public static final int MODIFY_CONTACT_RESULT_CODE = 1518;
 
     private Contact contact;
 
@@ -82,7 +82,6 @@ public class DetailsBuddyFragment extends Fragment {
         if(contact != null) {
             // For save memory get RawId only when showMessage details
             setHasOptionsMenu(true);
-            root.setVisibility(View.VISIBLE);
 
             ContactBuild.assignRawContactIdToContact(getContext(), contact);
 
@@ -131,10 +130,6 @@ public class DetailsBuddyFragment extends Fragment {
             } else {
                 //TODO Error
             }
-        } else {
-            // contact is null
-            setHasOptionsMenu(false);
-            root.setVisibility(View.GONE);
         }
         return root;
     }
@@ -182,7 +177,7 @@ public class DetailsBuddyFragment extends Fragment {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(contact.getUri(), ContactsContract.Contacts.CONTENT_ITEM_TYPE);
                     // Response in activity
-                    getActivity().startActivityForResult(editIntent, MODIFY_RESULT_CODE);
+                    getActivity().startActivityForResult(editIntent, MODIFY_CONTACT_RESULT_CODE);
                 }
                 break;
             case R.id.action_delete:

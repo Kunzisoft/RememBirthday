@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -94,8 +95,11 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
             currentContact = savedInstanceState.getParcelable(CONTACT_KEY);
             currentContactPosition = savedInstanceState.getInt(CONTACT_POSITION_KEY);
         }
-        if(dualPanel && currentContactPosition >= 0 && currentContact != null)
+        if(dualPanel && currentContactPosition >= 0 && currentContact != null) {
             showDetails(currentContact, currentContactPosition);
+        } else {
+            removeDetails();
+        }
     }
 
     @Override
@@ -109,8 +113,19 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
      * Deselect any contact, by the way hide details because no contact information
      */
     public void deselectForDualPanel() {
+        currentContact = null;
+        currentContactPosition = ContactAdapter.POSITION_UNDEFINED;
         if(dualPanel)
             showDetails(null, ContactAdapter.POSITION_UNDEFINED);
+    }
+
+    private void removeDetails() {
+        FragmentManager fragmentManager = getFragmentManager();
+        DetailsBuddyFragment fragment = (DetailsBuddyFragment) fragmentManager.findFragmentByTag(TAG_DETAILS_FRAGMENT);
+        if(fragment != null) {
+            setHasOptionsMenu(false);
+            fragmentManager.beginTransaction().remove(fragment).commit();
+        }
     }
 
     /**
@@ -130,25 +145,29 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
             // Checked the position
             contactAdapter.setItemCheckedByPosition(position);
 
-            // Make new fragment to showMessage this selection.
-            DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
-            detailsFragment.setBuddy(contact);
-            // Execute a transaction, replacing any existing fragment
-            // with this one inside the frame.
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            if(getFragmentManager().findFragmentByTag(TAG_DETAILS_FRAGMENT) == null)
-                fragmentTransaction.add(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_DETAILS_FRAGMENT);
-            else
-                fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_DETAILS_FRAGMENT);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            fragmentTransaction.commit();
+            if(contact == null) {
+                removeDetails();
+            } else {
+                // Make new fragment to showMessage this selection.
+                DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
+                detailsFragment.setBuddy(contact);
+                // Execute a transaction, replacing any existing fragment
+                // with this one inside the frame.
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                if (getFragmentManager().findFragmentByTag(TAG_DETAILS_FRAGMENT) == null)
+                    fragmentTransaction.add(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_DETAILS_FRAGMENT);
+                else
+                    fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, detailsFragment, TAG_DETAILS_FRAGMENT);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                fragmentTransaction.commit();
+            }
         } else {
             // Otherwise we need to launch a new activity to display
             // the dialog fragment with selected text.
             Intent intent = new Intent();
             intent.setClass(getActivity(), DetailsBuddyActivity.class);
             intent.putExtra(BuddyActivity.EXTRA_BUDDY, contact);
-            startActivity(intent);
+            getActivity().startActivityForResult(intent, DetailsBuddyActivity.UPDATE_BIRTHDAY_RESULT_CODE);
         }
     }
 

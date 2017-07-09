@@ -1,11 +1,11 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
@@ -19,6 +19,8 @@ import com.squareup.picasso.Picasso;
 public class DetailsBuddyActivity extends AbstractBuddyActivity {
 
     private static final String TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT";
+
+    public static final int UPDATE_BIRTHDAY_RESULT_CODE = 1786;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
         }
 
         // Build dialog
-        initDialogSelection();
+        initDialogSelection(savedInstanceState);
 
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.
@@ -82,7 +84,7 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case (DetailsBuddyFragment.MODIFY_RESULT_CODE) :
+            case (DetailsBuddyFragment.MODIFY_CONTACT_RESULT_CODE) :
                 //if (resultCode == Activity.RESULT_OK) {
                     finish();
                 /*
@@ -115,6 +117,7 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
                         .commit();
                         */
                 // TODO Change when new version of FABOptions
+                setResult(Activity.RESULT_OK);
                 finish();
                 break;
             case REMOVE:
