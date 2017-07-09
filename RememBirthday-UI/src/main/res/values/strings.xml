@@ -90,19 +90,28 @@
         <!-- <item>By Favorite (desc)</item> -->
     </string-array>
     <string name="pref_contacts_sort_list_value_name" translatable="false">by_name</string>
-    <string name="pref_contacts_sort_list_value_name_desc" translatable="false">by_name_desc</string>
     <string name="pref_contacts_sort_list_value_anniversary" translatable="false">by_anniversary</string>
-    <string name="pref_contacts_sort_list_value_anniversary_desc" translatable="false">by_anniversary_desc</string>
     <string name="pref_contacts_sort_list_value_days_left" translatable="false">by_days_left</string>
-    <string name="pref_contacts_sort_list_value_days_left_desc" translatable="false">by_days_left_desc</string>
     <string name="pref_contacts_sort_list_value_default" translatable="false">@string/pref_contacts_sort_list_value_days_left</string>
     <string-array name="pref_contacts_sort_list_values" translatable="false">
         <item>@string/pref_contacts_sort_list_value_name</item>
-        <item>@string/pref_contacts_sort_list_value_name_desc</item>
         <item>@string/pref_contacts_sort_list_value_anniversary</item>
-        <item>@string/pref_contacts_sort_list_value_anniversary_desc</item>
         <item>@string/pref_contacts_sort_list_value_days_left</item>
-        <item>@string/pref_contacts_sort_list_value_days_left_desc</item>
+    </string-array>
+
+    <string name="pref_contacts_order_list_title">Order</string>
+    <string name="pref_contacts_order_list_summary">Ascending or Descending</string>
+    <string name="pref_contacts_order_list_key" translatable="false">contacts_order_list</string>
+    <string-array name="pref_contacts_order_list_array">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+    <string name="pref_contacts_order_list_value_asc" translatable="false">asc</string>
+    <string name="pref_contacts_order_list_value_desc" translatable="false">desc</string>
+    <string name="pref_contacts_order_list_value_default" translatable="false">@string/pref_contacts_order_list_value_asc</string>
+    <string-array name="pref_contacts_order_list_values" translatable="false">
+        <item>@string/pref_contacts_order_list_value_asc</item>
+        <item>@string/pref_contacts_order_list_value_desc</item>
     </string-array>
 
     <string name="pref_category_theme_title">Theme</string>

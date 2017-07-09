@@ -76,6 +76,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
+
+        // Verify values of notifications
         if(key.equals(getString(R.string.pref_notifications_days_key))) {
             // Only for 99 days maximum before the event
             Pattern p = Pattern.compile(PreferencesManager.PATTERN_REMINDER_PREF);
@@ -97,6 +99,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                         notificationsDaysEditTextPreference.getText());
             }
             sharedPreferenceEditor.apply();
+        }
+
+        // Update list after change sort or order
+        if(key.equals(getString(R.string.pref_contacts_sort_list_key))
+                || key.equals(getString(R.string.pref_contacts_order_list_key))) {
         }
     }
 }

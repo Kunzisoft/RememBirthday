@@ -73,8 +73,8 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        if(contactSort != null && contactSort.getSortOrder() != null) {
-            sortOrder = contactSort.getSortOrder();
+        if(contactSort != null && contactSort.getOrderByQuery() != null) {
+            sortOrder = contactSort.getOrderByQuery();
         }
         // Starts the query
         return new CursorLoader(

@@ -68,6 +68,11 @@ public class PreferencesManager {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String prefContactSort = prefs.getString(context.getString(R.string.pref_contacts_sort_list_key),
                 context.getString(R.string.pref_contacts_sort_list_value_default));
-        return ContactSort.findContactSortByResourceValueString(context.getResources(), prefContactSort);
+        String prefContactOrder = prefs.getString(context.getString(R.string.pref_contacts_order_list_key),
+                context.getString(R.string.pref_contacts_order_list_value_default));
+        return ContactSort.findContactSortByResourceValueString(
+                context.getResources(),
+                prefContactSort,
+                prefContactOrder);
     }
 }

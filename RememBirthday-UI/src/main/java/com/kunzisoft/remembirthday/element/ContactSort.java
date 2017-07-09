@@ -16,18 +16,23 @@ public enum ContactSort {
 
     CONTACT_SORT_BY_NAME(
             R.string.pref_contacts_sort_list_value_name,
+            R.string.pref_contacts_order_list_value_asc,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY),
     CONTACT_SORT_BY_NAME_DESC(
-            R.string.pref_contacts_sort_list_value_name_desc,
+            R.string.pref_contacts_sort_list_value_name,
+            R.string.pref_contacts_order_list_value_desc,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " DESC"),
     CONTACT_SORT_BY_ANNIVERSARY(
             R.string.pref_contacts_sort_list_value_anniversary,
+            R.string.pref_contacts_order_list_value_asc,
             ContactsContract.CommonDataKinds.Event.START_DATE),
     CONTACT_SORT_BY_ANNIVERSARY_DESC(
-            R.string.pref_contacts_sort_list_value_anniversary_desc,
+            R.string.pref_contacts_sort_list_value_anniversary,
+            R.string.pref_contacts_order_list_value_desc,
             ContactsContract.CommonDataKinds.Event.START_DATE + " DESC"),
     CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT(
             R.string.pref_contacts_sort_list_value_days_left,
+            R.string.pref_contacts_order_list_value_asc,
             new Comparator<Contact>() {
         @Override
         public int compare(Contact contactA, Contact contactB) {
@@ -40,7 +45,8 @@ public enum ContactSort {
         }
     }),
     CONTACT_SORT_BY_ANNIVERSARY_DAYS_LEFT_DESC(
-            R.string.pref_contacts_sort_list_value_days_left_desc,
+            R.string.pref_contacts_sort_list_value_days_left,
+            R.string.pref_contacts_order_list_value_desc,
             new Comparator<Contact>() {
         @Override
         public int compare(Contact contactA, Contact contactB) {
@@ -53,7 +59,8 @@ public enum ContactSort {
         }
     });
 
-    private int resourceValueString = -1;
+    private int resourceValueSortString = -1;
+    private int resourceValueOrderString = -1;
     private String sortOrder = null;
     private Comparator<Contact> contactComparator = null;
 
@@ -61,27 +68,30 @@ public enum ContactSort {
      * Define the last parameter 'sortOrder' of CursorLoader @see <a href="https://developer.android.com/reference/android/content/CursorLoader.html">CursorLoader Doc</a>
      * @param sortOrder part of "ORDER BY" SQL query
      */
-    ContactSort(int resourceValueString, String sortOrder) {
-        this.resourceValueString = resourceValueString;
+    ContactSort(int resourceValueSortString, int resourceValueOrderString, String sortOrder) {
+        this.resourceValueSortString = resourceValueSortString;
+        this.resourceValueOrderString = resourceValueOrderString;
         this.sortOrder = sortOrder;
     }
 
-    ContactSort(int resourceValueString, Comparator<Contact> contactComparator) {
-        this.resourceValueString = resourceValueString;
+    ContactSort(int resourceValueSortString, int resourceValueOrderString, Comparator<Contact> contactComparator) {
+        this.resourceValueSortString = resourceValueSortString;
+        this.resourceValueOrderString = resourceValueOrderString;
         this.contactComparator = contactComparator;
     }
 
-    ContactSort(int resourceValueString, String sortOrder, Comparator<Contact> contactComparator) {
-        this.resourceValueString = resourceValueString;
+    ContactSort(int resourceValueSortString, int resourceValueOrderString, String sortOrder, Comparator<Contact> contactComparator) {
+        this.resourceValueSortString = resourceValueSortString;
+        this.resourceValueOrderString = resourceValueOrderString;
         this.sortOrder = sortOrder;
         this.contactComparator = contactComparator;
     }
 
     public int getResourceValueString() {
-        return resourceValueString;
+        return resourceValueSortString;
     }
 
-    public String getSortOrder() {
+    public String getOrderByQuery() {
         return sortOrder;
     }
 
@@ -92,12 +102,16 @@ public enum ContactSort {
     /**
      * Find the ContactSort with resource value associated
      * @param resources Resources for retrieve String
-     * @param value String defined in strings.xml and begins with "pref_contacts_sort_list_value_"
+     * @param valueSort String defined in strings.xml and begins with "pref_contacts_sort_list_value_"
+     * @param valueOrder String defined in strings.xml and begins with "pref_contacts_value_list_value_"
      * @return ContactSort associated
      */
-    public static ContactSort findContactSortByResourceValueString(Resources resources, String value) {
+    public static ContactSort findContactSortByResourceValueString(Resources resources,
+                                                                   String valueSort,
+                                                                   String valueOrder) {
         for(ContactSort currentContactSort : values()){
-            if(resources.getString(currentContactSort.resourceValueString).equals(value)){
+            if(resources.getString(currentContactSort.resourceValueSortString).equals(valueSort)
+                    && resources.getString(currentContactSort.resourceValueOrderString).equals(valueOrder)){
                 return currentContactSort;
             }
         }

@@ -29,6 +29,13 @@
             android:defaultValue="@string/pref_contacts_sort_list_value_default"
             android:entries="@array/pref_contacts_sort_list_array"
             android:entryValues="@array/pref_contacts_sort_list_values" />
+        <ListPreference
+            android:title="@string/pref_contacts_order_list_title"
+            android:summary="@string/pref_contacts_order_list_summary"
+            android:key="@string/pref_contacts_order_list_key"
+            android:defaultValue="@string/pref_contacts_order_list_value_default"
+            android:entries="@array/pref_contacts_order_list_array"
+            android:entryValues="@array/pref_contacts_order_list_values" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_theme_title"
