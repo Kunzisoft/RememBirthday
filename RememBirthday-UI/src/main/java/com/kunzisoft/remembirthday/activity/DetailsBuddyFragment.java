@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,8 +55,6 @@ public class DetailsBuddyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-
         View root = inflater.inflate(R.layout.fragment_details_buddy, container, false);
 
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
@@ -84,6 +81,9 @@ public class DetailsBuddyFragment extends Fragment {
         }
         if(contact != null) {
             // For save memory get RawId only when showMessage details
+            setHasOptionsMenu(true);
+            root.setVisibility(View.VISIBLE);
+
             ContactBuild.assignRawContactIdToContact(getContext(), contact);
 
             selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +131,10 @@ public class DetailsBuddyFragment extends Fragment {
             } else {
                 //TODO Error
             }
+        } else {
+            // contact is null
+            setHasOptionsMenu(false);
+            root.setVisibility(View.GONE);
         }
         return root;
     }

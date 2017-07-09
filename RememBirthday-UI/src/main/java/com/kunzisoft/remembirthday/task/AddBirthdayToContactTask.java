@@ -34,7 +34,6 @@ public class AddBirthdayToContactTask extends ActionBirthdayInDatabaseTask {
                     .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
             ops.add(contentBuilder.build());
             ContentProviderResult[] contentProviderResults = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-
             int dataId = Integer.parseInt(contentProviderResults[0].uri.getLastPathSegment());
 
         } catch(Exception e) {

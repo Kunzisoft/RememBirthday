@@ -4,12 +4,12 @@
     tools:context="com.kunzisoft.remembirthday.activity.BuddyActivity">
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="110"
+        android:orderInCategory="1100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_about"
-        android:orderInCategory="120"
+        android:orderInCategory="1200"
         android:title="@string/action_about"
         app:showAsAction="never" />
 </menu>

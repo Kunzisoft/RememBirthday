@@ -3,11 +3,9 @@ package com.kunzisoft.remembirthday.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
 import com.kunzisoft.remembirthday.element.Contact;
@@ -31,7 +30,7 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
     private static final String TAG = "ListBuddiesFragment";
 
     private Contact currentContact;
-    private int currentContactPosition = -1;
+    private int currentContactPosition = ContactAdapter.POSITION_UNDEFINED;
 
     private boolean dualPanel;
 
@@ -106,30 +105,11 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
         outState.putInt(CONTACT_POSITION_KEY, currentContactPosition);
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        super.onLoadFinished(loader, cursor);
-
-        // Check the first element in new thread
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                if(currentContact == null) {
-                    showFirstContact();
-                }
-            }
-        });
-    }
-
     /**
-     * Show the first contact by select them on the list and show its details
+     * Deselect any contact, by the way hide details because no contact information
      */
-    public void showFirstContact() {
-        // init currentContact to first in the list if we are un dualPanel
-        if (dualPanel) {
-            currentContact = contactAdapter.getFirst();
-            showDetails(currentContact, 0);
-        }
+    public void deselect() {
+        showDetails(null, ContactAdapter.POSITION_UNDEFINED);
     }
 
     /**
@@ -147,12 +127,11 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
             abstractBuddyActivity.attachDialogListener(contact);
 
             // Checked the position
-            contactAdapter.setItemChecked(position);
+            contactAdapter.setItemCheckedByPosition(position);
 
             // Make new fragment to showMessage this selection.
             DetailsBuddyFragment detailsFragment = new DetailsBuddyFragment();
             detailsFragment.setBuddy(contact);
-
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

@@ -23,7 +23,7 @@ import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
 public class ListContactsActivity extends AppCompatActivity
         implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, BirthdayDialogOpen {
 
-    private static final int INSERT_RESULT_CODE = 1567;
+    private static final int INSERT_CONTACT_RESULT_CODE = 1567;
 
     // Dialog for birthday selection
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
@@ -47,7 +47,7 @@ public class ListContactsActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, INSERT_RESULT_CODE);
+                startActivityForResult(intent, INSERT_CONTACT_RESULT_CODE);
             }
         });
 
@@ -103,15 +103,16 @@ public class ListContactsActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case (INSERT_RESULT_CODE) :
+            case (INSERT_CONTACT_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
                     Cursor cursor =  getContentResolver().query(contactData, null, null, null, null);
-                    if (cursor.moveToFirst()) {
-                        rawContactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID));
-                        // TODO Change to Uri
+                    if (cursor != null) {
+                        if (cursor.moveToFirst()) {
+                            rawContactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID));
+                        }
+                        cursor.close();
                     }
-                    cursor.close();
                 }
                 break;
         }

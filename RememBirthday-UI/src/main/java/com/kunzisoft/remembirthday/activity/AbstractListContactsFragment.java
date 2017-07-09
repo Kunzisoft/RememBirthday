@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.element.ContactSort;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 /**
  * Fragment that retrieves and displays the list of contacts
@@ -29,6 +28,7 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
 
     protected RecyclerView contactsListView;
     protected ContactAdapter contactAdapter;
+    protected LinearLayoutManager linearLayoutManager;
 
     // Connexion to content provider
     protected Uri uri = ContactsContract.Contacts.CONTENT_URI;
@@ -55,7 +55,7 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
         contactsListView = (RecyclerView) rootView.findViewById(R.id.fragment_list_contacts_recyclerview_contacts);
         contactsListView.setHasFixedSize(true);
         contactsListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contactsListView.setLayoutManager(linearLayoutManager);
 

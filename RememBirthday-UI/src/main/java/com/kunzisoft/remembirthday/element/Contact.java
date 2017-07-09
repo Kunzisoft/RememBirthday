@@ -189,9 +189,10 @@ public class Contact implements Parcelable{
 
         Contact contact = (Contact) o;
 
-        if (id != contact.id) return false;
-        return lookupKey != null ? lookupKey.equals(contact.lookupKey) : contact.lookupKey == null;
+        if(rawId != -1 && rawId == contact.rawId) return true;
 
+        if (id == -1 || id != contact.id) return false;
+        return lookupKey != null ? lookupKey.equals(contact.lookupKey) : contact.lookupKey == null;
     }
 
     @Override

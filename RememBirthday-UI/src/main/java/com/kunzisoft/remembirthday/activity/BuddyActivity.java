@@ -7,10 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,15 +34,12 @@ public class BuddyActivity extends AbstractBuddyActivity {
     private static final String TAG = "BuddyActivity";
     public final static String EXTRA_BUDDY = "EXTRA_BUDDY";
 
-    private boolean dualPane;
+    private static final int ADD_BIRTHDAY_RESULT_CODE = 1946;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buddy);
-
-        View detailsFrame = findViewById(R.id.activity_buddy_container_details_fragment);
-        dualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
 
         // Toolbar generation
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,19 +60,6 @@ public class BuddyActivity extends AbstractBuddyActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (!dualPane) {
-            // If in landscape remove all details
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ListBuddiesFragment.TAG_DETAILS_FRAGMENT);
-            if(fragment != null) {
-                fragment.setHasOptionsMenu(false);
-                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-            }
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         BuddyActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
@@ -84,6 +67,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
     @NeedsPermission(Manifest.permission.WRITE_CONTACTS)
     public void showRationalForContacts() {
+        deselectContactInList();
         Intent intent = new Intent(BuddyActivity.this, ListContactsActivity.class);
         startActivity(intent);
     }
@@ -138,30 +122,20 @@ public class BuddyActivity extends AbstractBuddyActivity {
     @Override
     public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
         super.afterActionBirthdayInDatabase(birthday, action, exception);
-        switch (action) {
-            case UPDATE:
-                contactSelected.setBirthday(birthday);
-                // Update details
-                if(dualPane) {
-                    DetailsBuddyFragment fragment = new DetailsBuddyFragment();
-                    fragment.setBuddy(contactSelected);
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.activity_buddy_container_details_fragment, fragment, ListBuddiesFragment.TAG_DETAILS_FRAGMENT);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                    fragmentTransaction.commit();
-                }
-                //TODO BUG when move after update
-                break;
-            case REMOVE:
-                // Select the first contact after deletion
-                if(dualPane) {
-                    ListBuddiesFragment listBuddiesFragment =
-                            (ListBuddiesFragment) getSupportFragmentManager()
-                                    .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
-                    if(listBuddiesFragment!=null)
-                        listBuddiesFragment.showFirstContact();
-                }
-                break;
+        // After remove and update deselect
+        deselectContactInList();
+    }
+
+    /**
+     * Deselect any contact in ListBuddiesFragment
+     */
+    private void deselectContactInList() {
+        ListBuddiesFragment listBuddiesFragment =
+                (ListBuddiesFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.activity_buddy_fragment_list_buddies);
+        if(listBuddiesFragment!=null) {
+            Log.e(TAG, listBuddiesFragment + "");
+            listBuddiesFragment.deselect();
         }
     }
 

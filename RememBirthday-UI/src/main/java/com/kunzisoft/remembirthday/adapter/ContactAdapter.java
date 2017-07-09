@@ -37,6 +37,8 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     private static final String TAG = "ContactBirthdayAdapter";
 
+    public static final int POSITION_UNDEFINED = -1;
+
     private Context context;
     private OnClickItemContactListener onClickItemContactListener;
 
@@ -46,7 +48,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
     // Only used for specific sort of contacts
     protected List<Contact> listContacts;
 
-    private int positionContactChecked = -1;
+    private int positionContactChecked = POSITION_UNDEFINED;
     private Drawable circleBackground;
     private int colorPrimary;
     private int colorSecondary;
@@ -71,21 +73,6 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         // Init circle background
         circleBackground = ContextCompat.getDrawable(context, R.drawable.background_circle);
         circleBackground.setColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP);
-    }
-
-    /**
-     * Get the first element in adapter
-     * @return First contact
-     */
-    public Contact getFirst() {
-        if(listContacts!= null && !listContacts.isEmpty())
-            return listContacts.get(0);
-        else if(cursor != null) {
-            cursor.moveToFirst();
-            if (!cursor.isAfterLast())
-                return getItemFromCursor(cursor);
-        }
-        return null;
     }
 
     /**
@@ -261,11 +248,58 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * Determines which item is highlighted
      * @param position Position
      */
-    public void setItemChecked(int position) {
+    public void setItemCheckedByPosition(int position) {
         int oldPositionChecked = positionContactChecked;
-        this.positionContactChecked = position;
+        if(position <= POSITION_UNDEFINED)
+            positionContactChecked = POSITION_UNDEFINED;
+        else
+            positionContactChecked = position;
         notifyItemChanged(oldPositionChecked);
-        notifyItemChanged(position);
+        if(positionContactChecked != POSITION_UNDEFINED)
+            notifyItemChanged(position);
+    }
+
+    /**
+     * Get the first element in adapter
+     * @return First contact
+     */
+    public Contact getFirst() {
+        if(listContacts!= null && !listContacts.isEmpty())
+            return listContacts.get(0);
+        else if(cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast())
+                return getItemFromCursor(cursor);
+        }
+        return null;
+    }
+
+    /**
+     * Get position of contact
+     * @param contact Contact to search
+     * @return Contact found, if not found return POSITION_UNDEFINED
+     */
+    public int getPosition(Contact contact) {
+        if(listContacts!= null && !listContacts.isEmpty())
+            return listContacts.indexOf(contact);
+        else if(cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Contact contactCursor = getItemFromCursor(cursor);
+                if (contact.equals(contactCursor))
+                    return cursor.getPosition();
+                cursor.moveToNext();
+            }
+        }
+        return POSITION_UNDEFINED;
+    }
+
+    /**
+     * Select the contact defined in parameter
+     * @param contact Contact to setItemCheckedByPosition
+     */
+    public void setItemChecked(Contact contact) {
+        setItemCheckedByPosition(getPosition(contact));
     }
 
     @Override
