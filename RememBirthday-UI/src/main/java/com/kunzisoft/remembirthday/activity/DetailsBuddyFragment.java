@@ -17,11 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.joaquimley.faboptions.FabOptions;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
+import com.kunzisoft.remembirthday.animation.AnimationCircle;
 import com.kunzisoft.remembirthday.database.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
@@ -46,6 +46,9 @@ public class DetailsBuddyFragment extends Fragment {
     protected RecyclerView remindersListView;
     protected ReminderNotificationsAdapter remindersAdapter;
 
+    private View menuView;
+    private AnimationCircle menuAnimationCircle;
+
     public void setBuddy(Contact currentContact) {
         Bundle args = new Bundle();
         args.putParcelable(BuddyActivity.EXTRA_BUDDY, currentContact);
@@ -61,6 +64,7 @@ public class DetailsBuddyFragment extends Fragment {
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
         View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_container_date);
+        menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
 
         // List of reminders elements
         remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
@@ -110,21 +114,44 @@ public class DetailsBuddyFragment extends Fragment {
                 // Number days left before birthday
                 Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
 
-                FabOptions fabOptions = (FabOptions) root.findViewById(R.id.fragment_details_buddy_fab_options);
-                fabOptions.setOnClickListener(new View.OnClickListener() {
+                // Animation for menu
+                View addButton = root.findViewById(R.id.fragment_details_buddy_add_button);
+                addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        switch (view.getId()) {
-                            case R.id.faboptions_reminder:
-                                remindersAdapter.addDefaultItem();
-                                break;
+                        menuAnimationCircle =
+                                AnimationCircle.build(menuView, menuView.getWidth() - 80, 0)
+                                        .animate();
+                    }
+                });
 
-                            case R.id.faboptions_auto_message:
-                                autoMessagesAdapter.addDefaultItem();
-                                break;
+                View calendarButton = root.findViewById(R.id.fragment_details_buddy_menu_calendar);
+                calendarButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        menuAnimationCircle.hide();
+                        Intent intent = getActivity().getPackageManager()
+                                .getLaunchIntentForPackage("com.android.calendar");
+                        startActivity(intent);
+                    }
+                });
 
-                            default:
-                        }
+                View reminderButton = root.findViewById(R.id.fragment_details_buddy_menu_reminder);
+                reminderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        menuAnimationCircle.hide();
+                        remindersAdapter.addDefaultItem();
+                    }
+                });
+
+
+                View messageButton = root.findViewById(R.id.fragment_details_buddy_menu_message);
+                messageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        menuAnimationCircle.hide();
+                        autoMessagesAdapter.addDefaultItem();
                     }
                 });
             } else {

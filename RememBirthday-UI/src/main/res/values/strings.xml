@@ -5,6 +5,7 @@
     <string name="about_title">About</string>
     <string name="at">At</string>
     <string name="select_contact_title">Select a contact</string>
+    <string name="calendar_title">Calendar</string>
     <string name="reminder_title">Reminder</string>
     <string name="reminder_notification_title">Notification</string>
     <string name="auto_sms_title">Auto SMS</string>

@@ -4,5 +4,9 @@
         android:color="@color/colorPrimaryDark"/>
     <item android:state_enabled="true"
         android:color="@color/colorPrimaryDarkInverse"/> <!-- idle state -->
+    <item android:state_checked="false"
+    android:color="@color/colorPrimaryDark"/>
+    <item android:state_checked="true"
+        android:color="@color/colorPrimaryDarkInverse"/> <!-- idle state -->
     <item android:color="@color/colorPrimaryDark"/>
 </selector>

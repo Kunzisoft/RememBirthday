@@ -50,6 +50,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     private int positionContactChecked = POSITION_UNDEFINED;
     private Drawable circleBackground;
+    private int colorHightlight;
     private int colorPrimary;
     private int colorSecondary;
 
@@ -58,6 +59,10 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         // Get colors from theme
+        TypedValue typedValueHighlight = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorControlHighlight, typedValueHighlight, true);
+        colorHightlight = typedValueHighlight.data;
+
         TypedValue typedValuePrimary = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValuePrimary, true);
         colorPrimary = typedValuePrimary.data;
@@ -174,7 +179,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
         // Highlight the contact
         if(position == positionContactChecked) {
-            holder.container.setBackgroundColor(colorSecondary);
+            holder.container.setBackgroundColor(colorHightlight);
         } else if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             holder.container.setBackgroundDrawable(null);
         } else {

@@ -41,10 +41,12 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Unit Tests
     testCompile 'junit:junit:4.12'
-    // FAB
-    compile 'com.github.joaquimley:faboptions:1.1.2'
     // HTML
     compile 'org.sufficientlysecure:html-textview:3.4'
+    // Reveal
+    compile ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
 
 
 }

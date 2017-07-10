@@ -1,97 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
 
-        <android.support.v7.widget.CardView
+        <RelativeLayout
             android:id="@+id/fragment_details_buddy_container_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/ChocolateTheme.CardView">
-            <RelativeLayout
+            android:padding="20dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/fragment_details_buddy_cake"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/img_cake"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fragment_details_buddy_dayAndMonth"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_below="@+id/fragment_details_buddy_year"
+                android:layout_toLeftOf="@+id/fragment_details_buddy_cake"
+                android:layout_toStartOf="@+id/fragment_details_buddy_cake"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fragment_details_buddy_year"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_toLeftOf="@+id/fragment_details_buddy_cake"
+                android:layout_toStartOf="@+id/fragment_details_buddy_cake"
+                android:layout_alignLeft="@+id/fragment_details_buddy_dayAndMonth"
+                android:layout_alignStart="@+id/fragment_details_buddy_dayAndMonth" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fragment_details_buddy_days_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/fragment_details_buddy_dayAndMonth"/>
+        </RelativeLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_below="@+id/fragment_details_buddy_container_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="500dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_details_buddy_list_reminders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_details_buddy_list_auto_messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <io.codetail.widget.RevealFrameLayout
+            android:layout_below="@+id/fragment_details_buddy_container_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/fragment_details_buddy_add_menu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="12dp">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/fragment_details_buddy_cake"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:srcCompat="@drawable/img_cake"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/fragment_details_buddy_dayAndMonth"
-                    android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="40dp"
+                android:background="@color/backgroundElement">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:id="@+id/fragment_details_buddy_menu_calendar"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:text=""
-                    android:layout_below="@+id/fragment_details_buddy_year"
-                    android:layout_toLeftOf="@+id/fragment_details_buddy_cake"
-                    android:layout_toStartOf="@+id/fragment_details_buddy_cake"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/fragment_details_buddy_year"
-                    android:gravity="center"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="12dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/background_circle"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:srcCompat="@drawable/ic_event_note_white_24dp"
+                        android:tint="@color/backgroundElement"/>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:text="@string/calendar_title"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:id="@+id/fragment_details_buddy_menu_reminder"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text=""
-                    android:layout_toLeftOf="@+id/fragment_details_buddy_cake"
-                    android:layout_toStartOf="@+id/fragment_details_buddy_cake"
-                    android:layout_alignLeft="@+id/fragment_details_buddy_dayAndMonth"
-                    android:layout_alignStart="@+id/fragment_details_buddy_dayAndMonth" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/fragment_details_buddy_container_days_left"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/ChocolateTheme.CardView" >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="12dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/fragment_details_buddy_days_left"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="12dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/background_circle"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:srcCompat="@drawable/ic_alarm_white_24dp"
+                        android:tint="@color/backgroundElement"/>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:text="@string/reminder_title"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:id="@+id/fragment_details_buddy_menu_message"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textStyle="italic"
-                    android:text=""
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="12dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/background_circle"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:srcCompat="@drawable/ic_message_white_24dp"
+                        android:tint="@color/backgroundElement"/>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:text="@string/auto_sms_title"/>
+                </LinearLayout>
+            </LinearLayout>
+        </io.codetail.widget.RevealFrameLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_details_buddy_list_reminders"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_details_buddy_list_auto_messages"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.joaquimley.faboptions.FabOptions
-            android:id="@+id/fragment_details_buddy_fab_options"
-            app:button_menu="@menu/menu_reminders"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fragment_details_buddy_add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            android:layout_gravity="end"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_add_alarm_white_24dp"
+            android:layout_alignBottom="@+id/fragment_details_buddy_container_date"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="-40dp" />
+    </RelativeLayout>

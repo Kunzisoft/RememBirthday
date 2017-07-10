@@ -34,11 +34,13 @@
         android:id="@+id/fab_add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:srcCompat="@drawable/ic_event_note_white_24dp"
-        android:layout_margin="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        fab:srcCompat="@drawable/ic_event_white_24dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="-40dp"
+        android:layout_marginRight="-40dp"
+        android:layout_marginEnd="-40dp"
+        android:layout_toLeftOf="@+id/activity_buddy_container_details_fragment"
+        android:layout_toStartOf="@+id/activity_buddy_container_details_fragment" />
 
 </RelativeLayout>
 
