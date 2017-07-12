@@ -12,15 +12,10 @@ import android.widget.TimePicker;
 
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,7 +34,7 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
     public AbstractReminderAdapter(Context context, DateUnknownYear anniversary) {
         this.context = context;
         this.anniversary = anniversary;
-        listReminders = new ArrayList<>();
+        listReminders = new LinkedList<>();
     }
 
     /**
@@ -102,7 +97,7 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
         holder.unitsBefore.setSelection(currentReminder.getDeltaDay());
         holder.unitsBefore.setOnItemSelectedListener(new OnDaySelected(currentReminder, listDays));
 
-        holder.deleteButton.setOnClickListener(new OnClickRemoveButton(position));
+        holder.deleteButton.setOnClickListener(new OnClickRemoveButton(currentReminder));
     }
 
     @Override
@@ -115,16 +110,17 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
      */
     private class OnClickRemoveButton implements View.OnClickListener {
 
-        private int positionInList;
+        private E reminder;
 
-        OnClickRemoveButton(int position) {
-            positionInList = position;
+        OnClickRemoveButton(E reminder) {
+            this.reminder = reminder;
         }
 
         @Override
         public void onClick(View view) {
-            listReminders.remove(positionInList);
-            notifyDataSetChanged();
+            int position = listReminders.indexOf(reminder);
+            notifyItemRemoved(position);
+            listReminders.remove(position);
         }
     }
 

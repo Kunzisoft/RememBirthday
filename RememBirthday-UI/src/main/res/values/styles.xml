@@ -29,8 +29,6 @@
         <!-- Text colors -->
         <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
-        <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
-        <item name="android:textColorSecondaryInverse">@color/colorPrimaryDarkInverse</item>
     </style>
 
     <style name="ChocolateTheme.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">

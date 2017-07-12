@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import java.util.Date;
 
@@ -163,9 +162,7 @@ public class Contact implements Parcelable{
      * @return Next birthday in the year
      */
     public Date getNextBirthday() {
-        Date date = birthday.getNextAnniversary();
-        Log.e("OK", date.toString());
-        return date;
+        return birthday.getNextAnniversary();
     }
 
     @Override
