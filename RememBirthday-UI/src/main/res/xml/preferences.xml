@@ -3,6 +3,10 @@
     <PreferenceCategory
         android:title="@string/pref_category_notifications_title"
         android:key="pref_key_storage_settings">
+        <android.support.v7.preference.Preference
+            android:key="@string/pref_calendar_key"
+            android:persistent="false"
+            android:title="@string/pref_calendar_open" />
         <CheckBoxPreference
             android:title="@string/pref_notifications_service_title"
             android:summary="@string/pref_notifications_service_summary"
@@ -48,19 +52,5 @@
             android:entries="@array/pref_theme_array"
             android:entryValues="@array/pref_theme_values" />
     </PreferenceCategory>
-    <!--
-    <PreferenceCategory
-        android:title="@string/pref_category_advanced_preferences_title"
-        android:key="pref_key_storage_settings">
-        <EditTextPreference
-            android:title="@string/pref_advanced_preferences_store_anniversary_title"
-            android:summary="@string/pref_advanced_preferences_store_anniversary_summary"
-            android:key="@string/pref_advanced_preferences_store_anniversary_key" />
-        <EditTextPreference
-            android:title="@string/pref_advanced_preferences_store_birthday_title"
-            android:summary="@string/pref_advanced_preferences_store_birthday_summary"
-            android:key="@string/pref_advanced_preferences_store_birthday_key" />
-    </PreferenceCategory>
-    -->
 
 </PreferenceScreen>

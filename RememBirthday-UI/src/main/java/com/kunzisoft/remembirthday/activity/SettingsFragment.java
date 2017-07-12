@@ -1,5 +1,6 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -12,10 +13,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.preference.TimePreference;
 import com.kunzisoft.remembirthday.preference.TimePreferenceDialogFragmentCompat;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,8 +38,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
-
         notificationsDaysEditTextPreference = (EditTextPreference) findPreference(getString(R.string.pref_notifications_days_key));
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Preference openCalendar = findPreference(getString(R.string.pref_calendar_key));
+        openCalendar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            @SuppressLint("NewApi")
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openCalendarAt(getContext(), new Date());
+                return true;
+            }
+        });
     }
 
     @Override

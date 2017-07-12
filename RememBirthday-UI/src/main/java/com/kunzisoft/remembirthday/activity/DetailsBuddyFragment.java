@@ -57,7 +57,7 @@ public class DetailsBuddyFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_details_buddy, container, false);
 
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
@@ -65,6 +65,9 @@ public class DetailsBuddyFragment extends Fragment {
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
         View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_container_date);
         menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
+
+        // Animation init
+        menuAnimationCircle = AnimationCircle.build(menuView);
 
         // List of reminders elements
         remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
@@ -119,20 +122,19 @@ public class DetailsBuddyFragment extends Fragment {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        menuAnimationCircle =
-                                AnimationCircle.build(menuView, menuView.getWidth() - 80, 0)
-                                        .animate();
+                        menuAnimationCircle
+                                .startPoint(menuView.getWidth() - 80, 0)
+                                .animate();
                     }
                 });
 
+                // Calendar button
                 View calendarButton = root.findViewById(R.id.fragment_details_buddy_menu_calendar);
                 calendarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         menuAnimationCircle.hide();
-                        Intent intent = getActivity().getPackageManager()
-                                .getLaunchIntentForPackage("com.android.calendar");
-                        startActivity(intent);
+                        Utility.openCalendarAt(getActivity(), contact.getNextBirthday());
                     }
                 });
 

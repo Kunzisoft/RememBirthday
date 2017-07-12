@@ -106,16 +106,20 @@ public class DateUnknownYear implements Parcelable {
         return daysBetweenTodayAnd(this.date);
     }
 
-    //TODO TEST
+    /**
+     * Gets the anniversary not yet passed
+     * @return Next anniversary in the year
+     */
+    // TODO TEST
     public Date getNextAnniversary() {
+        DateTime dateTimeNow = DateTime.now();
         MonthDay monthDayNow = MonthDay.now();
         MonthDay monthDayOfNextDate = MonthDay.fromDateFields(date);
         if(monthDayNow.isEqual(monthDayOfNextDate))
             return new DateTime().toDate();
         if(monthDayNow.isBefore(monthDayOfNextDate))
-            return new DateTime(date).toDate();
+            return new DateTime(date).withYear(dateTimeNow.getYear()).toDate();
         else {
-            DateTime dateTimeNow = DateTime.now();
             DateTime dateTimeOfNextDate = new DateTime(date).withYear(dateTimeNow.getYear()).plusYears(1);
             return dateTimeOfNextDate.toDate();
         }

@@ -61,6 +61,10 @@
     <string name="notifications_anniversary_later">This will be %1$s\'s birthday in 5 days.</string>
 
     <!-- Preferences -->
+
+    <string name="pref_calendar_key">calendar_key</string>
+    <string name="pref_calendar_open">Open Calendar</string>
+
     <string name="pref_category_notifications_title">Notifications</string>
 
     <string name="pref_notifications_service_title">Enable notifications</string>

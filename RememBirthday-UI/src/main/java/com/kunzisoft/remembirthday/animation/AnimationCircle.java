@@ -16,21 +16,18 @@ public class AnimationCircle {
     private int startPointX;
     private int startPointY;
     private int duration;
+    private boolean customRadius;
     private float radius;
     private Interpolator interpolator;
+    private Animator.AnimatorListener animatorListener;
 
-    private AnimationCircle(View view, int startPointX, int startPointY) {
+    private AnimationCircle(View view) {
         this.view = view;
 
-        this.startPointX = startPointX;
-        this.startPointY = startPointY;
-
-        // get the final radius for the clipping circle
-        this.duration = 320;
-        int dx = Math.max(startPointX, view.getWidth() - startPointX);
-        int dy = Math.max(startPointY, view.getHeight() - startPointY);
-        this.radius = (float) Math.hypot(dx, dy);
-        this.interpolator = new AccelerateDecelerateInterpolator();
+        customRadius = false;
+        startPoint(0, 0);
+        duration(320);
+        interpolator(new AccelerateDecelerateInterpolator());
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,18 +54,29 @@ public class AnimationCircle {
         animatorRevealMenu.setDuration(duration);
         animatorRevealMenu.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animator) {}
+            public void onAnimationStart(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationStart(animator);
+            }
 
             @Override
             public void onAnimationEnd(Animator animator) {
                 view.setVisibility(View.GONE);
+                if(animatorListener != null)
+                    animatorListener.onAnimationEnd(animator);
             }
 
             @Override
-            public void onAnimationCancel(Animator animator) {}
+            public void onAnimationCancel(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationCancel(animator);
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animator) {}
+            public void onAnimationRepeat(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationRepeat(animator);
+            }
         });
         animatorRevealMenu.start();
     }
@@ -82,23 +90,45 @@ public class AnimationCircle {
         animatorRevealMenu.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationStart(animator);
                 view.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onAnimationEnd(Animator animator) {}
+            public void onAnimationEnd(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationEnd(animator);
+            }
 
             @Override
-            public void onAnimationCancel(Animator animator) {}
+            public void onAnimationCancel(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationCancel(animator);
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animator) {}
+            public void onAnimationRepeat(Animator animator) {
+                if(animatorListener != null)
+                    animatorListener.onAnimationRepeat(animator);
+            }
         });
         animatorRevealMenu.start();
     }
 
-    public static AnimationCircle build(View view, int startPointX, int startPointY) {
-        return new AnimationCircle(view, startPointX, startPointY);
+    public static AnimationCircle build(View view) {
+        return new AnimationCircle(view);
+    }
+
+    public AnimationCircle startPoint(int startPointX, int startPointY) {
+        this.startPointX = startPointX;
+        this.startPointY = startPointY;
+        if(!customRadius) {
+            int dx = Math.max(startPointX, view.getWidth() - startPointX);
+            int dy = Math.max(startPointY, view.getHeight() - startPointY);
+            this.radius = (float) Math.hypot(dx, dy);
+        }
+        return this;
     }
 
     public AnimationCircle duration(int duration) {
@@ -106,13 +136,19 @@ public class AnimationCircle {
         return this;
     }
 
-    public AnimationCircle radius(int radius) {
+    public AnimationCircle radius(float radius) {
+        this.customRadius = true;
         this.radius = radius;
         return this;
     }
 
     public AnimationCircle interpolator(Interpolator interpolator) {
         this.interpolator = interpolator;
+        return this;
+    }
+
+    public AnimationCircle setAnimatorListener(Animator.AnimatorListener animatorListener) {
+        this.animatorListener = animatorListener;
         return this;
     }
 }
