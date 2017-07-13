@@ -1,16 +1,14 @@
 package com.kunzisoft.remembirthday.factory;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.element.Contact;
 
 /**
  * Created by joker on 13/07/17.
  */
 
 public class MenuActionReminder extends MenuAction{
+
+    public static final int ITEM_ID = 1646954;
 
     public MenuActionReminder() {
         super(R.string.reminder_title,
@@ -24,10 +22,7 @@ public class MenuActionReminder extends MenuAction{
     }
 
     @Override
-    public void doAction(Context context,
-                         FragmentManager fragmentManager,
-                         Contact contact) {
-        super.doAction(context, fragmentManager, contact);
-
+    public int getItemId() {
+        return ITEM_ID;
     }
 }

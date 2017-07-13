@@ -1,11 +1,5 @@
 package com.kunzisoft.remembirthday.factory;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-
-import com.kunzisoft.remembirthday.Utility;
-import com.kunzisoft.remembirthday.element.Contact;
-
 /**
  * Created by joker on 13/07/17.
  */
@@ -16,6 +10,8 @@ public abstract class MenuAction {
     private int imageId;
     private boolean active;
 
+    private ActionContactMenu actionContactMenu;
+
     public MenuAction(int titleId, int imageId) {
         this(titleId, imageId, true);
     }
@@ -25,6 +21,8 @@ public abstract class MenuAction {
         this.imageId = imageId;
         this.active = active;
     }
+
+    public abstract int getItemId();
 
     public int getTitleId() {
         return titleId;
@@ -38,11 +36,12 @@ public abstract class MenuAction {
         return active;
     }
 
-    public void doAction(Context context,
-                         FragmentManager fragmentManager,
-                         Contact contact) {
-        if(!isActive()) {
-            Utility.openProFeatureDialog(fragmentManager);
-        }
+    public void setActionContactMenu(ActionContactMenu actionContactMenu) {
+        this.actionContactMenu = actionContactMenu;
+    }
+
+    public void doAction(MenuAction menuAction, int position) {
+        if(actionContactMenu != null)
+            actionContactMenu.doActionMenu(menuAction);
     }
 }

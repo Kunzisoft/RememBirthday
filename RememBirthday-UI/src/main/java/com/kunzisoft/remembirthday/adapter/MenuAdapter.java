@@ -1,14 +1,12 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.factory.MenuAction;
 import com.kunzisoft.remembirthday.factory.MenuFactory;
 
@@ -21,17 +19,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
     private static final int MENU_NOT_ACTIVE = 1;
 
     private Context context;
-    private FragmentManager fragmentManager;
-    private Contact contact;
     private MenuFactory menuFactory;
 
     public MenuAdapter(Context context,
-                       FragmentManager fragmentManager,
-                       Contact contact,
                        MenuFactory menuFactory) {
         this.context = context;
-        this.fragmentManager = fragmentManager;
-        this.contact = contact;
         this.menuFactory = menuFactory;
     }
 
@@ -86,7 +78,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
         @Override
         public void onClick(View view) {
-            menuAction.doAction(context, fragmentManager, contact);
+            menuAction.doAction(menuAction, position);
         }
     }
 }

@@ -8,12 +8,9 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import com.kunzisoft.remembirthday.activity.ProFeatureDialogFragment;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -51,17 +48,6 @@ public class Utility {
         } else{
             textView.setText(resources.getString(R.string.dialog_select_birthday_number_days_left, numberDaysRemaining));
         }
-    }
-
-    /**
-     * Show the dialog for pro feature
-     * @param fragmentManager FragmentManager to call dialog
-     * @return TAG of fragment
-     */
-    public static String openProFeatureDialog(FragmentManager fragmentManager) {
-        final String PRO_FEATURE_TAG = "PRO_FEATURE_TAG";
-        new ProFeatureDialogFragment().show(fragmentManager, PRO_FEATURE_TAG);
-        return PRO_FEATURE_TAG;
     }
 
     /**

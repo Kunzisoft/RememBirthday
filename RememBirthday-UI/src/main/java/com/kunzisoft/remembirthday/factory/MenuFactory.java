@@ -15,6 +15,12 @@ public abstract class MenuFactory {
         listMenuAction = new ArrayList<>();
     }
 
+    public void setActionContactMenu(ActionContactMenu actionContactMenu) {
+        for (MenuAction menuAction : listMenuAction) {
+            menuAction.setActionContactMenu(actionContactMenu);
+        }
+    }
+
     public List<MenuAction> createMenu() {
         return listMenuAction;
     }

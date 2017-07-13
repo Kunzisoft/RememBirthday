@@ -18,4 +18,8 @@ public class MenuFactoryFree extends MenuFactory {
         listMenuAction.add(menuAutoMessage);
         listMenuAction.add(menuMessage);
     }
+
+    public void setAction(ActionContactMenu actionContactMenu) {
+
+    }
 }

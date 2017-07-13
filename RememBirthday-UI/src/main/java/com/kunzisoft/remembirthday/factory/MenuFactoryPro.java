@@ -4,9 +4,9 @@ package com.kunzisoft.remembirthday.factory;
  * Created by joker on 13/07/17.
  */
 
-public class MenuFactoryBuy extends MenuFactory {
+public class MenuFactoryPro extends MenuFactory {
 
-    public MenuFactoryBuy() {
+    public MenuFactoryPro() {
         super();
         MenuAction menuCalendar = new MenuActionCalendar();
         MenuAction menuReminder = new MenuActionReminder();

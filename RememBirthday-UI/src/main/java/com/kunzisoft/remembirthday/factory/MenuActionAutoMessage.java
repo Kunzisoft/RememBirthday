@@ -1,16 +1,14 @@
 package com.kunzisoft.remembirthday.factory;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.element.Contact;
 
 /**
  * Created by joker on 13/07/17.
  */
 
 public class MenuActionAutoMessage extends MenuAction{
+
+    public static final int ITEM_ID = 1684968;
 
     public MenuActionAutoMessage() {
         super(R.string.auto_sms_title,
@@ -24,9 +22,7 @@ public class MenuActionAutoMessage extends MenuAction{
     }
 
     @Override
-    public void doAction(Context context,
-                         FragmentManager fragmentManager,
-                         Contact contact) {
-        super.doAction(context, fragmentManager, contact);
+    public int getItemId() {
+        return ITEM_ID;
     }
 }

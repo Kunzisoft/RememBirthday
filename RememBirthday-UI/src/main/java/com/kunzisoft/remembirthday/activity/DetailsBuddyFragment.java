@@ -27,7 +27,13 @@ import com.kunzisoft.remembirthday.animation.AnimationCircle;
 import com.kunzisoft.remembirthday.database.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.factory.MenuFactoryFree;
+import com.kunzisoft.remembirthday.factory.ActionContactMenu;
+import com.kunzisoft.remembirthday.factory.MenuAction;
+import com.kunzisoft.remembirthday.factory.MenuActionAutoMessage;
+import com.kunzisoft.remembirthday.factory.MenuActionCalendar;
+import com.kunzisoft.remembirthday.factory.MenuActionReminder;
+import com.kunzisoft.remembirthday.factory.MenuFactory;
+import com.kunzisoft.remembirthday.factory.MenuFactoryLibre;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
@@ -35,7 +41,7 @@ import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
 /**
  * Activity who showMessage the details of buddy selected
  */
-public class DetailsBuddyFragment extends Fragment {
+public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
 
@@ -51,6 +57,7 @@ public class DetailsBuddyFragment extends Fragment {
 
     private RecyclerView menuListView;
     private MenuAdapter menuAdpater;
+    private MenuFactory menuFactory;
 
     private View menuView;
     private AnimationCircle menuAnimationCircle;
@@ -76,8 +83,19 @@ public class DetailsBuddyFragment extends Fragment {
         menuAnimationCircle = AnimationCircle.build(menuView);
 
         // List for menu
+        menuFactory = new MenuFactoryLibre();
+        menuFactory.setActionContactMenu(this);
         menuListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_menu_list);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        int spanCount = 3;
+        if(menuFactory.getMenuCount() % 4 == 0)
+            spanCount = 2;
+        else if(menuFactory.getMenuCount() % 3 == 0)
+            spanCount = 3;
+        else if(menuFactory.getMenuCount() % 2 == 0)
+            spanCount = 2;
+        else if(menuFactory.getMenuCount() == 1)
+            spanCount = 1;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
         menuListView.setLayoutManager(gridLayoutManager);
 
         // List of reminders elements
@@ -139,37 +157,6 @@ public class DetailsBuddyFragment extends Fragment {
                     }
                 });
 
-                /*
-                // Calendar button
-                View calendarButton = root.findViewById(R.id.fragment_details_buddy_menu_calendar);
-                calendarButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        menuAnimationCircle.hide();
-                        Utility.openCalendarAt(getActivity(), contact.getNextBirthday());
-                    }
-                });
-
-                // Reminder Button
-                View reminderButton = root.findViewById(R.id.fragment_details_buddy_menu_reminder);
-                reminderButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        menuAnimationCircle.hide();
-                        remindersAdapter.addDefaultItem();
-                    }
-                });
-
-                // Message button
-                View messageButton = root.findViewById(R.id.fragment_details_buddy_menu_message);
-                messageButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        menuAnimationCircle.hide();
-                        autoMessagesAdapter.addDefaultItem();
-                    }
-                });
-                */
             } else {
                 //TODO Error
             }
@@ -196,11 +183,29 @@ public class DetailsBuddyFragment extends Fragment {
             autoMessagesListView.setAdapter(autoMessagesAdapter);
 
             // Link menu to adapter
-            menuAdpater = new MenuAdapter(getContext(),
-                    getFragmentManager(),
-                    contact,
-                    new MenuFactoryFree());
+            menuAdpater = new MenuAdapter(getContext(), menuFactory);
             menuListView.setAdapter(menuAdpater);
+        }
+    }
+
+    @Override
+    public void doActionMenu(MenuAction menuAction) {
+        if(!menuAction.isActive())
+            new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
+        else {
+            switch (menuAction.getItemId()) {
+                case MenuActionCalendar.ITEM_ID :
+                    Utility.openCalendarAt(getActivity(), contact.getNextBirthday());
+                    break;
+                case MenuActionReminder.ITEM_ID :
+                    menuAnimationCircle.hide();
+                    remindersAdapter.addDefaultItem();
+                    break;
+                case MenuActionAutoMessage.ITEM_ID :
+                    menuAnimationCircle.hide();
+                    autoMessagesAdapter.addDefaultItem();
+                    break;
+            }
         }
     }
 
@@ -260,4 +265,6 @@ public class DetailsBuddyFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
