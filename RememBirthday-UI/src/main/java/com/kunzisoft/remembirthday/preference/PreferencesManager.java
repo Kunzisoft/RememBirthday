@@ -75,4 +75,14 @@ public class PreferencesManager {
                 prefContactSort,
                 prefContactOrder);
     }
+
+    /**
+     * Return true if daemons for powerfull notification or auto send message is active
+     * @param context Context to call
+     * @return Daemons active
+     */
+    public static boolean isDaemonsActive(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.pref_notifications_service_key), false);
+    }
 }

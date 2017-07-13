@@ -1,14 +1,15 @@
 package com.kunzisoft.remembirthday.factory;
 
+import android.content.Context;
+
 /**
- * Created by joker on 13/07/17.
+ * Menu Factory for libre version of application
  */
+public class MenuFactoryLibre extends MenuFactoryPro {
 
-public class MenuFactoryLibre extends MenuFactory {
-
-    public MenuFactoryLibre() {
-        super();
-        MenuAction menuCalendar = new MenuActionCalendar();
-        listMenuAction.add(menuCalendar);
+    public MenuFactoryLibre(Context context) {
+        super(context);
+        // New special feature in future for Libre user
+        // TODO Cool feature
     }
 }

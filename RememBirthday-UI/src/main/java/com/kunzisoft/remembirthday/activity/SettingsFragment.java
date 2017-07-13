@@ -9,9 +9,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
@@ -39,6 +41,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
         notificationsDaysEditTextPreference = (EditTextPreference) findPreference(getString(R.string.pref_notifications_days_key));
+
+        if (!BuildConfig.FULL_VERSION) {
+            // Disable switch and show pro dialog if free version
+            SwitchPreferenceCompat preference = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_notifications_service_key));
+            preference.setDefaultValue(false);
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ((SwitchPreferenceCompat) preference).setChecked(false);
+                    new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
+                    return false;
+                }
+            });
+        }
     }
 
     @Override

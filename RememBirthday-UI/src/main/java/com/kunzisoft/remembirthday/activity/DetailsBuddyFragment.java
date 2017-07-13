@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
@@ -33,7 +34,8 @@ import com.kunzisoft.remembirthday.factory.MenuActionAutoMessage;
 import com.kunzisoft.remembirthday.factory.MenuActionCalendar;
 import com.kunzisoft.remembirthday.factory.MenuActionReminder;
 import com.kunzisoft.remembirthday.factory.MenuFactory;
-import com.kunzisoft.remembirthday.factory.MenuFactoryLibre;
+import com.kunzisoft.remembirthday.factory.MenuFactoryFree;
+import com.kunzisoft.remembirthday.factory.MenuFactoryPro;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
@@ -56,7 +58,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     protected ReminderNotificationsAdapter remindersAdapter;
 
     private RecyclerView menuListView;
-    private MenuAdapter menuAdpater;
+    private MenuAdapter menuAdapter;
     private MenuFactory menuFactory;
 
     private View menuView;
@@ -82,10 +84,15 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
         menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
         menuAnimationCircle = AnimationCircle.build(menuView);
 
-        // List for menu
-        menuFactory = new MenuFactoryLibre();
+        // List for menu, depend of variant of app
+        if(!BuildConfig.FULL_VERSION)
+            menuFactory = new MenuFactoryFree();
+        else {
+            menuFactory = new MenuFactoryPro(getContext());
+        }
         menuFactory.setActionContactMenu(this);
         menuListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_menu_list);
+        // Manage grid for buttons
         int spanCount = 3;
         if(menuFactory.getMenuCount() % 4 == 0)
             spanCount = 2;
@@ -156,7 +163,6 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                                 .animate();
                     }
                 });
-
             } else {
                 //TODO Error
             }
@@ -169,30 +175,30 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
         super.onActivityCreated(savedInstanceState);
 
         if(contact != null && contact.hasBirthday()) {
-            // Add default reminders and link view to adapter
-            remindersAdapter = new ReminderNotificationsAdapter(getContext(), contact.getBirthday());
-            int[] defaultDays = PreferencesManager.getDefaultDays(getContext());
-            // TODO get items from saved element
-            for(int day : defaultDays) {
-                remindersAdapter.addDefaultItem(day);
-            }
-            remindersListView.setAdapter(remindersAdapter);
 
-            // Link auto messages view to adapter
-            autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
-            autoMessagesListView.setAdapter(autoMessagesAdapter);
+            // Build adapters only if daemons active
+            if(PreferencesManager.isDaemonsActive(getContext())) {
+                // Add default reminders and link view to adapter
+                remindersAdapter = new ReminderNotificationsAdapter(getContext(), contact.getBirthday());
+                remindersListView.setAdapter(remindersAdapter);
+
+                // Link auto messages view to adapter
+                autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
+                autoMessagesListView.setAdapter(autoMessagesAdapter);
+            }
 
             // Link menu to adapter
-            menuAdpater = new MenuAdapter(getContext(), menuFactory);
-            menuListView.setAdapter(menuAdpater);
+            menuAdapter = new MenuAdapter(getContext(), menuFactory);
+            menuListView.setAdapter(menuAdapter);
         }
     }
 
     @Override
     public void doActionMenu(MenuAction menuAction) {
-        if(!menuAction.isActive())
-            new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
-        else {
+        if(!menuAction.isActive()) {
+            if (!BuildConfig.FULL_VERSION)
+                new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
+        } else {
             switch (menuAction.getItemId()) {
                 case MenuActionCalendar.ITEM_ID :
                     Utility.openCalendarAt(getActivity(), contact.getNextBirthday());

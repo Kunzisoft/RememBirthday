@@ -12,7 +12,7 @@ public class MenuActionMessage extends MenuAction{
 
     public MenuActionMessage() {
         super(R.string.message_title,
-                R.drawable.ic_message_white_24dp, false);
+                R.drawable.ic_message_white_24dp);
     }
 
     @Override

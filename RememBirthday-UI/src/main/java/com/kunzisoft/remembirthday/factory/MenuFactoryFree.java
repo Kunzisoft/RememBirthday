@@ -1,25 +1,15 @@
 package com.kunzisoft.remembirthday.factory;
 
 /**
- * Created by joker on 13/07/17.
+ * Menu Factory for Free variant of application
  */
-
 public class MenuFactoryFree extends MenuFactory {
 
     public MenuFactoryFree() {
         super();
-        MenuAction menuCalendar = new MenuActionCalendar();
-        MenuAction menuReminder = new MenuActionReminder(false);
-        MenuAction menuAutoMessage = new MenuActionAutoMessage(false);
-        MenuAction menuMessage = new MenuActionMessage();
-
-        listMenuAction.add(menuCalendar);
-        listMenuAction.add(menuReminder);
-        listMenuAction.add(menuAutoMessage);
-        listMenuAction.add(menuMessage);
-    }
-
-    public void setAction(ActionContactMenu actionContactMenu) {
-
+        listMenuAction.add(new MenuActionCalendar());
+        listMenuAction.add(new MenuActionMessage());
+        listMenuAction.add(new MenuActionReminder(false));
+        listMenuAction.add(new MenuActionAutoMessage(false));
     }
 }

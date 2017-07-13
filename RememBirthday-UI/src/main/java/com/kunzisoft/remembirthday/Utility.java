@@ -20,6 +20,8 @@ import java.util.Date;
  */
 public class Utility {
 
+
+
     /**
      * Utility class for setBackground and not depend to SDKVersion
      * @param view View to set background

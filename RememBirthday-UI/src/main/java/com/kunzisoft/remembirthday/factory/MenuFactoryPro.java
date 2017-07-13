@@ -1,21 +1,22 @@
 package com.kunzisoft.remembirthday.factory;
 
-/**
- * Created by joker on 13/07/17.
- */
+import android.content.Context;
 
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
+
+/**
+ * Menu Factory for Pro version of application. <br />
+ * Automatically hides the daemon-dependent buttons when they are inactive
+ */
 public class MenuFactoryPro extends MenuFactory {
 
-    public MenuFactoryPro() {
+    public MenuFactoryPro(Context context) {
         super();
-        MenuAction menuCalendar = new MenuActionCalendar();
-        MenuAction menuReminder = new MenuActionReminder();
-        MenuAction menuAutoMessage = new MenuActionAutoMessage();
-        MenuAction menuMessage = new MenuActionMessage();
-
-        listMenuAction.add(menuCalendar);
-        listMenuAction.add(menuReminder);
-        listMenuAction.add(menuAutoMessage);
-        listMenuAction.add(menuMessage);
+        listMenuAction.add(new MenuActionCalendar());
+        listMenuAction.add(new MenuActionMessage());
+        if(PreferencesManager.isDaemonsActive(context)) {
+            listMenuAction.add(new MenuActionReminder());
+            listMenuAction.add(new MenuActionAutoMessage());
+        }
     }
 }
