@@ -10,6 +10,7 @@
     <string name="reminder_notification_title">Notification</string>
     <string name="auto_sms_title">Auto SMS</string>
     <string name="auto_sms_content">SMS Content</string>
+    <string name="message_title">Message</string>
     <string name="days_before">Day(s) before</string>
 
     <!-- Menus -->
@@ -34,6 +35,9 @@
 
     <string name="dialog_delete_birthday_title">Delete Birthday</string>
     <string name="dialog_delete_birthday_message">Are you sure you want to delete the anniversary date and related events ?</string>
+
+    <string name="dialog_pro_feature_title">This feature is available on the pro version.</string>
+    <string name="dialog_pro_feature_download">Download</string>
 
     <string name="activity_list_contacts_error_add">Error when adding</string>
     <string name="activity_list_contacts_success_add">Successful addition</string>
@@ -144,5 +148,7 @@
 
     <!-- Errors -->
     <string name="error_pref_notifications_days">Unable to save the day values, format the string correctly</string>
+
+
 
 </resources>

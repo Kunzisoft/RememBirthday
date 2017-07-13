@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,11 +21,13 @@ import android.widget.TextView;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
+import com.kunzisoft.remembirthday.adapter.MenuAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
 import com.kunzisoft.remembirthday.animation.AnimationCircle;
 import com.kunzisoft.remembirthday.database.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.factory.MenuFactoryFree;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
@@ -46,6 +49,9 @@ public class DetailsBuddyFragment extends Fragment {
     protected RecyclerView remindersListView;
     protected ReminderNotificationsAdapter remindersAdapter;
 
+    private RecyclerView menuListView;
+    private MenuAdapter menuAdpater;
+
     private View menuView;
     private AnimationCircle menuAnimationCircle;
 
@@ -64,10 +70,15 @@ public class DetailsBuddyFragment extends Fragment {
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
         View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_container_date);
-        menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
 
         // Animation init
+        menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
         menuAnimationCircle = AnimationCircle.build(menuView);
+
+        // List for menu
+        menuListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_menu_list);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        menuListView.setLayoutManager(gridLayoutManager);
 
         // List of reminders elements
         remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
@@ -128,6 +139,7 @@ public class DetailsBuddyFragment extends Fragment {
                     }
                 });
 
+                /*
                 // Calendar button
                 View calendarButton = root.findViewById(R.id.fragment_details_buddy_menu_calendar);
                 calendarButton.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +150,7 @@ public class DetailsBuddyFragment extends Fragment {
                     }
                 });
 
+                // Reminder Button
                 View reminderButton = root.findViewById(R.id.fragment_details_buddy_menu_reminder);
                 reminderButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -147,7 +160,7 @@ public class DetailsBuddyFragment extends Fragment {
                     }
                 });
 
-
+                // Message button
                 View messageButton = root.findViewById(R.id.fragment_details_buddy_menu_message);
                 messageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -156,6 +169,7 @@ public class DetailsBuddyFragment extends Fragment {
                         autoMessagesAdapter.addDefaultItem();
                     }
                 });
+                */
             } else {
                 //TODO Error
             }
@@ -180,6 +194,13 @@ public class DetailsBuddyFragment extends Fragment {
             // Link auto messages view to adapter
             autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
             autoMessagesListView.setAdapter(autoMessagesAdapter);
+
+            // Link menu to adapter
+            menuAdpater = new MenuAdapter(getContext(),
+                    getFragmentManager(),
+                    contact,
+                    new MenuFactoryFree());
+            menuListView.setAdapter(menuAdpater);
         }
     }
 

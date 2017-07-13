@@ -5,10 +5,15 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+
+import com.kunzisoft.remembirthday.activity.ProFeatureDialogFragment;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +22,20 @@ import java.util.Date;
  * Utility class for generic methods
  */
 public class Utility {
+
+    /**
+     * Utility class for setBackground and not depend to SDKVersion
+     * @param view View to set background
+     * @param drawable Background
+     */
+    @SuppressWarnings("deprecation")
+    public static void setBackground(View view, Drawable drawable) {
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackgroundDrawable(drawable);
+        } else {
+            view.setBackground(drawable);
+        }
+    }
 
     /**
      * Assign custom phrase in TextView to describe the number of days remaining until the birthday
@@ -32,6 +51,17 @@ public class Utility {
         } else{
             textView.setText(resources.getString(R.string.dialog_select_birthday_number_days_left, numberDaysRemaining));
         }
+    }
+
+    /**
+     * Show the dialog for pro feature
+     * @param fragmentManager FragmentManager to call dialog
+     * @return TAG of fragment
+     */
+    public static String openProFeatureDialog(FragmentManager fragmentManager) {
+        final String PRO_FEATURE_TAG = "PRO_FEATURE_TAG";
+        new ProFeatureDialogFragment().show(fragmentManager, PRO_FEATURE_TAG);
+        return PRO_FEATURE_TAG;
     }
 
     /**

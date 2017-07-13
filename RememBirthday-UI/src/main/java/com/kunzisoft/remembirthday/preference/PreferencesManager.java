@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.element.ContactSort;
+import com.kunzisoft.remembirthday.factory.ContactSort;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -174,27 +175,20 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @param holder The ViewHolder
      * @param contact The item
      */
-    @SuppressWarnings("deprecation")
     protected void assignDataToView(final T holder, Contact contact, int position) {
 
         // Highlight the contact
         if(position == positionContactChecked) {
             holder.container.setBackgroundColor(colorHightlight);
-        } else if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            holder.container.setBackgroundDrawable(null);
         } else {
-            holder.container.setBackground(null);
+            Utility.setBackground(holder.container, null);
         }
 
         // Assign Icon
         if(contact.containsImage()) {
             // ReInit image and background
             holder.icon.setColorFilter(null);
-            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.icon.setBackgroundDrawable(null);
-            } else {
-                holder.icon.setBackground(null);
-            }
+            Utility.setBackground(holder.container, null);
             // Load Image and crop circle
             Picasso.with(context).load(contact.getImageThumbnailUri())
                     .into(holder.icon, new Callback() {
@@ -210,12 +204,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
             holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person_white_24dp));
             holder.icon.setColorFilter(colorPrimary);
             // Colorize background of icon
-
-            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.icon.setBackgroundDrawable(circleBackground);
-            } else {
-                holder.icon.setBackground(circleBackground);
-            }
+            Utility.setBackground(holder.icon, circleBackground);
         }
 
         // Assign name
