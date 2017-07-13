@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="26sp"
-    android:background="@color/backgroundElement"
+    android:background="?attr/backgroundElement"
     android:ellipsize="marquee"
     android:textAlignment="inherit"/>

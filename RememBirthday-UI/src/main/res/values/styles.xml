@@ -6,38 +6,57 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="ChocolateTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="ChocolateTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
 
-        <!-- Toolbar -->
-        <item name="colorControlNormal">@android:color/white</item>
+        <!-- Custom attribute -->
+
+        <item name="backgroundElement">@color/backgroundElement</item>
+        <item name="backgroundElementInverse">@color/backgroundElementInverse</item>
+        <item name="colorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="colorPrimaryDarkInverse">@color/colorPrimaryDarkInverse</item>
+
+        <!-- Normal attributes -->
 
         <item name="android:textColor">@color/colorPrimary</item>
-
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorControlNormal">@android:color/white</item>
 
         <item name="android:windowBackground">@color/background</item>
 
         <item name="android:textAppearance">@style/ChocolateTheme.TextAppearance</item>
         <item name="android:textAppearanceMedium">@style/ChocolateTheme.TextAppearance</item>
 
-        <!-- Text colors -->
         <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
-    </style>
 
-    <style name="ChocolateTheme.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- CollapsingToolbarLayout -->
+        <item name="expandedTitleTextAppearance">@style/ChocolateTheme.Expanded.TextAppearance.Title</item>
+        <item name="collapsedTitleTextAppearance">@style/ChocolateTheme.Expanded.TextAppearance.Title</item>
+
+        <!-- Toolbar -->
+        <item name="toolbarDark">@style/ChocolateTheme.Toolbar.Dark</item>
+        <item name="toolbarTransparent">@style/ChocolateTheme.Toolbar.Transparent</item>
+
+        <!-- CardView -->
+        <item name="cardViewLight">@style/ChocolateTheme.CardView.Light</item>
+        <item name="cardViewDark">@style/ChocolateTheme.CardView.Dark</item>
+
+
+    </style>
+    <style name="ChocolateTheme.Toolbar.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
-        <item name="android:background">@color/colorPrimary</item>
+
+        <item name="android:colorBackground">@android:color/white</item>
     </style>
     <style name="ChocolateTheme.Toolbar.Transparent" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">@android:color/white</item>
@@ -69,7 +88,7 @@
         <item name="android:textColor">@color/colorPrimaryInverse</item>
     </style>
 
-    <style name="ChocolateTheme.CardView" parent="CardView">
+    <style name="ChocolateTheme.CardView.Light" parent="CardView">
         <!-- Card background color -->
         <item name="cardBackgroundColor">@color/backgroundElement</item>
         <!-- Ripple for API 21 of android, and regular selector on older -->
@@ -84,7 +103,7 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="ChocolateTheme.CardView.Alternative" parent="CardView">
+    <style name="ChocolateTheme.CardView.Dark" parent="CardView">
         <!-- Card background color -->
         <item name="cardBackgroundColor">@color/backgroundElementInverse</item>
         <!-- Ripple for API 21 of android, and regular selector on older -->

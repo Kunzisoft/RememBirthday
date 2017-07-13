@@ -12,7 +12,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="10dp"
         android:elevation="4dp"
-        android:background="@color/colorAccent">
+        android:background="?attr/colorAccent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_details_buddy_menu_list"
             android:layout_width="match_parent"

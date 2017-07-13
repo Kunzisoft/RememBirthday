@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:textSize="22sp"
     android:textColor="@color/color_text_year"
-    android:background="@color/backgroundElementInverse"
+    android:background="?attr/backgroundElementInverse"
     android:text=""
     android:duplicateParentState="true"
     android:ellipsize="marquee"

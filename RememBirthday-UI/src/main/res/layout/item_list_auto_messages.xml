@@ -4,7 +4,7 @@
     android:id="@+id/fragment_details_buddy_container_actions"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/ChocolateTheme.CardView.Alternative">
+    style="?attr/cardViewDark">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/auto_sms_title"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimaryInverse"
+                android:textColor="?attr/colorPrimaryInverse"
                 android:layout_toLeftOf="@+id/item_list_reminder_button_delete"
                 android:layout_toStartOf="@+id/item_list_reminder_button_delete"
                 android:layout_alignParentLeft="true"
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/auto_sms_content"
-                android:textColor="@color/colorPrimaryDarkInverse"
+                android:textColor="?attr/colorPrimaryDarkInverse"
                 android:layout_below="@+id/item_list_auto_message_title"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />

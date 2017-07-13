@@ -12,7 +12,7 @@
             android:id="@+id/fragment_birthday_select_card_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/ChocolateTheme.CardView"
+            style="?attr/cardViewLight"
             android:layout_gravity="center" >
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:id="@+id/fragment_birthday_select_card_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/ChocolateTheme.CardView.Alternative">
+            style="?attr/cardViewDark">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="backgroundElement" format="reference" />
+    <attr name="backgroundElementInverse" format="reference" />
+
+    <attr name="colorPrimaryInverse" format="reference" />
+    <attr name="colorPrimaryDarkInverse" format="reference" />
+
+    <attr name="toolbarDark" format="reference" />
+    <attr name="toolbarTransparent" format="reference" />
+
+    <attr name="cardViewLight" format="reference" />
+    <attr name="cardViewDark" format="reference" />
+</resources>

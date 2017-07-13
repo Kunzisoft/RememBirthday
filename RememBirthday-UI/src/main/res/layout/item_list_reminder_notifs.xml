@@ -4,7 +4,7 @@
     android:id="@+id/fragment_details_buddy_container_actions"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/ChocolateTheme.CardView">
+    style="?attr/cardViewLight">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_close_white_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="?attr/colorAccent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />

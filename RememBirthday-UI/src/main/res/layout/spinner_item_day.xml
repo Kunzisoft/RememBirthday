@@ -7,6 +7,6 @@
     android:layout_height="wrap_content"
     android:textSize="28sp"
     android:textStyle="bold"
-    android:background="@color/backgroundElement"
+    android:background="?attr/backgroundElement"
     android:ellipsize="marquee"
     android:textAlignment="inherit"/>
