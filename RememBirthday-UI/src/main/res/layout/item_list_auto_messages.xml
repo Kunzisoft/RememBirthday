@@ -17,7 +17,7 @@
                 android:id="@+id/item_list_auto_message_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/auto_sms_title"
+                android:text="@string/auto_message_title"
                 android:textSize="16sp"
                 android:textColor="?attr/colorPrimaryInverse"
                 android:layout_toLeftOf="@+id/item_list_reminder_button_delete"

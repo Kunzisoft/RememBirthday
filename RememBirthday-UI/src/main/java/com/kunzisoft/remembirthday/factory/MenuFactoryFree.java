@@ -9,7 +9,9 @@ public class MenuFactoryFree extends MenuFactory {
         super();
         listMenuAction.add(new MenuActionCalendar());
         listMenuAction.add(new MenuActionMessage());
+        listMenuAction.add(new MenuActionCall());
         listMenuAction.add(new MenuActionReminder(false));
         listMenuAction.add(new MenuActionAutoMessage(false));
+        listMenuAction.add(new MenuActionAutoVoice(false));
     }
 }

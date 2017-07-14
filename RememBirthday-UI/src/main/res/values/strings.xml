@@ -8,9 +8,11 @@
     <string name="calendar_title">Calendar</string>
     <string name="reminder_title">Reminder</string>
     <string name="reminder_notification_title">Notification</string>
-    <string name="auto_sms_title">Auto SMS</string>
     <string name="auto_sms_content">SMS Content</string>
     <string name="message_title">Message</string>
+    <string name="auto_message_title">Auto-Message</string>
+    <string name="call_title">Call</string>
+    <string name="auto_sound_title">Auto-Vocal</string>
     <string name="days_before">Day(s) before</string>
 
     <!-- Menus -->

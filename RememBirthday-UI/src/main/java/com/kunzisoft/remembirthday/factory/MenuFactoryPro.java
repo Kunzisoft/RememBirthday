@@ -14,9 +14,11 @@ public class MenuFactoryPro extends MenuFactory {
         super();
         listMenuAction.add(new MenuActionCalendar());
         listMenuAction.add(new MenuActionMessage());
+        listMenuAction.add(new MenuActionCall());
         if(PreferencesManager.isDaemonsActive(context)) {
             listMenuAction.add(new MenuActionReminder());
             listMenuAction.add(new MenuActionAutoMessage());
+            listMenuAction.add(new MenuActionAutoVoice());
         }
     }
 }
