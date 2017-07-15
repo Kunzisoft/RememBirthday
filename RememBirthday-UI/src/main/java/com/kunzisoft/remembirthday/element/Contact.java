@@ -5,7 +5,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 
+import com.kunzisoft.remembirthday.exception.NoPhoneNumberException;
+import com.kunzisoft.remembirthday.exception.PhoneNumberNotInitializedException;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Model for contact with birthday manager <br />
@@ -23,6 +28,7 @@ public class Contact implements Parcelable{
     private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
+    private List<PhoneNumber> phoneNumbers;
 
     public Contact(long id, String lookupKey, String name) {
         this(id, lookupKey, ID_UNDEFINED, name, null);
@@ -131,6 +137,44 @@ public class Contact implements Parcelable{
 
     public void setBirthday(DateUnknownYear date) {
         this.birthday = date;
+    }
+
+    public boolean hasPhoneNumber() throws PhoneNumberNotInitializedException {
+        if (phoneNumbers == null)
+            throw new PhoneNumberNotInitializedException();
+        return !phoneNumbers.isEmpty();
+    }
+
+    public PhoneNumber getMainPhoneNumber() throws PhoneNumberNotInitializedException,NoPhoneNumberException {
+        if (phoneNumbers == null)
+            throw new PhoneNumberNotInitializedException();
+        if (phoneNumbers.isEmpty())
+            throw new NoPhoneNumberException();
+        return phoneNumbers.get(0);
+    }
+
+    public List<PhoneNumber> getPhoneNumbers() throws PhoneNumberNotInitializedException {
+        if (phoneNumbers == null)
+            throw new PhoneNumberNotInitializedException();
+        return phoneNumbers;
+    }
+
+    public void setNoPhoneNumber() {
+        if(this.phoneNumbers == null)
+            this.phoneNumbers = new ArrayList<>();
+        else
+            this.phoneNumbers.clear();
+    }
+
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        setNoPhoneNumber();
+        this.phoneNumbers.add(phoneNumber);
+    }
+
+
+    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+        setNoPhoneNumber();
+        this.phoneNumbers = phoneNumbers;
     }
 
     public boolean containsImage() {

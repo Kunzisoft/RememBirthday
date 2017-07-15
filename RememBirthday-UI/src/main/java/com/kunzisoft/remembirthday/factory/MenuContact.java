@@ -7,11 +7,11 @@ import java.util.List;
  * Created by joker on 13/07/17.
  */
 
-public abstract class MenuFactory {
+public abstract class MenuContact {
 
     protected List<MenuAction> listMenuAction;
 
-    protected MenuFactory() {
+    protected MenuContact() {
         listMenuAction = new ArrayList<>();
     }
 

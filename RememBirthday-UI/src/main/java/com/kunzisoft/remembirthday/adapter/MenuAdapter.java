@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.factory.MenuAction;
-import com.kunzisoft.remembirthday.factory.MenuFactory;
+import com.kunzisoft.remembirthday.factory.MenuContact;
 
 /**
  * Adapter that handles actions in the contact menu
@@ -19,17 +19,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
     private static final int MENU_NOT_ACTIVE = 1;
 
     private Context context;
-    private MenuFactory menuFactory;
+    private MenuContact menuFactory;
 
     public MenuAdapter(Context context,
-                       MenuFactory menuFactory) {
+                       MenuContact menuFactory) {
         this.context = context;
         this.menuFactory = menuFactory;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(menuFactory.getMenu(position).isActive())
+        if(menuFactory.getMenu(position).getState() == MenuAction.STATE.ACTIVE)
             return MENU_ACTIVE;
         else
             return MENU_NOT_ACTIVE;
@@ -61,6 +61,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
     @Override
     public int getItemCount() {
         return menuFactory.getMenuCount();
+    }
+
+    public void setMenuContact(MenuContact menuContact) {
+        this.menuFactory = menuContact;
     }
 
     /**

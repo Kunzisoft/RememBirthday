@@ -8,18 +8,18 @@ public abstract class MenuAction {
 
     private int titleId;
     private int imageId;
-    private boolean active;
+    private STATE state;
 
     private ActionContactMenu actionContactMenu;
 
     public MenuAction(int titleId, int imageId) {
-        this(titleId, imageId, true);
+        this(titleId, imageId, STATE.ACTIVE);
     }
 
-    public MenuAction(int titleId, int imageId, boolean active) {
+    public MenuAction(int titleId, int imageId, STATE state) {
         this.titleId = titleId;
         this.imageId = imageId;
-        this.active = active;
+        this.state = state;
     }
 
     public abstract int getItemId();
@@ -32,8 +32,8 @@ public abstract class MenuAction {
         return imageId;
     }
 
-    public boolean isActive() {
-        return active;
+    public STATE getState() {
+        return state;
     }
 
     public void setActionContactMenu(ActionContactMenu actionContactMenu) {
@@ -43,5 +43,11 @@ public abstract class MenuAction {
     public void doAction(MenuAction menuAction, int position) {
         if(actionContactMenu != null)
             actionContactMenu.doActionMenu(menuAction);
+    }
+
+    public enum STATE {
+        ACTIVE,
+        INACTIVE_FOR_PRO,
+        INACTIVE_NOT_AVAILABLE
     }
 }

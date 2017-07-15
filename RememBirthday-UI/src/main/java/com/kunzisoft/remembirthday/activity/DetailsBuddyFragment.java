@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
@@ -28,17 +28,26 @@ import com.kunzisoft.remembirthday.animation.AnimationCircle;
 import com.kunzisoft.remembirthday.database.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.element.PhoneNumber;
+import com.kunzisoft.remembirthday.exception.NoPhoneNumberException;
+import com.kunzisoft.remembirthday.exception.PhoneNumberNotInitializedException;
 import com.kunzisoft.remembirthday.factory.ActionContactMenu;
 import com.kunzisoft.remembirthday.factory.MenuAction;
 import com.kunzisoft.remembirthday.factory.MenuActionAutoMessage;
 import com.kunzisoft.remembirthday.factory.MenuActionCalendar;
+import com.kunzisoft.remembirthday.factory.MenuActionCall;
+import com.kunzisoft.remembirthday.factory.MenuActionMessage;
 import com.kunzisoft.remembirthday.factory.MenuActionReminder;
-import com.kunzisoft.remembirthday.factory.MenuFactory;
-import com.kunzisoft.remembirthday.factory.MenuFactoryFree;
-import com.kunzisoft.remembirthday.factory.MenuFactoryPro;
+import com.kunzisoft.remembirthday.factory.MenuContact;
+import com.kunzisoft.remembirthday.factory.MenuContactCreator;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
+import com.kunzisoft.remembirthday.task.RetrievePhoneNumberFromContactTask;
+import com.kunzisoft.remembirthday.utility.IntentCall;
+import com.kunzisoft.remembirthday.utility.Utility;
+
+import java.util.List;
 
 /**
  * Activity who showMessage the details of buddy selected
@@ -58,8 +67,10 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     protected ReminderNotificationsAdapter remindersAdapter;
 
     private RecyclerView menuListView;
+    private GridLayoutManager gridLayoutManager;
     private MenuAdapter menuAdapter;
-    private MenuFactory menuFactory;
+    private int spanCount = 3;
+    private MenuContact menuContact;
 
     private View menuView;
     private AnimationCircle menuAnimationCircle;
@@ -84,25 +95,8 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
         menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
         menuAnimationCircle = AnimationCircle.build(menuView);
 
-        // List for menu, depend of variant of app
-        if(!BuildConfig.FULL_VERSION)
-            menuFactory = new MenuFactoryFree();
-        else {
-            menuFactory = new MenuFactoryPro(getContext());
-        }
-        menuFactory.setActionContactMenu(this);
         menuListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_menu_list);
-        // Manage grid for buttons
-        int spanCount = 3;
-        if(menuFactory.getMenuCount() % 4 == 0)
-            spanCount = 2;
-        else if(menuFactory.getMenuCount() % 3 == 0)
-            spanCount = 3;
-        else if(menuFactory.getMenuCount() % 2 == 0)
-            spanCount = 2;
-        else if(menuFactory.getMenuCount() == 1)
-            spanCount = 1;
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
+        gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
         menuListView.setLayoutManager(gridLayoutManager);
 
         // List of reminders elements
@@ -188,20 +182,77 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             }
 
             // Link menu to adapter
-            menuAdapter = new MenuAdapter(getContext(), menuFactory);
+            menuContact = MenuContactCreator.emptyMenuContact();
+            menuAdapter = new MenuAdapter(getContext(), menuContact);
             menuListView.setAdapter(menuAdapter);
+
+            // Retrieve the phone number
+            retrievePhoneNumber();
         }
+    }
+
+    /**
+     * Retrieve the phone number with the LookUpKey of contact,
+     * Assign the list of phone numbers to "phoneNumbers"
+     */
+    private void retrievePhoneNumber() {
+        RetrievePhoneNumberFromContactTask retrievePhoneNumberFromContactTask =
+                new RetrievePhoneNumberFromContactTask(getContext(), contact.getId(), contact.getLookUpKey());
+        retrievePhoneNumberFromContactTask.setCallbackActionPhoneNumber(
+                new RetrievePhoneNumberFromContactTask.CallbackActionPhoneNumber() {
+                    @Override
+                    public void afterActionPhoneNumberInDatabase(List<PhoneNumber> phoneNumberList) {
+                        menuContact = new MenuContactCreator(
+                                getContext(),
+                                !phoneNumberList.isEmpty())
+                                .create();
+                        menuContact.setActionContactMenu(DetailsBuddyFragment.this);
+                        // Manage grid for buttons
+                        if(menuContact.getMenuCount() % 4 == 0)
+                            spanCount = 2;
+                        else if(menuContact.getMenuCount() % 3 == 0)
+                            spanCount = 3;
+                        else if(menuContact.getMenuCount() % 2 == 0)
+                            spanCount = 2;
+                        else if(menuContact.getMenuCount() == 1)
+                            spanCount = 1;
+                        gridLayoutManager.setSpanCount(spanCount);
+                        menuAdapter.setMenuContact(menuContact);
+                        menuAdapter.notifyDataSetChanged();
+                        // Assign phone numbers to current contact
+                        contact.setPhoneNumbers(phoneNumberList);
+                    }
+                }
+        );
+        retrievePhoneNumberFromContactTask.execute();
     }
 
     @Override
     public void doActionMenu(MenuAction menuAction) {
-        if(!menuAction.isActive()) {
+        if(menuAction.getState() == MenuAction.STATE.INACTIVE_FOR_PRO) {
             if (!BuildConfig.FULL_VERSION)
                 new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
         } else {
             switch (menuAction.getItemId()) {
                 case MenuActionCalendar.ITEM_ID :
-                    Utility.openCalendarAt(getActivity(), contact.getNextBirthday());
+                    IntentCall.openCalendarAt(getActivity(), contact.getNextBirthday());
+                    break;
+                case MenuActionMessage.ITEM_ID :
+                    try {
+                        IntentCall.openSMSApp(getContext(),
+                                contact.getMainPhoneNumber().getNumber(),
+                                ""); // TODO Default message
+                    } catch (PhoneNumberNotInitializedException | NoPhoneNumberException e) {
+                        Log.e(TAG, e.getLocalizedMessage());
+                    }
+                    break;
+                case MenuActionCall.ITEM_ID :
+                    try {
+                        IntentCall.openCallApp(getContext(),
+                                contact.getMainPhoneNumber().getNumber());
+                    } catch (PhoneNumberNotInitializedException | NoPhoneNumberException e) {
+                        Log.e(TAG, e.getLocalizedMessage());
+                    }
                     break;
                 case MenuActionReminder.ITEM_ID :
                     menuAnimationCircle.hide();

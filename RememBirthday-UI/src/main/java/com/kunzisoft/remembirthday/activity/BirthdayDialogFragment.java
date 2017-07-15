@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.Utility;
+import com.kunzisoft.remembirthday.utility.Utility;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 import java.text.DateFormat;

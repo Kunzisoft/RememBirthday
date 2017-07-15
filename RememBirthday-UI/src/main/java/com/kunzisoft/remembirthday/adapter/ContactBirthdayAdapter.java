@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.Utility;
+import com.kunzisoft.remembirthday.utility.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 

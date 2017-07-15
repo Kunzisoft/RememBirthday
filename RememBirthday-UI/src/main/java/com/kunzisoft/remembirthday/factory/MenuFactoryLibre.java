@@ -7,8 +7,8 @@ import android.content.Context;
  */
 public class MenuFactoryLibre extends MenuFactoryPro {
 
-    public MenuFactoryLibre(Context context) {
-        super(context);
+    public MenuFactoryLibre(Context context, boolean asPhoneNumber) {
+        super(context, asPhoneNumber);
         // New special feature in future for Libre user
         // TODO Cool feature
     }

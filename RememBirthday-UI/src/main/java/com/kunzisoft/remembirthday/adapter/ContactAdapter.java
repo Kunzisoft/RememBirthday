@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.Utility;
+import com.kunzisoft.remembirthday.utility.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;

@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.Utility;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.preference.TimePreference;
 import com.kunzisoft.remembirthday.preference.TimePreferenceDialogFragmentCompat;
+import com.kunzisoft.remembirthday.utility.IntentCall;
 
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -67,7 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             @SuppressLint("NewApi")
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Utility.openCalendarAt(getContext(), new Date());
+                IntentCall.openCalendarAt(getContext(), new Date());
                 return true;
             }
         });

@@ -10,15 +10,14 @@ public class MenuActionReminder extends MenuAction{
 
     public static final int ITEM_ID = 1646954;
 
-    public MenuActionReminder() {
-        super(R.string.reminder_title,
-                R.drawable.ic_alarm_white_24dp);
-    }
-
-    public MenuActionReminder(boolean active) {
+    public MenuActionReminder(STATE state) {
         super(R.string.reminder_title,
                 R.drawable.ic_alarm_white_24dp,
-                active);
+                state);
+    }
+
+    public MenuActionReminder() {
+        this(STATE.ACTIVE);
     }
 
     @Override
