@@ -1,5 +1,7 @@
 package com.kunzisoft.remembirthday.utility;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -7,10 +9,14 @@ import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Utility class for generic methods
  */
 public class Utility {
+
+    private static final String FIRST_TIME_KEY = "FIRST_TIME_KEY";
 
     /**
      * Utility class for setBackground and not depend to SDKVersion
@@ -24,6 +30,23 @@ public class Utility {
         } else {
             view.setBackground(drawable);
         }
+    }
+
+    /***
+     * Checks that application runs first time and write flag at SharedPreferences
+     * @return true if 1st time
+     */
+    public static boolean isFirstTime(Activity activity)
+    {
+        SharedPreferences preferences = activity.getPreferences(MODE_PRIVATE);
+        boolean ranBefore = preferences.getBoolean(FIRST_TIME_KEY, false);
+        if (!ranBefore) {
+            // first time
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(FIRST_TIME_KEY, true);
+            editor.apply();
+        }
+        return !ranBefore;
     }
 
     /**

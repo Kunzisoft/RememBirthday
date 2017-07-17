@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.utility.Utility;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -31,7 +32,8 @@ import permissions.dispatcher.RuntimePermissions;
 public class BuddyActivity extends AbstractBuddyActivity {
 
     private static final String TAG = "BuddyActivity";
-    public final static String EXTRA_BUDDY = "EXTRA_BUDDY";
+    public static final String EXTRA_BUDDY = "EXTRA_BUDDY";
+    public static final String TAG_STARTUP_FRAGMENT = "TAG_STARTUP_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class BuddyActivity extends AbstractBuddyActivity {
                 BuddyActivityPermissionsDispatcher.showRationalForContactsWithCheck(BuddyActivity.this);
             }
         });
+
+        if (Utility.isFirstTime(this))
+            new StartupDialogFragment().show(getSupportFragmentManager(), TAG_STARTUP_FRAGMENT);
 
         //TODO BUG
         initDialogSelection(savedInstanceState);

@@ -1,15 +1,13 @@
 package com.kunzisoft.remembirthday.activity;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.utility.Constants;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -32,10 +30,28 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         TextView versionText = (TextView) findViewById(R.id.activity_about_version);
-        versionText.setText(getString(R.string.about_version) + " " + getVersion());
+        versionText.setText(getString(R.string.about_version) + " " + Constants.getVersion(this));
 
         HtmlTextView aboutTextView = (HtmlTextView) findViewById(R.id.activity_about_content);
-        aboutTextView.setHtml(R.raw.about);
+
+        String htmlContent =
+                "<p>"+getString(R.string.powered_by)+" <a href=\""+ Constants.WEB_SITE +"\">"+ Constants.WEB_SITE +"</a></p>"+
+                "<p>"+getString(R.string.html_text_purpose)+"</p>"+
+                "<h2>"+getString(R.string.participation_title)+"</h2>"+
+                "<p>"+getString(R.string.html_text_free)+"</p>"+
+                "<p>"+getString(R.string.html_text_donation)+"</p>"+
+                "<h2>"+getString(R.string.features_title)+"</h2>"+
+                "<p>"+getString(R.string.html_text_integration)+"</p>"+
+                "<ul>";
+        for (String feature:getResources().getStringArray(R.array.html_dialog_startup_text_features)) {
+            htmlContent+="<li>"+ feature +"</li>";
+        }
+        htmlContent+="</ul>"+
+                "<h2>"+getString(R.string.contact_title)+"</h2>"+
+                "<p>"+getString(R.string.developer)+" : "+getString(R.string.developer_name)+"</p>"+
+                "<a href=\"mailto:"+ Constants.EMAIL +"\">"+getString(R.string.html_text_bugs)+"</a>";
+
+        aboutTextView.setHtml(htmlContent);
     }
 
     @Override
@@ -52,25 +68,5 @@ public class AboutActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Get the current package version.
-     *
-     * @return The current version.
-     */
-    private String getVersion() {
-        String result;
-        try {
-            PackageManager manager = getPackageManager();
-            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
-
-            result = String.format("%s (%s)", info.versionName, info.versionCode);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.w(getClass().getSimpleName(), "Unable to get application version", e);
-            result = "Unable to get application version.";
-        }
-
-        return result;
     }
 }
