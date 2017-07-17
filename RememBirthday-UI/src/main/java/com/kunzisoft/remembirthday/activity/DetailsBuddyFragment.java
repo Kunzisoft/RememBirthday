@@ -43,7 +43,7 @@ import com.kunzisoft.remembirthday.factory.MenuContactCreator;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.task.RemoveBirthdayFromContactTask;
-import com.kunzisoft.remembirthday.task.RetrievePhoneNumberFromContactTask;
+import com.kunzisoft.remembirthday.database.RetrievePhoneNumberFromContactTask;
 import com.kunzisoft.remembirthday.utility.IntentCall;
 import com.kunzisoft.remembirthday.utility.Utility;
 
@@ -55,6 +55,8 @@ import java.util.List;
 public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
     private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
+
+    private static final String CONTACT_KEY = "CONTACT_KEY";
 
     public static final int MODIFY_CONTACT_RESULT_CODE = 1518;
 
@@ -89,7 +91,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
         TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
         TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
         TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
-        View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_container_date);
+        View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_date);
 
         // Animation init
         menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
@@ -113,7 +115,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
         // Contact attributes
         contact = null;
-        if(getArguments()!=null) {
+        if(savedInstanceState != null)
+            contact = savedInstanceState.getParcelable(CONTACT_KEY);
+        else if(getArguments()!=null) {
             contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
         if(contact != null) {
@@ -187,8 +191,40 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             menuListView.setAdapter(menuAdapter);
 
             // Retrieve the phone number
-            retrievePhoneNumber();
+            if(!contact.isPhoneNumberInit()) {
+                retrievePhoneNumber();
+            } else {
+                try {
+                    defineMenuContact(contact.getPhoneNumbers());
+                } catch (PhoneNumberNotInitializedException e) {
+                    Log.e(TAG, e.getLocalizedMessage());
+                }
+            }
         }
+    }
+
+    /**
+     * Define action menu of current contact
+     * @param phoneNumberList Phone numbers for dynamically create menu
+     */
+    private void defineMenuContact(List<PhoneNumber> phoneNumberList) {
+        menuContact = new MenuContactCreator(
+                getContext(),
+                !phoneNumberList.isEmpty())
+                .create();
+        menuContact.setActionContactMenu(DetailsBuddyFragment.this);
+        // Manage grid for buttons
+        if(menuContact.getMenuCount() % 4 == 0)
+            spanCount = 2;
+        else if(menuContact.getMenuCount() % 3 == 0)
+            spanCount = 3;
+        else if(menuContact.getMenuCount() % 2 == 0)
+            spanCount = 2;
+        else if(menuContact.getMenuCount() == 1)
+            spanCount = 1;
+        gridLayoutManager.setSpanCount(spanCount);
+        menuAdapter.setMenuContact(menuContact);
+        menuAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -197,34 +233,24 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
      */
     private void retrievePhoneNumber() {
         RetrievePhoneNumberFromContactTask retrievePhoneNumberFromContactTask =
-                new RetrievePhoneNumberFromContactTask(getContext(), contact.getId(), contact.getLookUpKey());
+                new RetrievePhoneNumberFromContactTask(getActivity(), contact.getId(), contact.getLookUpKey());
         retrievePhoneNumberFromContactTask.setCallbackActionPhoneNumber(
                 new RetrievePhoneNumberFromContactTask.CallbackActionPhoneNumber() {
                     @Override
                     public void afterActionPhoneNumberInDatabase(List<PhoneNumber> phoneNumberList) {
-                        menuContact = new MenuContactCreator(
-                                getContext(),
-                                !phoneNumberList.isEmpty())
-                                .create();
-                        menuContact.setActionContactMenu(DetailsBuddyFragment.this);
-                        // Manage grid for buttons
-                        if(menuContact.getMenuCount() % 4 == 0)
-                            spanCount = 2;
-                        else if(menuContact.getMenuCount() % 3 == 0)
-                            spanCount = 3;
-                        else if(menuContact.getMenuCount() % 2 == 0)
-                            spanCount = 2;
-                        else if(menuContact.getMenuCount() == 1)
-                            spanCount = 1;
-                        gridLayoutManager.setSpanCount(spanCount);
-                        menuAdapter.setMenuContact(menuContact);
-                        menuAdapter.notifyDataSetChanged();
+                        defineMenuContact(phoneNumberList);
                         // Assign phone numbers to current contact
                         contact.setPhoneNumbers(phoneNumberList);
                     }
                 }
         );
         retrievePhoneNumberFromContactTask.execute();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(CONTACT_KEY, contact);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

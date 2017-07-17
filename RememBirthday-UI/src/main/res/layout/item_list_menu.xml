@@ -13,7 +13,7 @@
         android:padding="12dp"
         android:layout_gravity="center"
         android:background="@drawable/background_circle"
-        app:backgroundTint="?attr/colorPrimaryDarkInverse"
+        app:backgroundTint="?attr/backgroundElement"
         app:srcCompat="@drawable/ic_message_white_24dp"
         android:tint="?attr/colorAccent"/>
     <android.support.v7.widget.AppCompatTextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_gravity="center"
-        android:textColor="?attr/colorPrimaryDarkInverse"
+        android:textColor="?attr/backgroundElement"
         android:textSize="16sp"
         android:text="@string/message_title"/>
 </LinearLayout>

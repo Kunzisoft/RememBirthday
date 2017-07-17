@@ -1,10 +1,12 @@
 package com.kunzisoft.remembirthday.element;
 
-/**
- * Created by joker on 15/07/17.
- */
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class PhoneNumber {
+/**
+ * Model for Phone Number
+ */
+public class PhoneNumber implements Parcelable {
 
     private String number;
     private int type;
@@ -12,6 +14,11 @@ public class PhoneNumber {
     public PhoneNumber(String number, int type) {
         this.number = number;
         this.type = type;
+    }
+
+    private PhoneNumber(Parcel in) {
+        number = in.readString();
+        type = in.readInt();
     }
 
     public String getNumber() {
@@ -37,4 +44,25 @@ public class PhoneNumber {
                 ", type=" + type +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(number);
+        parcel.writeInt(type);
+    }
+
+    public static final Parcelable.Creator<PhoneNumber> CREATOR = new Parcelable.Creator<PhoneNumber>() {
+        public PhoneNumber createFromParcel(Parcel in) {
+            return new PhoneNumber(in);
+        }
+
+        public PhoneNumber[] newArray(int size) {
+            return new PhoneNumber[size];
+        }
+    };
 }

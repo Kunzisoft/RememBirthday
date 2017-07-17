@@ -13,9 +13,14 @@
         <!-- Custom attribute -->
 
         <item name="backgroundElement">@color/backgroundElement</item>
+        <item name="backgroundAccentElement">@color/backgroundAccentElement</item>
         <item name="backgroundElementInverse">@color/backgroundElementInverse</item>
+
         <item name="colorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="colorPrimaryDarkInverse">@color/colorPrimaryDarkInverse</item>
+
+        <item name="colorInactive">@color/colorInactive</item>
+        <item name="colorInactiveDark">@color/colorInactiveDark</item>
 
         <!-- Normal attributes -->
 
@@ -36,7 +41,7 @@
 
         <!-- CollapsingToolbarLayout -->
         <item name="expandedTitleTextAppearance">@style/ChocolateTheme.Expanded.TextAppearance.Title</item>
-        <item name="collapsedTitleTextAppearance">@style/ChocolateTheme.Expanded.TextAppearance.Title</item>
+        <item name="collapsedTitleTextAppearance">@style/ChocolateTheme.Collapsed.TextAppearance.Title</item>
 
         <!-- Toolbar -->
         <item name="toolbarDark">@style/ChocolateTheme.Toolbar.Dark</item>
@@ -77,7 +82,7 @@
 
     <style name="ChocolateTheme.Collapsed.TextAppearance.Title" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="ChocolateTheme.TextAppearance" parent="@android:style/TextAppearance">

@@ -65,6 +65,7 @@ public class Contact implements Parcelable{
         imageThumbnailUri = in.readParcelable(Uri.class.getClassLoader());
         imageUri = in.readParcelable(Uri.class.getClassLoader());
         birthday = in.readParcelable(DateUnknownYear.class.getClassLoader());
+        phoneNumbers = in.readArrayList(PhoneNumber.class.getClassLoader());
     }
 
     public long getId() {
@@ -139,7 +140,11 @@ public class Contact implements Parcelable{
         this.birthday = date;
     }
 
-    public boolean hasPhoneNumber() throws PhoneNumberNotInitializedException {
+    public boolean isPhoneNumberInit() {
+        return phoneNumbers != null;
+    }
+
+    public boolean containsPhoneNumber() throws PhoneNumberNotInitializedException {
         if (phoneNumbers == null)
             throw new PhoneNumberNotInitializedException();
         return !phoneNumbers.isEmpty();
@@ -224,6 +229,7 @@ public class Contact implements Parcelable{
         parcel.writeParcelable(imageThumbnailUri, i);
         parcel.writeParcelable(imageUri, i);
         parcel.writeParcelable(birthday, i);
+        parcel.writeList(phoneNumbers);
     }
 
     public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {

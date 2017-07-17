@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background">#F5F5F5</color>
-    <color name="backgroundElement">#edd6b0</color>
+    <color name="backgroundElement">#fcecd2</color>
+    <color name="backgroundAccentElement">#FB8C00</color>
     <color name="backgroundElementInverse">#795548</color>
 
     <!-- <color name="colorPrimary">#935918</color> -->
-    <color name="colorPrimary">#795548</color>
+    <color name="colorPrimary">#6d4c41</color>
     <color name="colorPrimaryInverse">#FFECB3</color>
-    <color name="colorPrimaryDark">#6D4C41</color>
-    <color name="colorPrimaryDarkInverse">#fcecd2</color>
+    <color name="colorPrimaryDark">#5d4037</color>
+    <color name="colorPrimaryDarkInverse">#edd6b0</color>
+    <color name="colorSecondary">#FFECB3</color>
     <color name="colorAccent">#FB8C00</color>
+    <color name="colorInactive">@color/backgroundElement</color><!-- #dedede -->
+    <color name="colorInactiveDark">#ffcc80</color><!-- #b7b7b7 -->
 
 </resources>

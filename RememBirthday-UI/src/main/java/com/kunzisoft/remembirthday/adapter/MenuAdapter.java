@@ -44,7 +44,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
                 itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu, parent, false);
                 break;
             case MENU_NOT_ACTIVE:
-                itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_not_active_list_menu, parent, false);
+                itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu_inactive, parent, false);
                 break;
         }
         return new MenuViewHolder(itemListBuddyView);

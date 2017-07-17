@@ -13,16 +13,16 @@
         android:padding="12dp"
         android:layout_gravity="center"
         android:background="@drawable/background_circle"
-        app:backgroundTint="#dedede"
+        app:backgroundTint="?attr/colorInactive"
         app:srcCompat="@drawable/ic_message_white_24dp"
-        android:tint="#b7b7b7"/>
+        android:tint="?attr/colorInactiveDark"/>
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/item_list_menu_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_gravity="center"
-        android:textColor="#dedede"
+        android:textColor="?attr/colorInactive"
         android:textSize="16sp"
         android:text="@string/message_title"/>
 </LinearLayout>

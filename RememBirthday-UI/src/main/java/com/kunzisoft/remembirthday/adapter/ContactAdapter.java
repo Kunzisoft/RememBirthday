@@ -1,7 +1,6 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -21,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.utility.Utility;
 import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.utility.Utility;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -51,9 +50,9 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
     private int positionContactChecked = POSITION_UNDEFINED;
     private Drawable circleBackground;
-    private int colorHightlight;
+    private int colorHighlight;
     private int colorPrimary;
-    private int colorSecondary;
+    private int colorPrimaryInverse;
 
     public ContactAdapter(Context context) {
         this.context = context;
@@ -61,24 +60,21 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
         // Get colors from theme
         TypedValue typedValueHighlight = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorControlHighlight, typedValueHighlight, true);
-        colorHightlight = typedValueHighlight.data;
+        context.getTheme().resolveAttribute(R.attr.backgroundElement, typedValueHighlight, true);
+        colorHighlight = typedValueHighlight.data;
 
         TypedValue typedValuePrimary = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValuePrimary, true);
         colorPrimary = typedValuePrimary.data;
 
-        // Init color secondary
+        // Init color primary inverse
         TypedValue typedValueSecondary = new TypedValue();
-        TypedArray arr = context.obtainStyledAttributes(
-                typedValueSecondary.data, new int[]{android.R.attr.textColorPrimaryInverse});
-        colorSecondary = arr.getColor(0, -1);
-        arr.recycle();
-        context.getTheme().resolveAttribute(android.R.attr.textColorPrimaryInverse, typedValueSecondary, true);
+        context.getTheme().resolveAttribute(R.attr.colorPrimaryInverse, typedValueSecondary, true);
+        colorPrimaryInverse = typedValueSecondary.data;
 
         // Init circle background
         circleBackground = ContextCompat.getDrawable(context, R.drawable.background_circle);
-        circleBackground.setColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP);
+        circleBackground.setColorFilter(colorPrimaryInverse, PorterDuff.Mode.SRC_ATOP);
     }
 
     /**
@@ -179,7 +175,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
 
         // Highlight the contact
         if(position == positionContactChecked) {
-            holder.container.setBackgroundColor(colorHightlight);
+            holder.container.setBackgroundColor(colorHighlight);
         } else {
             Utility.setBackground(holder.container, null);
         }
@@ -188,7 +184,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
         if(contact.containsImage()) {
             // ReInit image and background
             holder.icon.setColorFilter(null);
-            Utility.setBackground(holder.container, null);
+            Utility.setBackground(holder.icon, null);
             // Load Image and crop circle
             Picasso.with(context).load(contact.getImageThumbnailUri())
                     .into(holder.icon, new Callback() {
