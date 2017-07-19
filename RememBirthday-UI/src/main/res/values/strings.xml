@@ -49,25 +49,25 @@
     <string name="dialog_pro_feature_download">Download</string>
 
     <string name="dialog_startup_title">Thanks to download !</string>
+    <string name="dialog_startup_cancel_button">Let me try</string>
     <string name="dialog_startup_donate_button">Donate</string>
 
-    <!-- TODO Change language -->
-    <string name="html_text_purpose">Cette application est destinée a &lt;strong&gt;gérer facilement les anniversaires&lt;/strong&gt; des contacts sur téléphones et tablettes.</string>
-    <string name="html_text_free">Contrairement à la quasi totalité de ses concurrentes, elle est &lt;strong&gt;sans publicité&lt;/strong&gt; même dans sa version gratuite et est entièrement libre.</string>
-    <string name="html_text_donation">Afin de garder sa liberté et être toujours actif, nous comptons sur vos &lt;strong&gt;donations.&lt;/strong&gt;</string>
-    <string name="html_text_integration">L\'application a été construite afin de &lt;strong&gt;s\'intéger&lt;/strong&gt; au mieux &lt;strong&gt;aux applications de bases&lt;/strong&gt; de l\'appareil, avec la gestion : </string>
+    <string name="html_text_purpose">This application is designed to &lt;strong&gt;easily manage the birthdays&lt;/strong&gt; of contacts on phones and tablets.</string>
+    <string name="html_text_free">Unlike almost all of its competitors, it is &lt;strong&gt;without advertising&lt;/strong&gt; even in its free version.</string>
+    <string name="html_text_donation">In order to keep our freedom and to be always active, we count on your &lt;strong&gt;donations.&lt;/strong&gt;</string>
+    <string name="html_text_integration">The application was built in order &lt;strong&gt;to integrate&lt;/strong&gt; at best &lt;strong&gt;the basic applications&lt;/strong&gt; of the device, with : </string>
     <string-array name="html_dialog_startup_text_features">
-        <item>des contacts et de la synchronisation &lt;small&gt;(Par synchronisation du compte Google associé)&lt;/small&gt;</item>
-        <item>du calendrier et de la gestion des événements &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
-        <item>de l\'envoie de message &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
-        <item>de l\'appel du contact &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
-        <item>du tri des contacts possédant un anniversaire</item>
-        <item>de la gestion des jours restants</item>
-        <item>de la gestion des contacts favoris &lt;small&gt;(en cours)&lt;/small&gt;</item>
-        <item>de la gestion des thèmes &lt;small&gt;(en cours)&lt;/small&gt;</item>
-        <item>de l\'ajout de notifications multiples et complètement personnalisables &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
-        <item>de l\'envoi automatique de messages à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
-        <item>de l\'envoi automatique d\'un message vocal à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
+        <item>Managing contacts and syncing &lt;small&gt;(by synchronizing the associated Google account)&lt;/small&gt;</item>
+        <item>Managing the calendar and events &lt;small&gt;(by the basic application)&lt;/small&gt;</item>
+        <item>Sending message &lt;small&gt;(by the basic application)&lt;/small&gt;</item>
+        <item>Contact call &lt;small&gt;(by the basic application)&lt;/small&gt;</item>
+        <item>Sorting contacts with a birthday</item>
+        <item>Management of the remaining days</item>
+        <item>Managing favorite contacts &lt;small&gt;(in progress)&lt;/small&gt;</item>
+        <item>Theme management &lt;small&gt;(in progress)&lt;/small&gt;</item>
+        <item>The addition of multiple and completely customizable notifications &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
+        <item>Automatic sending of messages at a specific time &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
+        <item>Sending a voice message automatically at a specific time &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
     </string-array>
     <string name="html_text_bugs">A bug or a new feature : email me</string>
 
@@ -80,9 +80,10 @@
     <string name="activity_list_contacts_success_remove">Successful removal</string>
 
     <!-- Permissions -->
-    <string name="permission_read_contacts_rationale">Read contact permissions are required for their display</string>
+    <string name="permission_read_contacts_start">The application needs to read your contacts to manage birthday data, we guarantee that this data is only visible to you and is not used by third parties.</string>
+    <string name="permission_read_contacts_rationale">Read contact permissions are required to display the list of anniversaries.</string>
     <string name="permission_read_contacts_denied">The application will not be able to display contacts.</string>
-    <string name="permission_write_contacts_rationale">Write contact permissions are required for their save in database</string>
+    <string name="permission_write_contacts_rationale">Write contact permissions are required for their save in database.</string>
     <string name="permission_write_contacts_denied">The application will not be able to save birthdays in contacts.</string>
     <string name="permission_contacts_neverask">Never Ask</string>
 

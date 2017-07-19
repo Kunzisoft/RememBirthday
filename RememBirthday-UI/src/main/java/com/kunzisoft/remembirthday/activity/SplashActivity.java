@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.notifications.ContactsProviderIntentService;
+import com.kunzisoft.remembirthday.utility.Utility;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -29,7 +30,18 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SplashActivityPermissionsDispatcher.showRationalForContactsWithCheck(this);
+        if (Utility.isFirstTime(this)) {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.permission_read_contacts_start)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            SplashActivityPermissionsDispatcher.showRationalForContactsWithCheck(SplashActivity.this);
+                        }
+                    })
+                    .show();
+        } else
+            SplashActivityPermissionsDispatcher.showRationalForContactsWithCheck(this);
     }
 
     @NeedsPermission(Manifest.permission.READ_CONTACTS)
@@ -63,13 +75,13 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnPermissionDenied(Manifest.permission.READ_CONTACTS)
     void showDeniedForContacts() {
-        Toast.makeText(this, R.string.permission_read_contacts_denied, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.permission_read_contacts_denied, Toast.LENGTH_LONG).show();
         finish();
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_CONTACTS)
     void showNeverAskForContacts() {
-        Toast.makeText(this, R.string.permission_contacts_neverask, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.permission_contacts_neverask, Toast.LENGTH_LONG).show();
     }
 
     @Override

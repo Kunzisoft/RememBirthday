@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="html_text_purpose">Cette application est destinée a &lt;strong&gt;gérer facilement les anniversaires&lt;/strong&gt; des contacts sur téléphones et tablettes.</string>
+    <string name="html_text_free">Contrairement à la quasi totalité de ses concurrentes, elle est &lt;strong&gt;sans publicité&lt;/strong&gt; même dans sa version gratuite.</string>
+    <string name="html_text_donation">Afin de garder sa liberté et être toujours actif, nous comptons sur vos &lt;strong&gt;donations.&lt;/strong&gt;</string>
+    <string name="html_text_integration">L\'application a été construite afin de &lt;strong&gt;s\'intéger&lt;/strong&gt; au mieux &lt;strong&gt;aux applications de bases&lt;/strong&gt; de l\'appareil, avec la gestion : </string>
+    <string-array name="html_dialog_startup_text_features">
+        <item>des contacts et de la synchronisation &lt;small&gt;(Par synchronisation du compte Google associé)&lt;/small&gt;</item>
+        <item>du calendrier et de la gestion des événements &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
+        <item>de l\'envoie de message &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
+        <item>de l\'appel du contact &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
+        <item>du tri des contacts possédant un anniversaire</item>
+        <item>de la gestion des jours restants</item>
+        <item>de la gestion des contacts favoris &lt;small&gt;(en cours)&lt;/small&gt;</item>
+        <item>de la gestion des thèmes &lt;small&gt;(en cours)&lt;/small&gt;</item>
+        <item>de l\'ajout de notifications multiples et complètement personnalisables &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
+        <item>de l\'envoi automatique de messages à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
+        <item>de l\'envoi automatique d\'un message vocal à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
+    </string-array>
+
+</resources>

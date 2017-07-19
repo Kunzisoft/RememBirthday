@@ -1,7 +1,7 @@
 <resources>
 
     <!-- SplashScreen theme -->
-    <style name="SplashChocolateTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashChocolateTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 

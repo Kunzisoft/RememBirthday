@@ -18,17 +18,14 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 public class StartupDialogFragment extends DialogFragment {
 
+    private DialogInterface.OnClickListener onPositiveButtonClickListener;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.dialog_startup_title)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(R.string.dialog_startup_donate_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO Donation link
-                    }
-                });
+                .setNegativeButton(R.string.dialog_startup_cancel_button, null)
+                .setPositiveButton(R.string.dialog_startup_donate_button, onPositiveButtonClickListener);
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View viewRoot = inflater.inflate(R.layout.dialog_startup, null);
@@ -43,5 +40,9 @@ public class StartupDialogFragment extends DialogFragment {
         builder.setView(viewRoot);
 
         return builder.create();
+    }
+
+    public void setOnPositiveButtonClickListener(DialogInterface.OnClickListener onClickListener) {
+        this.onPositiveButtonClickListener = onClickListener;
     }
 }
