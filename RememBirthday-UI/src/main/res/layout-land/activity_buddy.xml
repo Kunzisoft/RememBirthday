@@ -1,47 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.kunzisoft.remembirthday.activity.BuddyActivity">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar_default" />
 
-    <fragment android:name="com.kunzisoft.remembirthday.activity.ListBuddiesFragment"
-        android:id="@+id/activity_buddy_fragment_list_buddies"
-        android:tag="@string/tag_list_birthdays"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_list_buddies"
-        android:layout_below="@+id/toolbar" />
+        android:orientation="horizontal">
 
-    <FrameLayout
-        android:id="@+id/activity_buddy_container_details_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_details_buddy"
-        android:layout_toRightOf="@+id/activity_buddy_fragment_list_buddies"
-        android:layout_toEndOf="@+id/activity_buddy_fragment_list_buddies"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/toolbar" />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            tools:context="com.kunzisoft.remembirthday.activity.BuddyActivity">
 
-    <android.support.design.widget.FloatingActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab_add_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:srcCompat="@drawable/ic_add_white_24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="-20dp"
-        android:layout_marginEnd="-20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/activity_buddy_container_details_fragment"
-        android:layout_toStartOf="@+id/activity_buddy_container_details_fragment" />
+            <fragment android:name="com.kunzisoft.remembirthday.activity.ListBuddiesFragment"
+                android:id="@+id/activity_buddy_fragment_list_buddies"
+                android:tag="@string/tag_list_birthdays"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_list_buddies" />
 
-</RelativeLayout>
+            <android.support.design.widget.FloatingActionButton
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fab_add_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:srcCompat="@drawable/ic_add_white_24dp"
+                android:layout_margin="8dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/activity_buddy_container_details_fragment"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_details_buddy" />
+    </LinearLayout>
+</LinearLayout>
 
 
