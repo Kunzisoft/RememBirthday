@@ -23,6 +23,7 @@ import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
 public class ListContactsActivity extends AppCompatActivity
         implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, BirthdayDialogOpen {
 
+    public static final int INSERT_BIRTHDAY_RESULT_CODE = 1619;
     private static final int INSERT_CONTACT_RESULT_CODE = 1567;
 
     // Dialog for birthday selection
@@ -67,6 +68,7 @@ public class ListContactsActivity extends AppCompatActivity
                                 dateUnknownYear);
                 addBirthdayToContactTask.setCallbackActionBirthday(ListContactsActivity.this);
                 addBirthdayToContactTask.execute();
+                setResult(Activity.RESULT_OK);
                 finish();
             }
 

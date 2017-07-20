@@ -33,7 +33,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private static final String TAG_FRAGMENT_DIALOG = "com.kunzisoft.remembirthday.TAG_FRAGMENT_DIALOG";
 
-    public static final int SETTING_REQUEST_CODE = 1647;
+    public static final int SETTING_RESULT_CODE = 1647;
 
     private EditTextPreference notificationsDaysEditTextPreference;
 

@@ -83,7 +83,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
     @NeedsPermission(Manifest.permission.WRITE_CONTACTS)
     public void showRationalForContacts() {
         Intent intent = new Intent(BuddyActivity.this, ListContactsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ListContactsActivity.INSERT_BIRTHDAY_RESULT_CODE);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
             case R.id.action_settings:
                 startActivityForResult(
                         new Intent(this, SettingsActivity.class),
-                        SettingsFragment.SETTING_REQUEST_CODE);
+                        SettingsFragment.SETTING_RESULT_CODE);
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
@@ -128,13 +128,13 @@ public class BuddyActivity extends AbstractBuddyActivity {
                     cursor.close();
                     */
                 }
-                break;
+            case (ListContactsActivity.INSERT_BIRTHDAY_RESULT_CODE) :
             case (DetailsBuddyActivity.UPDATE_BIRTHDAY_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
                     deselectContactInListForDualPanel();
                 }
                 break;
-            case (SettingsFragment.SETTING_REQUEST_CODE) :
+            case (SettingsFragment.SETTING_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
                     // Restart after change settings
                     finish();
@@ -150,7 +150,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
     @Override
     public void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception) {
         super.afterActionBirthdayInDatabase(birthday, action, exception);
-        // After remove and update deselectForDualPanel
+        // After update deselectForDualPanel
         deselectContactInListForDualPanel();
     }
 
