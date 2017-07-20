@@ -14,8 +14,11 @@ public class MenuFactoryPro extends MenuFactoryBase {
         super(asPhoneNumber);
         if(PreferencesManager.isDaemonsActive(context)) {
             listMenuAction.add(new MenuActionReminder());
-            listMenuAction.add(new MenuActionAutoMessage());
-            listMenuAction.add(new MenuActionAutoVoice());
+            listMenuAction.add(new MenuActionGift());
+            if(asPhoneNumber) {
+                listMenuAction.add(new MenuActionAutoMessage());
+                //listMenuAction.add(new MenuActionAutoVoice());
+            }
         }
     }
 }

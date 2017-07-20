@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.utility.IntentCall;
 
 /**
  * Created by joker on 13/07/17.
@@ -21,7 +22,9 @@ public class ProFeatureDialogFragment extends DialogFragment {
         builder.setMessage(R.string.dialog_pro_feature_title)
                 .setPositiveButton(R.string.dialog_pro_feature_download, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // TODO GO TO PRO
+                        // TODO Download PRO
+                        // IntentCall.openStoreProApplication(ProFeatureDialogFragment.this.getContext());
+                        IntentCall.openContributionPage(ProFeatureDialogFragment.this.getContext());
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

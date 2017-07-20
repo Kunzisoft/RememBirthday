@@ -36,6 +36,7 @@ import com.kunzisoft.remembirthday.factory.MenuAction;
 import com.kunzisoft.remembirthday.factory.MenuActionAutoMessage;
 import com.kunzisoft.remembirthday.factory.MenuActionCalendar;
 import com.kunzisoft.remembirthday.factory.MenuActionCall;
+import com.kunzisoft.remembirthday.factory.MenuActionGift;
 import com.kunzisoft.remembirthday.factory.MenuActionMessage;
 import com.kunzisoft.remembirthday.factory.MenuActionReminder;
 import com.kunzisoft.remembirthday.factory.MenuContact;
@@ -259,6 +260,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             if (!BuildConfig.FULL_VERSION)
                 new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
         } else {
+            menuAnimationCircle.hide();
             switch (menuAction.getItemId()) {
                 case MenuActionCalendar.ITEM_ID :
                     IntentCall.openCalendarAt(getActivity(), contact.getNextBirthday());
@@ -281,12 +283,16 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     }
                     break;
                 case MenuActionReminder.ITEM_ID :
-                    menuAnimationCircle.hide();
                     remindersAdapter.addDefaultItem();
+                    // TODO reminder for pro
+                    break;
+                case MenuActionGift.ITEM_ID :
+
+                    // TODO Gift for pro
                     break;
                 case MenuActionAutoMessage.ITEM_ID :
-                    menuAnimationCircle.hide();
                     autoMessagesAdapter.addDefaultItem();
+                    // TODO Auto-message for pro
                     break;
             }
         }

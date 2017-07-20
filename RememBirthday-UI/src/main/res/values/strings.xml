@@ -18,6 +18,7 @@
     <string name="message_title">Message</string>
     <string name="auto_message_title">Auto-Message</string>
     <string name="call_title">Call</string>
+    <string name="gift_title">Gift Manager</string>
     <string name="auto_sound_title">Auto-Vocal</string>
     <string name="days_before">Day(s) before</string>
 
@@ -44,8 +45,8 @@
     <string name="dialog_delete_birthday_title">Delete Birthday</string>
     <string name="dialog_delete_birthday_message">Are you sure you want to delete the anniversary date and related events ?</string>
 
-    <string name="dialog_pro_feature_title">This feature is available on the pro version.</string>
-    <string name="dialog_pro_feature_download">Download</string>
+    <string name="dialog_pro_feature_title">This feature is available on the pro version currently in development.</string>
+    <string name="dialog_pro_feature_download">Contribute</string> <!-- TODO change to "DOWNLOAD" when finish -->
 
     <string name="dialog_startup_title">Thanks to download !</string>
     <string name="dialog_startup_cancel_button">Cancel</string>

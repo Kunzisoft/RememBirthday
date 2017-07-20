@@ -9,13 +9,16 @@ import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.kunzisoft.remembirthday.BuildConfig;
+
 import java.util.Calendar;
 
 /**
- * Created by joker on 15/07/17.
+ * Utility class who manage the calls of external apps
  */
-
 public class IntentCall {
+
+    private IntentCall() {}
 
     /**
      * Open calendar application at specific time
@@ -71,6 +74,31 @@ public class IntentCall {
      */
     public static void openSMSApp(Context context, String phoneNumber) {
         openSMSApp(context, phoneNumber, null);
+    }
+
+    /**
+     * Open the specific page to make a contribution
+     * @param context Context to call
+     */
+    public static void openContributionPage(Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(Constants.URL_PARTICIPATION));
+        context.startActivity(intent);
+    }
+
+    /**
+     * Open the store for pro version
+     * @param context Context to call
+     */
+    public static void openStoreProApplication(Context context) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + Constants.PRO_PACKAGE_NAME)));
+        } catch (android.content.ActivityNotFoundException e) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id="
+                            + Constants.PRO_PACKAGE_NAME)));
+        }
     }
 
 }

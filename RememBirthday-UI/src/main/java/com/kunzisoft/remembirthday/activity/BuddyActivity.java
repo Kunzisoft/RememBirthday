@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.utility.Constants;
+import com.kunzisoft.remembirthday.utility.IntentCall;
 import com.kunzisoft.remembirthday.utility.Utility;
 
 import permissions.dispatcher.NeedsPermission;
@@ -56,15 +55,14 @@ public class BuddyActivity extends AbstractBuddyActivity {
             }
         });
 
+        // Show the notification fragment for the first time
         if (Utility.isFirstTime(this)) {
             StartupDialogFragment startupDialogFragment =
                     new StartupDialogFragment();
             startupDialogFragment.setOnPositiveButtonClickListener(new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(Constants.URL_PARTICIPATION));
-                    startActivity(intent);
+                    IntentCall.openContributionPage(BuddyActivity.this);
                 }
             });
             startupDialogFragment.show(getSupportFragmentManager(), TAG_STARTUP_FRAGMENT);
