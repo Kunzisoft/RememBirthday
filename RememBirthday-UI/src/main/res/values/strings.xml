@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">RememBirthday</string>
-    <string name="developer_name">Jeremy JAMET</string>
 
     <string name="powered_by">Powered by</string>
     <string name="participation_title">Participation</string>
@@ -49,9 +48,10 @@
     <string name="dialog_pro_feature_download">Download</string>
 
     <string name="dialog_startup_title">Thanks to download !</string>
-    <string name="dialog_startup_cancel_button">Let me try</string>
+    <string name="dialog_startup_cancel_button">Cancel</string>
     <string name="dialog_startup_donate_button">Donate</string>
 
+    <string name="html_see_participation_page">See the participation page</string>
     <string name="html_text_purpose">This application is designed to &lt;strong&gt;easily manage the birthdays&lt;/strong&gt; of contacts on phones and tablets.</string>
     <string name="html_text_free">Unlike almost all of its competitors, it is &lt;strong&gt;without advertising&lt;/strong&gt; even in its free version.</string>
     <string name="html_text_donation">In order to keep our freedom and to be always active, we count on your &lt;strong&gt;donations.&lt;/strong&gt;</string>

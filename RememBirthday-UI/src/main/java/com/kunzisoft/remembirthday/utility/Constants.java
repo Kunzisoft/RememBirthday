@@ -13,7 +13,8 @@ public class Constants {
 
     public static final String DEVELOPER = "Jeremy JAMET";
     public static final String EMAIL = "contact@kunzisoft.com";
-    public static final String WEB_SITE = "http://kunzisoft.com";
+    public static final String URL_WEB_SITE = "http://kunzisoft.com/";
+    public static final String URL_PARTICIPATION = URL_WEB_SITE+"#contribute";
 
     /**
      * Get the current package version.

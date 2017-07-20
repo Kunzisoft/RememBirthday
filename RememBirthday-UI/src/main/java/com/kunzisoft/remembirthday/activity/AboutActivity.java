@@ -11,6 +11,8 @@ import com.kunzisoft.remembirthday.utility.Constants;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import static com.kunzisoft.remembirthday.utility.Constants.DEVELOPER;
+
 /**
  * Show the about page
  */
@@ -35,11 +37,14 @@ public class AboutActivity extends AppCompatActivity {
         HtmlTextView aboutTextView = (HtmlTextView) findViewById(R.id.activity_about_content);
 
         String htmlContent =
-                "<p>"+getString(R.string.powered_by)+" <a href=\""+ Constants.WEB_SITE +"\">"+ Constants.WEB_SITE +"</a></p>"+
+                "<p>"+getString(R.string.powered_by)+" <a href=\""+ Constants.URL_WEB_SITE +"\">"+ Constants.URL_WEB_SITE +"</a></p>"+
                 "<p>"+getString(R.string.html_text_purpose)+"</p>"+
+
                 "<h2>"+getString(R.string.participation_title)+"</h2>"+
                 "<p>"+getString(R.string.html_text_free)+"</p>"+
                 "<p>"+getString(R.string.html_text_donation)+"</p>"+
+                "<p><a href=\""+ Constants.URL_PARTICIPATION +"\">"+getString(R.string.html_see_participation_page)+"</a></p>"+
+
                 "<h2>"+getString(R.string.features_title)+"</h2>"+
                 "<p>"+getString(R.string.html_text_integration)+"</p>"+
                 "<ul>";
@@ -48,8 +53,8 @@ public class AboutActivity extends AppCompatActivity {
         }
         htmlContent+="</ul>"+
                 "<h2>"+getString(R.string.contact_title)+"</h2>"+
-                "<p>"+getString(R.string.developer)+" : "+getString(R.string.developer_name)+"</p>"+
-                "<a href=\"mailto:"+ Constants.EMAIL +"\">"+getString(R.string.html_text_bugs)+"</a>";
+                "<p><a href=\"mailto:"+ Constants.EMAIL +"\">"+getString(R.string.html_text_bugs)+"</a></p>"+
+                "<p>"+getString(R.string.developer)+" : "+ DEVELOPER +"</p>";
 
         aboutTextView.setHtml(htmlContent);
     }
