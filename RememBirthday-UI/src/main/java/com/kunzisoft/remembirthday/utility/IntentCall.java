@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -74,6 +75,14 @@ public class IntentCall {
      */
     public static void openSMSApp(Context context, String phoneNumber) {
         openSMSApp(context, phoneNumber, null);
+    }
+
+    /**
+     * Open Synchronization settings for contacts and calendar
+     * @param context Context to call
+     */
+    public static void openSyncSettings(Context context) {
+        context.startActivity(new Intent(Settings.ACTION_SYNC_SETTINGS));
     }
 
     /**

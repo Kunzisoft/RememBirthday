@@ -24,6 +24,7 @@
 
     <!-- Menus -->
     <string name="action_settings">Paramètres</string>
+    <string name="action_sync">Synchronisation</string>
     <string name="action_favorite">Favori</string>
     <string name="action_modify_contact">Modifier le contact</string>
     <string name="action_change_anniversary">Changer l\'Anniversaire</string>

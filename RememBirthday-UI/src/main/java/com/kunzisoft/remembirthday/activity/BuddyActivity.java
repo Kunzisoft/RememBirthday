@@ -102,6 +102,9 @@ public class BuddyActivity extends AbstractBuddyActivity {
                         new Intent(this, SettingsActivity.class),
                         SettingsFragment.SETTING_RESULT_CODE);
                 break;
+            case R.id.action_sync:
+                IntentCall.openSyncSettings(this);
+                break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
