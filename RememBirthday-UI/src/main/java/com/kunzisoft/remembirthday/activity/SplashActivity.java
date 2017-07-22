@@ -3,6 +3,7 @@ package com.kunzisoft.remembirthday.activity;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Utility.isFirstTime(this)) {
+        if (Build.VERSION.SDK_INT >= 23 && Utility.isFirstTime(this)) {
             new AlertDialog.Builder(this)
                     .setMessage(R.string.permission_read_contacts_start)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
