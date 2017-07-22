@@ -329,7 +329,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     AlertDialog.Builder builderDialog = new AlertDialog.Builder(getContext());
                     builderDialog.setTitle(R.string.dialog_select_birthday_title);
                     builderDialog.setMessage(R.string.dialog_delete_birthday_message);
-                    builderDialog.setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
+                    builderDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // Delete anniversary in database
                             RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
@@ -343,7 +343,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                             removeBirthdayFromContactTask.execute();
                         }
                     });
-                    builderDialog.setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
+                    builderDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // User cancelled the dialog
                         }

@@ -81,7 +81,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnNeverAskAgain(Manifest.permission.READ_CONTACTS)
     void showNeverAskForContacts() {
-        Toast.makeText(this, R.string.permission_contacts_neverask, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.permission_contacts_never_ask, Toast.LENGTH_LONG).show();
     }
 
     @Override

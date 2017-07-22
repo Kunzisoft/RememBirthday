@@ -1,26 +1,28 @@
 <resources>
-    <string name="app_name">RememBirthday</string>
+    <string name="app_name" translatable="false">RememBirthday</string>
 
     <string name="powered_by">Powered by</string>
+    <string name="at">At</string>
+    <string name="days_before">Day(s) before</string>
+    <string name="developer">Developer</string>
+
+    <!-- Titles -->
     <string name="participation_title">Participation</string>
     <string name="features_title">Features</string>
     <string name="contact_title">Contact</string>
     <string name="anniversaries_title">Birthdays</string>
     <string name="settings_title">Settings</string>
     <string name="about_title">About</string>
-    <string name="at">At</string>
-    <string name="developer">Developer</string>
     <string name="select_contact_title">Select a contact</string>
     <string name="calendar_title">Calendar</string>
     <string name="reminder_title">Reminder</string>
     <string name="reminder_notification_title">Notification</string>
-    <string name="auto_sms_content">SMS Content</string>
+    <string name="auto_sms_content">Message Content</string>
     <string name="message_title">Message</string>
     <string name="auto_message_title">Auto-Message</string>
     <string name="call_title">Call</string>
     <string name="gift_title">Gift Manager</string>
     <string name="auto_sound_title">Auto-Vocal</string>
-    <string name="days_before">Day(s) before</string>
 
     <!-- Menus -->
     <string name="action_settings">Settings</string>
@@ -46,36 +48,37 @@
     <string name="dialog_delete_birthday_message">Are you sure you want to delete the anniversary date and related events ?</string>
 
     <string name="dialog_pro_feature_title">This feature is available on the pro version currently in development.</string>
-    <string name="dialog_pro_feature_download">Contribute</string> <!-- TODO change to "DOWNLOAD" when finish -->
+    <string name="dialog_pro_feature_download">Download</string>
 
     <string name="dialog_startup_title">Thanks to download !</string>
     <string name="dialog_startup_cancel_button">Cancel</string>
-    <string name="dialog_startup_donate_button">Donate</string>
+    <string name="dialog_startup_contribute_button">Contribute</string>
 
     <string name="html_see_participation_page">See the participation page</string>
     <string name="html_text_purpose">This application is designed to &lt;strong&gt;easily manage the birthdays&lt;/strong&gt; of contacts on phones and tablets.</string>
     <string name="html_text_free">Unlike almost all of its competitors, it is &lt;strong&gt;without advertising&lt;/strong&gt; even in its free version.</string>
-    <string name="html_text_donation">In order to keep our freedom and to be always active, we count on your &lt;strong&gt;donations.&lt;/strong&gt;</string>
+    <string name="html_text_donation">In order to keep our freedom and to be always active, we count on your &lt;strong&gt;contribution.&lt;/strong&gt;</string>
     <string name="html_text_integration">The application was built in order &lt;strong&gt;to integrate&lt;/strong&gt; at best &lt;strong&gt;the basic applications&lt;/strong&gt; of the device, with : </string>
     <string-array name="html_dialog_startup_text_features">
-        <item>Managing contacts and syncing &lt;small&gt;(by synchronizing the associated Google account)&lt;/small&gt;</item>
+        <item>Managing contacts and syncing &lt;small&gt;(by synchronizing the associated contact and calendar account)&lt;/small&gt;</item>
         <item>Managing the calendar and events &lt;small&gt;(by the basic application)&lt;/small&gt;</item>
         <item>Sending message &lt;small&gt;(by the basic application)&lt;/small&gt;</item>
         <item>Contact call &lt;small&gt;(by the basic application)&lt;/small&gt;</item>
         <item>Sorting contacts with a birthday</item>
         <item>Management of the remaining days</item>
+        <item>Integration of the signs of the zodiac &lt;small&gt;(in progress)&lt;/small&gt;</item>
         <item>Managing favorite contacts &lt;small&gt;(in progress)&lt;/small&gt;</item>
         <item>Theme management &lt;small&gt;(in progress)&lt;/small&gt;</item>
         <item>The addition of multiple and completely customizable notifications &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
         <item>Automatic sending of messages at a specific time &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
-        <item>Sending a voice message automatically at a specific time &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
+        <item>Management of gifts &lt;small&gt;(in progress - pro)&lt;/small&gt;</item>
+        <!-- <item>Sending a voice message automatically at a specific time &lt;small&gt;(in progress - pro)&lt;/small&gt;</item> Just an idea-->
     </string-array>
     <string name="html_text_bugs">A bug or a new feature : email me</string>
 
-
     <string name="activity_list_contacts_error_add">Error when adding</string>
     <string name="activity_list_contacts_success_add">Successful addition</string>
-    <string name="activity_list_contacts_error_update">Error when adding</string>
+    <string name="activity_list_contacts_error_update">Error when updating</string>
     <string name="activity_list_contacts_success_update">Successful update</string>
     <string name="activity_list_contacts_error_remove">Error when removing</string>
     <string name="activity_list_contacts_success_remove">Successful removal</string>
@@ -86,34 +89,32 @@
     <string name="permission_read_contacts_denied">The application will not be able to display contacts.</string>
     <string name="permission_write_contacts_rationale">Write contact permissions are required for their save in database.</string>
     <string name="permission_write_contacts_denied">The application will not be able to save birthdays in contacts.</string>
-    <string name="permission_contacts_neverask">Never Ask</string>
+    <string name="permission_contacts_never_ask">Never Ask</string>
 
-    <string name="button_yes">Yes</string>
-    <string name="button_no">No</string>
-    <string name="button_allow">OK</string>
+    <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
 
     <!-- Notifications -->
     <string name="notifications_anniversary_title">Anniversary</string>
     <string name="notifications_anniversary_today">This is %1$s\'s birthday today.</string>
     <string name="notifications_anniversary_tomorrow">This will be %1$s\'s birthday tomorrow.</string>
-    <string name="notifications_anniversary_later">This will be %1$s\'s birthday in 5 days.</string>
+    <string name="notifications_anniversary_later">This will be %1$s\'s birthday in %1$d days.</string>
 
     <!-- Preferences -->
 
-    <string name="pref_calendar_key">calendar_key</string>
+    <string name="pref_calendar_key" translatable="false">calendar_key</string>
     <string name="pref_calendar_summary">Manage notifications directly in calendar</string>
     <string name="pref_calendar_open">Open Calendar</string>
 
     <string name="pref_category_notifications_title">Notifications</string>
 
     <string name="pref_notifications_service_title">Powerful daemons</string>
-    <string name="pref_notifications_service_summary">Creates daemons for gift purchase or automatic message sending.</string>
+    <string name="pref_notifications_service_summary">Creates daemons for gift management or automatic message sending.</string>
     <string name="pref_notifications_service_key" translatable="false">notifications_service_enable</string>
     <string name="pref_notifications_service_default" translatable="false">false</string>
 
     <string name="pref_notifications_days_title">Default days</string>
-    <string name="pref_notifications_days_summary">Ex : "0#2#7" Daemon visible on the day, 2 and 7 days before the event.</string>
+    <string name="pref_notifications_days_summary">Ex : "0#2#7" Daemon notification visible on the day, 2 and 7 days before the event.</string>
     <string name="pref_notifications_days_key" translatable="false">notifications_day_enable</string>
     <string name="pref_notifications_days_default" translatable="false">0</string>
 
@@ -166,24 +167,13 @@
     <string-array name="pref_theme_array">
         <item>Chocolate</item>
     </string-array>
-    <string name="pref_theme_values_default">Chocolate</string>
-    <string-array name="pref_theme_values">
-        <item>@string/pref_theme_values_default</item>
+    <string name="pref_theme_value_chocolate" translatable="false">chocolate</string>
+    <string name="pref_theme_value_default" translatable="false">@string/pref_theme_value_default</string>
+    <string-array name="pref_theme_values" translatable="false">
+        <item>@string/pref_theme_value_default</item>
     </string-array>
-
-    <string name="pref_category_advanced_preferences_title">Advanced preferences</string>
-
-    <string name="pref_advanced_preferences_store_anniversary_title">Store Anniversary</string>
-    <string name="pref_advanced_preferences_store_anniversary_summary">How to store anniversaries (without year)</string>
-    <string name="pref_advanced_preferences_store_anniversary_key" translatable="false">advanced_preferences_store_anniversary</string>
-
-    <string name="pref_advanced_preferences_store_birthday_title">Store Birthday</string>
-    <string name="pref_advanced_preferences_store_birthday_summary">How to store birthdays (with year)</string>
-    <string name="pref_advanced_preferences_store_birthday_key" translatable="false">advanced_preferences_store_birthday</string>
 
     <!-- Errors -->
     <string name="error_pref_notifications_days">Unable to save the day values, format the string correctly</string>
-
-
 
 </resources>

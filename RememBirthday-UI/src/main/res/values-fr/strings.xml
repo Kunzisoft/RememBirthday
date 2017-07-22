@@ -1,21 +1,143 @@
 <resources>
+    <string name="powered_by">Propulsé par</string>
+    <string name="at">A</string>
+    <string name="days_before">Jours(s) avant</string>
+    <string name="developer">Développeur</string>
 
+    <!-- Titles -->
+    <string name="participation_title">Participation</string>
+    <string name="features_title">Fonctionnalités</string>
+    <string name="contact_title">Contact</string>
+    <string name="anniversaries_title">Anniversaires</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="about_title">A Propos</string>
+    <string name="select_contact_title">Sélectionner un contact</string>
+    <string name="calendar_title">Calendrier</string>
+    <string name="reminder_title">Rappel</string>
+    <string name="reminder_notification_title">Notification</string>
+    <string name="auto_sms_content">Contenu du message</string>
+    <string name="message_title">Message</string>
+    <string name="auto_message_title">Auto-Message</string>
+    <string name="call_title">Appel</string>
+    <string name="gift_title">Gestionnaire de cadeau</string>
+    <string name="auto_sound_title">Auto-Vocal</string>
+
+    <!-- Menus -->
+    <string name="action_settings">Paramètres</string>
+    <string name="action_favorite">Favori</string>
+    <string name="action_modify_contact">Modifier le contact</string>
+    <string name="action_change_anniversary">Changer l\'Anniversaire</string>
+    <string name="action_delete">Effacer</string>
+    <string name="action_about">A Propos</string>
+
+    <!-- About -->
+    <string name="about_version">Version:</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_select_birthday_title">Selectionner un Anniversaire</string>
+    <string name="dialog_select_birthday_zero_day_left">Joyeux anniversaire!</string>
+    <string name="dialog_select_birthday_one_day_left">Anniversaire dans 1 jour seulement!</string>
+    <string name="dialog_select_birthday_number_days_left">Anniversaire dans %1$d jours.</string>
+
+    <string name="dialog_delete_birthday_title">Effacer l\'Anniversaire</string>
+    <string name="dialog_delete_birthday_message">Etes-vous sûr de vouloir la date d\'anniversaire et les événements associés?</string>
+
+    <string name="dialog_pro_feature_title">Cette fonctionnalité est disponible dans la version pro actuellement en développement.</string>
+    <string name="dialog_pro_feature_download">Télécharger</string>
+
+    <string name="dialog_startup_title">Merci pour le téléchargement !</string>
+    <string name="dialog_startup_cancel_button">Annuler</string>
+    <string name="dialog_startup_contribute_button">Contribuer</string>
+
+    <string name="html_see_participation_page">Voir la page de participation</string>
     <string name="html_text_purpose">Cette application est destinée a &lt;strong&gt;gérer facilement les anniversaires&lt;/strong&gt; des contacts sur téléphones et tablettes.</string>
     <string name="html_text_free">Contrairement à la quasi totalité de ses concurrentes, elle est &lt;strong&gt;sans publicité&lt;/strong&gt; même dans sa version gratuite.</string>
-    <string name="html_text_donation">Afin de garder sa liberté et être toujours actif, nous comptons sur vos &lt;strong&gt;donations.&lt;/strong&gt;</string>
+    <string name="html_text_donation">Afin de garder sa liberté et être toujours actif, nous comptons sur votre &lt;strong&gt;contibution.&lt;/strong&gt;</string>
     <string name="html_text_integration">L\'application a été construite afin de &lt;strong&gt;s\'intéger&lt;/strong&gt; au mieux &lt;strong&gt;aux applications de bases&lt;/strong&gt; de l\'appareil, avec la gestion : </string>
     <string-array name="html_dialog_startup_text_features">
-        <item>des contacts et de la synchronisation &lt;small&gt;(Par synchronisation du compte Google associé)&lt;/small&gt;</item>
+        <item>des contacts et de la synchronisation &lt;small&gt;(Par synchronisation du compte de contact et de calendrier associé)&lt;/small&gt;</item>
         <item>du calendrier et de la gestion des événements &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
         <item>de l\'envoie de message &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
         <item>de l\'appel du contact &lt;small&gt;(Par l\'application de base)&lt;/small&gt;</item>
         <item>du tri des contacts possédant un anniversaire</item>
         <item>de la gestion des jours restants</item>
+        <item>de l\'intégration des signes du zodiac &lt;small&gt;(en cours)&lt;/small&gt;</item>
         <item>de la gestion des contacts favoris &lt;small&gt;(en cours)&lt;/small&gt;</item>
         <item>de la gestion des thèmes &lt;small&gt;(en cours)&lt;/small&gt;</item>
         <item>de l\'ajout de notifications multiples et complètement personnalisables &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
         <item>de l\'envoi automatique de messages à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
-        <item>de l\'envoi automatique d\'un message vocal à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
+        <item>de la gestion des cadeaux &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>
+        <!--<item>de l\'envoi automatique d\'un message vocal à un moment spécifique &lt;small&gt;(en cours - pro)&lt;/small&gt;</item>-->
     </string-array>
+    <string name="html_text_bugs">Un bug ou une nouvelle fonctionnalité : envoyez-moi un e-mail</string>
+
+    <string name="activity_list_contacts_error_add">Erreur lors de l\'addition</string>
+    <string name="activity_list_contacts_success_add">Ajout réussi</string>
+    <string name="activity_list_contacts_error_update">Erreur lors de la mise à jour</string>
+    <string name="activity_list_contacts_success_update">Mise à jour réussie</string>
+    <string name="activity_list_contacts_error_remove">Erreur lors de la suppression</string>
+    <string name="activity_list_contacts_success_remove">Suppression réussie</string>
+
+    <!-- Permissions -->
+    <string name="permission_read_contacts_start">L\'application a besoin de lire vos contacts pour gérer les données d\'anniversaires, nous garantissons que ces données ne sont visibles que par vous et ne sont pas utilisées par de tierces parties.</string>
+    <string name="permission_read_contacts_rationale">Les permissions de lecture de contacts sont requises pour afficher la liste des anniversaires.</string>
+    <string name="permission_read_contacts_denied">L\'application ne sera pas en mesure d\'afficher les contacts.</string>
+    <string name="permission_write_contacts_rationale">Les permissions d\'écriture de contacts sont requises pour leurs sauvegardes dans la base de données.</string>
+    <string name="permission_write_contacts_denied">L\'application ne sera pas en mesure de sauvegarder les anniversaires de contacts.</string>
+    <string name="permission_contacts_never_ask">Ne plus demander</string>
+
+    <string name="button_allow">Autoriser</string>
+    <string name="button_deny">Refuser</string>
+
+    <!-- Notifications -->
+    <string name="notifications_anniversary_title">Anniversaire</string>
+    <string name="notifications_anniversary_today">C\'est l\'anniversaire de %1$s aujourd\'hui.</string>
+    <string name="notifications_anniversary_tomorrow">Ce sera l\'anniversaire de %1$s demain.</string>
+    <string name="notifications_anniversary_later">Ce sera l\anniversaire de %1$s dans %1$d days.</string>
+
+    <!-- Preferences -->
+
+    <string name="pref_calendar_summary">Gérer les notifications directement dans le calendrier</string>
+    <string name="pref_calendar_open">Ouvrir le Calendrier</string>
+
+    <string name="pref_category_notifications_title">Notifications</string>
+
+    <string name="pref_notifications_service_title">Puissants démons</string>
+    <string name="pref_notifications_service_summary">Créer des démons pour la gestion de cadeaux ou l\'envoie automatique de messages.</string>
+
+    <string name="pref_notifications_days_title">Jours par défaut</string>
+    <string name="pref_notifications_days_summary">Ex : "0#2#7" Notification de démon visible pour le jour, 2 et 7 jours avant l\'événement.</string>
+
+    <string name="pref_notifications_time_title">Heure par défaut</string>
+    <string name="pref_notifications_time_summary">Heure de l\événement du démon : [time]</string>
+
+    <string name="pref_category_contacts_sort_title">Trie de contacts</string>
+
+    <string name="pref_contacts_sort_list_title">Trie</string>
+    <string name="pref_contacts_sort_list_summary">Sélectionner le mode de trie des contacts</string>
+    <string-array name="pref_contacts_sort_list_array">
+        <item>Par Nom</item>
+        <item>Par Anniversaire</item>
+        <item>Par Jours Restants</item>
+        <!-- <item>Par Favoris</item> -->
+    </string-array>
+
+    <string name="pref_contacts_order_list_title">Ordre</string>
+    <string name="pref_contacts_order_list_summary">Ascendant ou Descendant</string>
+    <string-array name="pref_contacts_order_list_array">
+        <item>Ascendant</item>
+        <item>Descendant</item>
+    </string-array>
+
+    <string name="pref_category_theme_title">Thème</string>
+
+    <string name="pref_theme_title">Sélection de Thème</string>
+    <string name="pref_theme_summary">Sélectionner le Thème de l\'application</string>
+    <string-array name="pref_theme_array">
+        <item>Chocolat</item>
+    </string-array>
+
+    <!-- Errors -->
+    <string name="error_pref_notifications_days">Echec de sauvegarde des valeurs de jours, formater la chaine de caractères correctement</string>
 
 </resources>

@@ -25,7 +25,7 @@ public class StartupDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.dialog_startup_title)
                 .setNegativeButton(R.string.dialog_startup_cancel_button, null)
-                .setPositiveButton(R.string.dialog_startup_donate_button, onPositiveButtonClickListener);
+                .setPositiveButton(R.string.dialog_startup_contribute_button, onPositiveButtonClickListener);
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View viewRoot = inflater.inflate(R.layout.dialog_startup, null);

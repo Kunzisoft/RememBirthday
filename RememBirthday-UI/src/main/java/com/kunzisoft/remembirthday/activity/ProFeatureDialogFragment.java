@@ -20,7 +20,9 @@ public class ProFeatureDialogFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.dialog_pro_feature_title)
-                .setPositiveButton(R.string.dialog_pro_feature_download, new DialogInterface.OnClickListener() {
+                // TODO change when pro is available
+                //.setPositiveButton(R.string.dialog_pro_feature_download, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_startup_contribute_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO Download PRO
                         // IntentCall.openStoreProApplication(ProFeatureDialogFragment.this.getContext());

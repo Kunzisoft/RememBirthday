@@ -190,7 +190,7 @@ public class BuddyActivity extends AbstractBuddyActivity {
 
     @OnNeverAskAgain(Manifest.permission.WRITE_CONTACTS)
     void showNeverAskForContacts() {
-        Toast.makeText(this, R.string.permission_contacts_neverask, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.permission_contacts_never_ask, Toast.LENGTH_SHORT).show();
     }
 
     @Override
