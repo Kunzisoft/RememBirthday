@@ -93,11 +93,11 @@ public class IntentCall {
     public static void openStoreProApplication(Context context) {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=" + Constants.PRO_PACKAGE_NAME)));
+                    Uri.parse("market://details?id=" + BuildConfig.PRO_APPLICATION_ID)));
         } catch (android.content.ActivityNotFoundException e) {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id="
-                            + Constants.PRO_PACKAGE_NAME)));
+                            + BuildConfig.PRO_APPLICATION_ID)));
         }
     }
 
