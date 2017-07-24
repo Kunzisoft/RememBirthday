@@ -22,10 +22,15 @@
         android:title="@string/pref_category_notifications_title"
         android:key="pref_key_storage_settings">
         <android.support.v7.preference.Preference
-            android:key="@string/pref_calendar_key"
-            android:summary="@string/pref_calendar_summary"
-            android:persistent="false"
-            android:title="@string/pref_calendar_open" />
+            android:title="@string/pref_open_calendar_title"
+            android:key="@string/pref_open_calendar_key"
+            android:summary="@string/pref_open_calendar_summary"
+            android:persistent="false" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:title="@string/pref_create_calendar_title"
+            android:key="@string/pref_create_calendar_key"
+            android:summary="@string/pref_create_calendar_summary"
+            android:defaultValue="@string/pref_notifications_service_default" />
         <android.support.v7.preference.SwitchPreferenceCompat
             android:title="@string/pref_notifications_service_title"
             android:summary="@string/pref_notifications_service_summary"

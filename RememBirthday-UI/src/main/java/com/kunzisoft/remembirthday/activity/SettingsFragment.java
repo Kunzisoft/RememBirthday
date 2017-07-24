@@ -37,6 +37,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private EditTextPreference notificationsDaysEditTextPreference;
 
+    private SwitchPreferenceCompat customCalendar;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
@@ -61,13 +63,30 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Preference openCalendar = findPreference(getString(R.string.pref_calendar_key));
+        Preference openCalendar = findPreference(getString(R.string.pref_open_calendar_key));
         openCalendar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             @SuppressLint("NewApi")
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 IntentCall.openCalendarAt(getContext(), new Date());
+                return true;
+            }
+        });
+
+        customCalendar = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_create_calendar_key));
+        customCalendar.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (newValue instanceof Boolean) {
+                    Boolean boolVal = (Boolean) newValue;
+
+                    if (boolVal) {
+                        //TODO addAccountAndSync();
+                    } else {
+                        //TODO accountHelper.removeAccount();
+                    }
+                }
                 return true;
             }
         });
@@ -79,8 +98,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onDisplayPreferenceDialog(Preference preference)
-    {
+    public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment dialogFragment = null;
         if (preference instanceof TimePreference) {
             dialogFragment = new TimePreferenceDialogFragmentCompat();
@@ -103,6 +121,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         super.onResume();
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+
+        // If account is activated check the preference
+        /* TODO account
+        if (accountHelper.isAccountActivated()) {
+            customCalendar.setChecked(true);
+        } else {
+            customCalendar.setChecked(false);
+        }
+        */
     }
 
     @Override
@@ -113,7 +140,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
-
         // Verify values of notifications
         if(key.equals(getString(R.string.pref_notifications_days_key))) {
             // Only for 99 days maximum before the event

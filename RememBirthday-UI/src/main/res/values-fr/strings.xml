@@ -98,8 +98,11 @@
 
     <!-- Preferences -->
 
-    <string name="pref_calendar_summary">Gérer les notifications directement dans le calendrier</string>
-    <string name="pref_calendar_open">Ouvrir le Calendrier</string>
+    <string name="pref_open_calendar_title">Ouvrir le Calendrier</string>
+    <string name="pref_open_calendar_summary">Gérer les notifications directement dans le calendrier</string>
+
+    <string name="pref_create_calendar_title">Calendrier customisé</string>
+    <string name="pref_create_calendar_summary">Créer un calendrier customisé pour la gestion des notifications</string>
 
     <string name="pref_category_notifications_title">Notifications</string>
 

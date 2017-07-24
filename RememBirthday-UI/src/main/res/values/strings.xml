@@ -103,9 +103,14 @@
 
     <!-- Preferences -->
 
-    <string name="pref_calendar_key" translatable="false">calendar_key</string>
-    <string name="pref_calendar_summary">Manage notifications directly in calendar</string>
-    <string name="pref_calendar_open">Open Calendar</string>
+    <string name="pref_open_calendar_title">Open Calendar</string>
+    <string name="pref_open_calendar_summary">Manage notifications directly in calendar</string>
+    <string name="pref_open_calendar_key" translatable="false">open_calendar_key</string>
+
+    <string name="pref_create_calendar_title">Customized calendar</string>
+    <string name="pref_create_calendar_summary">Create a customized calendar for manage notifications</string>
+    <string name="pref_create_calendar_key" translatable="false">create_calendar_key</string>
+    <string name="pref_create_calendar_default" translatable="false">default</string>
 
     <string name="pref_category_notifications_title">Notifications</string>
 
