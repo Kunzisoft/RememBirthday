@@ -70,6 +70,6 @@ public class BackgroundStatusHandler extends Handler {
     }
 
     public interface StatusChangeListener {
-        public void onStatusChange(boolean progress);
+        void onStatusChange(boolean progress);
     }
 }

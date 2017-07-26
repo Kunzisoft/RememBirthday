@@ -48,33 +48,6 @@ public class CalendarSyncAdapterService extends Service {
         super();
     }
 
-    private class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
-
-        CalendarSyncAdapter() {
-            super(CalendarSyncAdapterService.this, true);
-        }
-
-        @Override
-        public void onPerformSync(Account account, Bundle extras, String authority,
-                                  ContentProviderClient provider, SyncResult syncResult) {
-            try {
-                CalendarSyncAdapterService.performSync(CalendarSyncAdapterService.this, account, extras, authority,
-                        provider, syncResult);
-            } catch (OperationCanceledException e) {
-                Log.e(getClass().getSimpleName(), "OperationCanceledException", e);
-            }
-        }
-
-        @Override
-        public void onSecurityException(Account account, Bundle extras, String authority, SyncResult syncResult) {
-            super.onSecurityException(account, extras, authority, syncResult);
-
-            // contact or calendar permission has been revoked -> simply remove account
-            AccountResolver accountResolver = CalendarAccount.getAccount(CalendarSyncAdapterService.this, null);
-            accountResolver.removeAccount();
-        }
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
         return new CalendarSyncAdapter().getSyncAdapterBinder();
@@ -93,6 +66,7 @@ public class CalendarSyncAdapterService extends Service {
     /**
      * Updates calendar color
      */
+    @SuppressWarnings("deprecation")
     public static void updateCalendarColor(Context context) {
         int color = PreferencesManager.getCustomCalendarColor(context);
         ContentResolver contentResolver = context.getContentResolver();
@@ -105,15 +79,21 @@ public class CalendarSyncAdapterService extends Service {
 
         ContentProviderClient client = contentResolver
                 .acquireContentProviderClient(CalendarContract.AUTHORITY);
+        if(client != null) {
+            ContentValues values = new ContentValues();
+            values.put(CalendarContract.Calendars.CALENDAR_COLOR, color);
+            try {
+                client.update(uri, values, null, null);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error while updating calendar color!", e);
+            }
 
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Calendars.CALENDAR_COLOR, color);
-        try {
-            client.update(uri, values, null, null);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error while updating calendar color!", e);
+            if (android.os.Build.VERSION.SDK_INT < 24) {
+                client.release();
+            } else {
+                client.close();
+            }
         }
-        client.release();
     }
 
     /**
@@ -666,6 +646,33 @@ public class CalendarSyncAdapterService extends Service {
             } catch (Exception e) {
                 Log.e(TAG, "Applying batch error!", e);
             }
+        }
+    }
+
+    private class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
+
+        CalendarSyncAdapter() {
+            super(CalendarSyncAdapterService.this, true);
+        }
+
+        @Override
+        public void onPerformSync(Account account, Bundle extras, String authority,
+                                  ContentProviderClient provider, SyncResult syncResult) {
+            try {
+                CalendarSyncAdapterService.performSync(CalendarSyncAdapterService.this, account, extras, authority,
+                        provider, syncResult);
+            } catch (OperationCanceledException e) {
+                Log.e(getClass().getSimpleName(), "OperationCanceledException", e);
+            }
+        }
+
+        @Override
+        public void onSecurityException(Account account, Bundle extras, String authority, SyncResult syncResult) {
+            super.onSecurityException(account, extras, authority, syncResult);
+
+            // contact or calendar permission has been revoked -> simply remove account
+            AccountResolver accountResolver = CalendarAccount.getAccount(CalendarSyncAdapterService.this, null);
+            accountResolver.removeAccount();
         }
     }
 }

@@ -2,9 +2,11 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Messenger;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
@@ -13,13 +15,16 @@ import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.kunzisoft.androidclearchroma.ChromaPreferenceFragmentCompat;
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.account.AccountResolver;
+import com.kunzisoft.remembirthday.account.BackgroundStatusHandler;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.preference.TimePreference;
 import com.kunzisoft.remembirthday.preference.TimePreferenceDialogFragmentCompat;
+import com.kunzisoft.remembirthday.service.MainIntentService;
 import com.kunzisoft.remembirthday.utility.IntentCall;
 
 import java.util.Date;
@@ -31,7 +36,7 @@ import java.util.regex.Pattern;
  * WARNING : Use compatibility library known for display bugs
  * @see <a href="http://stackoverflow.com/questions/32070670/preferencefragmentcompat-requires-preferencetheme-to-be-set">StackOverflow Question</a>
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends ChromaPreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG_FRAGMENT_DIALOG = "com.kunzisoft.remembirthday.TAG_FRAGMENT_DIALOG";
 
@@ -144,7 +149,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
         // Verify values of notifications
-        if(key.equals(getString(R.string.pref_notifications_days_key))) {
+        if (key.equals(getString(R.string.pref_notifications_days_key))) {
             // Only for 99 days maximum before the event
             Pattern p = Pattern.compile(PreferencesManager.PATTERN_REMINDER_PREF);
             Matcher m = p.matcher(notificationsDaysEditTextPreference.getText());
@@ -168,9 +173,31 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         // Update list after change sort or order
-        if(key.equals(getString(R.string.pref_contacts_sort_list_key))
+        if (key.equals(getString(R.string.pref_contacts_sort_list_key))
                 || key.equals(getString(R.string.pref_contacts_order_list_key))) {
             getActivity().setResult(Activity.RESULT_OK);
         }
+
+        // set new color
+        if (key.equals(getString(R.string.pref_calendar_color_key))) {
+            startServiceAction(MainIntentService.ACTION_CHANGE_COLOR);
+        }
+    }
+
+    /**
+     * Start service with action, while executing, show progress
+     */
+    public void startServiceAction(String action) {
+        // Send all information needed to service to do in other thread
+        Intent intent = new Intent(getContext(), MainIntentService.class);
+
+        // Create a new Messenger for the communication back
+        Messenger messenger = new Messenger(new BackgroundStatusHandler(null));
+        intent.putExtra(MainIntentService.EXTRA_MESSENGER, messenger);
+
+        intent.setAction(action);
+
+        // start service with intent
+        getContext().startService(intent);
     }
 }

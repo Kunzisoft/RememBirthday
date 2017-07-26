@@ -23,7 +23,7 @@ public class MainIntentService extends IntentService {
     public static final String ACTION_MANUAL_COMPLETE_SYNC = "MANUAL_SYNC";
     public static final String ACTION_CHANGE_COLOR = "CHANGE_COLOR";
 
-    Messenger mMessenger;
+    private Messenger mMessenger;
 
     public MainIntentService() {
         super("BirthdayAdapterMainIntentService");
@@ -56,14 +56,17 @@ public class MainIntentService extends IntentService {
         setProgressCircleWithHandler(true);
 
         // execute action
-        if (ACTION_CHANGE_COLOR.equals(action)) {
-            // update calendar color if enabled
-            if (CalendarAccount.isAccountActivated(this)) {
-                CalendarSyncAdapterService.updateCalendarColor(this);
-            }
-        } else if (ACTION_MANUAL_COMPLETE_SYNC.equals(action)) {
-            // perform blocking sync
-            CalendarSyncAdapterService.performSync(this);
+        switch (action) {
+            case ACTION_CHANGE_COLOR:
+                // update calendar color if enabled
+                if (CalendarAccount.isAccountActivated(this)) {
+                    CalendarSyncAdapterService.updateCalendarColor(this);
+                }
+                break;
+            case ACTION_MANUAL_COMPLETE_SYNC:
+                // perform blocking sync
+                CalendarSyncAdapterService.performSync(this);
+                break;
         }
 
         setProgressCircleWithHandler(false);

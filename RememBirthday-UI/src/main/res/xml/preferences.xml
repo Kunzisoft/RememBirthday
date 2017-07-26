@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:title="@string/pref_category_contacts_sort_title"
         android:key="pref_key_storage_settings">
@@ -31,6 +32,14 @@
             android:key="@string/pref_create_calendar_key"
             android:summary="@string/pref_create_calendar_summary"
             android:defaultValue="@string/pref_notifications_service_default" />
+        <com.kunzisoft.androidclearchroma.ChromaPreferenceCompat
+            android:title="@string/pref_calendar_color_title"
+            android:key="@string/pref_calendar_color_key"
+            android:summary="@string/pref_calendar_color_summary"
+            app:chromaShapePreview="ROUNDED_SQUARE"
+            app:chromaColorMode="RGB"
+            app:chromaIndicatorMode="HEX"
+            app:chromaInitialColor="@color/pref_calendar_color_default"/>
         <EditTextPreference
             android:title="@string/pref_notifications_days_title"
             android:summary="@string/pref_notifications_days_summary"

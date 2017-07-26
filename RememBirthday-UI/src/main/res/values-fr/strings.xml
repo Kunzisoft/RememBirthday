@@ -114,6 +114,9 @@
     <string name="pref_create_calendar_title">Calendrier customisé</string>
     <string name="pref_create_calendar_summary">Créer un calendrier customisé pour la gestion des notifications</string>
 
+    <string name="pref_calendar_color_title">Couleur du calendrier</string>
+    <string name="pref_calendar_color_summary">Définit la couleur du calendrier avec [color]</string>
+
     <string name="pref_notifications_days_title">Jours par défaut</string>
     <string name="pref_notifications_days_summary">Ex : "0#2#7" Notification de démon visible pour le jour, 2 et 7 jours avant l\'événement.</string>
 
