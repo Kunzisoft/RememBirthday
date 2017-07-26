@@ -48,12 +48,14 @@
     <string name="dialog_delete_birthday_title">Delete Birthday</string>
     <string name="dialog_delete_birthday_message">Are you sure you want to delete the anniversary date and related events ?</string>
 
-    <string name="dialog_pro_feature_title">This feature is available on the pro version currently in development.</string>
-    <string name="dialog_pro_feature_download">Download</string>
+    <string name="dialog_need_calendar_message">This feature needs the customized calendar to work, you can enable it in the settings.</string>
+
+    <string name="dialog_pro_feature_message">This feature is available on the pro version currently in development.</string>
+    <string name="dialog_pro_feature_positive_button">Download</string>
 
     <string name="dialog_startup_title">Thanks to download !</string>
-    <string name="dialog_startup_cancel_button">Cancel</string>
-    <string name="dialog_startup_contribute_button">Contribute</string>
+    <string name="dialog_startup_negative_button">Cancel</string>
+    <string name="dialog_startup_positive_button">Contribute</string>
 
     <string name="html_see_participation_page">See the participation page</string>
     <string name="html_text_purpose">This application is designed to &lt;strong&gt;easily manage the birthdays&lt;/strong&gt; of contacts on phones and tablets.</string>
@@ -92,8 +94,16 @@
     <string name="permission_write_contacts_denied">The application will not be able to save birthdays in contacts.</string>
     <string name="permission_contacts_never_ask">Never Ask</string>
 
+    <string name="permission_get_accounts_start">The application needs to get access to accounts to manage the custom calendar.</string>
+    <string name="permission_get_accounts_rationale">Get Accounts permissions are required to manage the calendar.</string>
+    <string name="permission_get_accounts_denied">The application will not be able to manage calendar.</string>
+    <string name="permission_get_accounts_never_ask">Never Ask</string>
+
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
+
+    <!-- Calendar -->
+    <string name="calendar_display_name">Birthdays</string>
 
     <!-- Notifications -->
     <string name="notifications_anniversary_title">Anniversary</string>
@@ -102,6 +112,7 @@
     <string name="notifications_anniversary_later">This will be %1$s\'s birthday in %1$d days.</string>
 
     <!-- Preferences -->
+    <string name="pref_category_notifications_title">Notifications</string>
 
     <string name="pref_open_calendar_title">Open Calendar</string>
     <string name="pref_open_calendar_summary">Manage notifications directly in calendar</string>
@@ -110,14 +121,9 @@
     <string name="pref_create_calendar_title">Customized calendar</string>
     <string name="pref_create_calendar_summary">Create a customized calendar for manage notifications</string>
     <string name="pref_create_calendar_key" translatable="false">create_calendar_key</string>
-    <string name="pref_create_calendar_default" translatable="false">default</string>
+    <string name="pref_create_calendar_default" translatable="false">true</string>
 
-    <string name="pref_category_notifications_title">Notifications</string>
-
-    <string name="pref_notifications_service_title">Powerful daemons</string>
-    <string name="pref_notifications_service_summary">Creates daemons for gift management or automatic message sending.</string>
-    <string name="pref_notifications_service_key" translatable="false">notifications_service_enable</string>
-    <string name="pref_notifications_service_default" translatable="false">false</string>
+    <string name="pref_calendar_color_key" translatable="false">calendar_color_key</string>
 
     <string name="pref_notifications_days_title">Default days</string>
     <string name="pref_notifications_days_summary">Ex : "0#2#7" Daemon notification visible on the day, 2 and 7 days before the event.</string>
@@ -128,6 +134,11 @@
     <string name="pref_notifications_time_summary">Demon Event Time : [time]</string>
     <string name="pref_notifications_time_key" translatable="false">notifications_time_enable</string>
     <string name="pref_notifications_time_default" translatable="false">10:00</string>
+
+    <string name="pref_notifications_service_title">Powerful daemons</string>
+    <string name="pref_notifications_service_summary">Creates daemons for gift management or automatic message sending.</string>
+    <string name="pref_notifications_service_key" translatable="false">notifications_service_enable</string>
+    <string name="pref_notifications_service_default" translatable="false">false</string>
 
     <string name="pref_category_contacts_sort_title">Contact sort</string>
 
@@ -181,5 +192,13 @@
 
     <!-- Errors -->
     <string name="error_pref_notifications_days">Unable to save the day values, format the string correctly</string>
+
+    <!-- Account -->
+    <string name="account_name" translatable="false">Birthday Reminder</string>
+    <string name="account_type" translatable="false">com.kunzisoft.remembirthday.account</string>
+    <string name="account_authority" translatable="false">com.android.calendar</string>
+    <string name="account_pref_header">Settings</string>
+    <string name="account_pref_settings">Configure Birthday Reminder</string>
+
 
 </resources>

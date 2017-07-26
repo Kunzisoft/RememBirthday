@@ -43,12 +43,14 @@
     <string name="dialog_delete_birthday_title">Effacer l\'Anniversaire</string>
     <string name="dialog_delete_birthday_message">Etes-vous sûr de vouloir la date d\'anniversaire et les événements associés?</string>
 
-    <string name="dialog_pro_feature_title">Cette fonctionnalité est disponible dans la version pro actuellement en développement.</string>
-    <string name="dialog_pro_feature_download">Télécharger</string>
+    <string name="dialog_need_calendar_message">Cette fonctionnalité a besoin du calendrier customisé pour fonctionner, vous pouvez l\'activer dans les paramètres.</string>
+
+    <string name="dialog_pro_feature_message">Cette fonctionnalité est disponible dans la version pro actuellement en développement.</string>
+    <string name="dialog_pro_feature_positive_button">Télécharger</string>
 
     <string name="dialog_startup_title">Merci pour le téléchargement !</string>
-    <string name="dialog_startup_cancel_button">Annuler</string>
-    <string name="dialog_startup_contribute_button">Contribuer</string>
+    <string name="dialog_startup_negative_button">Annuler</string>
+    <string name="dialog_startup_positive_button">Contribuer</string>
 
     <string name="html_see_participation_page">Voir la page de participation</string>
     <string name="html_text_purpose">Cette application est destinée a &lt;strong&gt;gérer facilement les anniversaires&lt;/strong&gt; des contacts sur téléphones et tablettes.</string>
@@ -87,8 +89,15 @@
     <string name="permission_write_contacts_denied">L\'application ne sera pas en mesure de sauvegarder les anniversaires de contacts.</string>
     <string name="permission_contacts_never_ask">Ne plus demander</string>
 
+    <string name="permission_get_accounts_start">L\'application a besoin d\'obtenir l\'accès aux comptes pour gérer le calendrier personnalisé.</string>
+    <string name="permission_get_accounts_rationale">Les autorisations de récupération des comptes sont nécessaires pour gérer le calendrier.</string>
+    <string name="permission_get_accounts_denied">L\'application ne sera pas en mesure de gérer le calendrier.</string>
+
     <string name="button_allow">Autoriser</string>
     <string name="button_deny">Refuser</string>
+
+    <!-- Calendar -->
+    <string name="calendar_display_name">Anniversaires</string>
 
     <!-- Notifications -->
     <string name="notifications_anniversary_title">Anniversaire</string>
@@ -97,6 +106,7 @@
     <string name="notifications_anniversary_later">Ce sera l\anniversaire de %1$s dans %1$d days.</string>
 
     <!-- Preferences -->
+    <string name="pref_category_notifications_title">Notifications</string>
 
     <string name="pref_open_calendar_title">Ouvrir le Calendrier</string>
     <string name="pref_open_calendar_summary">Gérer les notifications directement dans le calendrier</string>
@@ -104,16 +114,14 @@
     <string name="pref_create_calendar_title">Calendrier customisé</string>
     <string name="pref_create_calendar_summary">Créer un calendrier customisé pour la gestion des notifications</string>
 
-    <string name="pref_category_notifications_title">Notifications</string>
-
-    <string name="pref_notifications_service_title">Puissants démons</string>
-    <string name="pref_notifications_service_summary">Créer des démons pour la gestion de cadeaux ou l\'envoie automatique de messages.</string>
-
     <string name="pref_notifications_days_title">Jours par défaut</string>
     <string name="pref_notifications_days_summary">Ex : "0#2#7" Notification de démon visible pour le jour, 2 et 7 jours avant l\'événement.</string>
 
     <string name="pref_notifications_time_title">Heure par défaut</string>
     <string name="pref_notifications_time_summary">Heure de l\événement du démon : [time]</string>
+
+    <string name="pref_notifications_service_title">Puissants démons</string>
+    <string name="pref_notifications_service_summary">Créer des démons pour la gestion de cadeaux ou l\'envoie automatique de messages.</string>
 
     <string name="pref_category_contacts_sort_title">Trie de contacts</string>
 
@@ -143,5 +151,9 @@
 
     <!-- Errors -->
     <string name="error_pref_notifications_days">Echec de sauvegarde des valeurs de jours, formater la chaine de caractères correctement</string>
+
+    <!-- Account -->
+    <string name="account_pref_header">Paramètres</string>
+    <string name="account_pref_settings">Configurer les rappels d\'anniversaires</string>
 
 </resources>

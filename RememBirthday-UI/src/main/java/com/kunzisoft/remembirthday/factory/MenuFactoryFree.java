@@ -1,17 +1,18 @@
 package com.kunzisoft.remembirthday.factory;
 
+import android.content.Context;
+
 /**
  * Menu Factory for Free variant of application
  */
 public class MenuFactoryFree extends MenuFactoryBase {
 
-    public MenuFactoryFree(boolean asPhoneNumber) {
-        super(asPhoneNumber);
-        listMenuAction.add(new MenuActionReminder(MenuAction.STATE.INACTIVE_FOR_PRO));
-        listMenuAction.add(new MenuActionGift(MenuAction.STATE.INACTIVE_FOR_PRO));
+    public MenuFactoryFree(Context context, boolean asPhoneNumber) {
+        super(context, asPhoneNumber);
+        listMenuAction.add(new MenuActionGift(MenuAction.STATE.NOT_AVAILABLE));
         if(asPhoneNumber) {
-            listMenuAction.add(new MenuActionAutoMessage(MenuAction.STATE.INACTIVE_FOR_PRO));
-            //listMenuAction.add(new MenuActionAutoVoice(MenuAction.STATE.INACTIVE_FOR_PRO));
+            listMenuAction.add(new MenuActionAutoMessage(MenuAction.STATE.NOT_AVAILABLE));
+            //listMenuAction.add(new MenuActionAutoVoice(MenuAction.STATE.NOT_AVAILABLE));
         }
     }
 }

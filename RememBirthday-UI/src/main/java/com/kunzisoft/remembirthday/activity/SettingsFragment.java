@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.account.AccountResolver;
+import com.kunzisoft.remembirthday.account.CalendarAccount;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.preference.TimePreference;
 import com.kunzisoft.remembirthday.preference.TimePreferenceDialogFragmentCompat;
@@ -38,6 +40,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private EditTextPreference notificationsDaysEditTextPreference;
 
     private SwitchPreferenceCompat customCalendar;
+    private AccountResolver accountResolver;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -74,17 +77,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         });
 
+        accountResolver = CalendarAccount.getAccount(getContext());
         customCalendar = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_create_calendar_key));
         customCalendar.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (newValue instanceof Boolean) {
                     Boolean boolVal = (Boolean) newValue;
-
                     if (boolVal) {
-                        //TODO addAccountAndSync();
+                        accountResolver.addAccountAndSync();
                     } else {
-                        //TODO accountHelper.removeAccount();
+                        accountResolver.removeAccount();
                     }
                 }
                 return true;

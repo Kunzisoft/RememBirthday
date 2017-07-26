@@ -5,14 +5,17 @@
     <color name="backgroundAccentElement">#FB8C00</color>
     <color name="backgroundElementInverse">#795548</color>
 
-    <!-- <color name="colorPrimary">#935918</color> -->
     <color name="colorPrimary">#6d4c41</color>
     <color name="colorPrimaryInverse">#FFECB3</color>
     <color name="colorPrimaryDark">#5d4037</color>
     <color name="colorPrimaryDarkInverse">#edd6b0</color>
     <color name="colorSecondary">#FFECB3</color>
     <color name="colorAccent">#FB8C00</color>
-    <color name="colorInactive">@color/backgroundElement</color><!-- #dedede -->
-    <color name="colorInactiveDark">#ffcc80</color><!-- #b7b7b7 -->
+    <color name="colorInactive">@color/backgroundElement</color>
+    <color name="colorInactiveDark">#ffcc80</color>
+    <color name="colorNotAvailable">#dedede</color>
+    <color name="colorNotAvailableDark">#b7b7b7</color>
 
+    <!-- preferences -->
+    <color name="pref_calendar_color_default" translatable="false">#5d4037</color>
 </resources>

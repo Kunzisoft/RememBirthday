@@ -10,6 +10,9 @@
     <attr name="colorInactive" format="reference" />
     <attr name="colorInactiveDark" format="reference" />
 
+    <attr name="colorNotAvailable" format="reference" />
+    <attr name="colorNotAvailableDark" format="reference" />
+
     <attr name="toolbarDark" format="reference" />
     <attr name="toolbarTransparent" format="reference" />
 

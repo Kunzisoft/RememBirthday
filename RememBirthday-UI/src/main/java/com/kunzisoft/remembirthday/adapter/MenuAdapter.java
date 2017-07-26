@@ -15,9 +15,6 @@ import com.kunzisoft.remembirthday.factory.MenuContact;
  */
 public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
-    private static final int MENU_ACTIVE = 0;
-    private static final int MENU_NOT_ACTIVE = 1;
-
     private Context context;
     private MenuContact menuFactory;
 
@@ -29,24 +26,19 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if(menuFactory.getMenu(position).getState() == MenuAction.STATE.ACTIVE)
-            return MENU_ACTIVE;
-        else
-            return MENU_NOT_ACTIVE;
+        return menuFactory.getMenu(position).getState().ordinal();
     }
 
     @Override
     public MenuViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemListBuddyView;
-        switch (viewType) {
-            default:
-            case MENU_ACTIVE:
-                itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu, parent, false);
-                break;
-            case MENU_NOT_ACTIVE:
-                itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu_inactive, parent, false);
-                break;
-        }
+        if(viewType == MenuAction.STATE.ACTIVE.ordinal())
+            itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu, parent, false);
+        else if(viewType == MenuAction.STATE.INACTIVE.ordinal())
+            itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu_inactive, parent, false);
+        else
+            itemListBuddyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_menu_not_available, parent, false);
+
         return new MenuViewHolder(itemListBuddyView);
     }
 

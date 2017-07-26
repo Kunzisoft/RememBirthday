@@ -11,7 +11,7 @@ import com.kunzisoft.remembirthday.preference.PreferencesManager;
 public class MenuFactoryPro extends MenuFactoryBase {
 
     public MenuFactoryPro(Context context, boolean asPhoneNumber) {
-        super(asPhoneNumber);
+        super(context, asPhoneNumber);
         if(PreferencesManager.isDaemonsActive(context)) {
             listMenuAction.add(new MenuActionReminder());
             listMenuAction.add(new MenuActionGift());

@@ -1,13 +1,24 @@
 package com.kunzisoft.remembirthday.utility;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -36,8 +47,8 @@ public class Utility {
      * Checks that application runs first time and write flag at SharedPreferences
      * @return true if 1st time
      */
-    public static boolean isFirstTime(Activity activity)
-    {
+    public static boolean isFirstTime(Activity activity) {
+        //TODO Possible bug
         SharedPreferences preferences = activity.getPreferences(MODE_PRIVATE);
         boolean ranBefore = preferences.getBoolean(FIRST_TIME_KEY, false);
         if (!ranBefore) {
@@ -64,4 +75,5 @@ public class Utility {
             textView.setText(resources.getString(R.string.dialog_select_birthday_number_days_left, numberDaysRemaining));
         }
     }
+
 }

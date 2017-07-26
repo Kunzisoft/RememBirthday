@@ -24,7 +24,7 @@ public class MenuContactCreator {
     public MenuContactCreator(Context context, boolean asPhoneNumber) {
         // List for menu, depend of variant of app
         if(!BuildConfig.FULL_VERSION)
-            menuFactory = new MenuFactoryFree(asPhoneNumber);
+            menuFactory = new MenuFactoryFree(context, asPhoneNumber);
         else {
             menuFactory = new MenuFactoryPro(context, asPhoneNumber);
         }

@@ -10,7 +10,7 @@ import com.kunzisoft.remembirthday.R;
 /**
  * Created by joker on 13/04/17.
  */
-public class SettingsActivity extends AppCompatActivity{
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +41,4 @@ public class SettingsActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

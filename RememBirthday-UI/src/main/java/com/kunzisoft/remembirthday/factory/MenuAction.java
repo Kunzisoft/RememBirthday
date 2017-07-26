@@ -47,7 +47,7 @@ public abstract class MenuAction {
 
     public enum STATE {
         ACTIVE,
-        INACTIVE_FOR_PRO,
-        INACTIVE_NOT_AVAILABLE
+        INACTIVE,
+        NOT_AVAILABLE
     }
 }

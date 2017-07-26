@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/account_pref_header" />
+
+    <PreferenceScreen
+        android:key="goToPreferences"
+        android:title="@string/account_pref_settings">
+
+        <!-- package relative class name -->
+        <intent
+            android:action="com.kunzisoft.remembirthday.settings.MAIN"
+            android:targetClass=".activity.SettingsActivity" />
+    </PreferenceScreen>
+
+</PreferenceScreen>

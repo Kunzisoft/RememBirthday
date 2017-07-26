@@ -175,12 +175,14 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
         if(contact != null && contact.hasBirthday()) {
 
-            // Build adapters only if daemons active
-            if(PreferencesManager.isDaemonsActive(getContext())) {
+            if(PreferencesManager.isCustomCalendarActive(getContext())) {
                 // Add default reminders and link view to adapter
                 remindersAdapter = new ReminderNotificationsAdapter(getContext(), contact.getBirthday());
                 remindersListView.setAdapter(remindersAdapter);
+            }
 
+            // Build adapters only if daemons active
+            if(PreferencesManager.isDaemonsActive(getContext())) {
                 // Link auto messages view to adapter
                 autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
                 autoMessagesListView.setAdapter(autoMessagesAdapter);
@@ -256,9 +258,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
     @Override
     public void doActionMenu(MenuAction menuAction) {
-        if(menuAction.getState() == MenuAction.STATE.INACTIVE_FOR_PRO) {
+        if(menuAction.getState() == MenuAction.STATE.NOT_AVAILABLE) {
             if (!BuildConfig.FULL_VERSION)
-                new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
+                new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_DIALOG_TAG");
         } else {
             menuAnimationCircle.hide();
             switch (menuAction.getItemId()) {
@@ -283,7 +285,11 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     }
                     break;
                 case MenuActionReminder.ITEM_ID :
-                    remindersAdapter.addDefaultItem();
+                    if(PreferencesManager.isCustomCalendarActive(getContext())) {
+                        remindersAdapter.addDefaultItem();
+                    } else {
+                        new NeedCalendarDialogFragment().show(getFragmentManager(), "CALENDAR_DIALOG_TAG");
+                    }
                     // TODO reminder for pro
                     break;
                 case MenuActionGift.ITEM_ID :

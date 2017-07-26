@@ -16,6 +16,8 @@ public class Constants {
     public static final String URL_WEB_SITE = "http://kunzisoft.com/";
     public static final String URL_PARTICIPATION = URL_WEB_SITE+"#contribute";
 
+    public static final int DISABLED_REMINDER = -99999;
+
     /**
      * Get the current package version.
      *

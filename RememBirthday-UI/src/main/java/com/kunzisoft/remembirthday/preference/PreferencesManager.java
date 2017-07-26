@@ -2,6 +2,8 @@ package com.kunzisoft.remembirthday.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 
 import com.kunzisoft.remembirthday.R;
@@ -17,6 +19,32 @@ import java.util.regex.Pattern;
 public class PreferencesManager {
 
     public static final String PATTERN_REMINDER_PREF = "^\\d{1,2}+(#\\d{1,2})*$";
+
+    /**
+     * Return true if custom calendar is active, false elsewhere
+     * @param context Context to call
+     * @return true id active
+     */
+    public static boolean isCustomCalendarActive(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        //TODO false for free and new
+        // true for free and old
+        // true for pro and old
+        // true for pro and new with dialog for duplication
+        return prefs.getBoolean(context.getString(R.string.pref_create_calendar_key),
+                Boolean.getBoolean(context.getString(R.string.pref_create_calendar_default)));
+    }
+
+    /**
+     * Return the color of custom calendar
+     * @param context Context to call
+     * @return Color
+     */
+    public static @ColorInt int getCustomCalendarColor(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt(context.getString(R.string.pref_calendar_color_key),
+                ContextCompat.getColor(context, R.color.pref_calendar_color_default));
+    }
 
     /**
      * Get default days in preferences

@@ -22,6 +22,9 @@
         <item name="colorInactive">@color/colorInactive</item>
         <item name="colorInactiveDark">@color/colorInactiveDark</item>
 
+        <item name="colorNotAvailable">@color/colorNotAvailable</item>
+        <item name="colorNotAvailableDark">@color/colorNotAvailableDark</item>
+
         <!-- Normal attributes -->
 
         <item name="android:textColor">@color/colorPrimary</item>
