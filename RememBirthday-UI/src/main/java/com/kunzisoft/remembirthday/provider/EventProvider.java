@@ -14,20 +14,15 @@ import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.element.Reminder;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Created by joker on 27/07/17.

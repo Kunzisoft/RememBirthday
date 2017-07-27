@@ -28,6 +28,7 @@ public class Contact implements Parcelable{
     private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
+    private CalendarEvent birthdayEvent;
     private List<PhoneNumber> phoneNumbers;
 
     public Contact(long id, String lookupKey, String name) {
@@ -45,7 +46,7 @@ public class Contact implements Parcelable{
         this.name = name;
         this.imageThumbnailUri = null;
         this.imageUri = null;
-        this.birthday = birthday;
+        setBirthday(birthday);
     }
 
     public Contact(String name) {
@@ -64,7 +65,7 @@ public class Contact implements Parcelable{
         name = in.readString();
         imageThumbnailUri = in.readParcelable(Uri.class.getClassLoader());
         imageUri = in.readParcelable(Uri.class.getClassLoader());
-        birthday = in.readParcelable(DateUnknownYear.class.getClassLoader());
+        setBirthday((DateUnknownYear) in.readParcelable(DateUnknownYear.class.getClassLoader()));
         phoneNumbers = in.readArrayList(PhoneNumber.class.getClassLoader());
     }
 
@@ -138,6 +139,18 @@ public class Contact implements Parcelable{
 
     public void setBirthday(DateUnknownYear date) {
         this.birthday = date;
+        if(date != null) {
+            setBirthdayEvent(new CalendarEvent(date.getDate()));
+        } else
+            setBirthdayEvent(null);
+    }
+
+    public CalendarEvent getBirthdayEvent() {
+        return birthdayEvent;
+    }
+
+    private void setBirthdayEvent(CalendarEvent birthdayEvent) {
+        this.birthdayEvent = birthdayEvent;
     }
 
     public boolean isPhoneNumberInit() {
@@ -181,6 +194,8 @@ public class Contact implements Parcelable{
         setNoPhoneNumber();
         this.phoneNumbers = phoneNumbers;
     }
+
+
 
     public boolean containsImage() {
         return imageUri!=null;

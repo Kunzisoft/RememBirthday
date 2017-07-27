@@ -1,9 +1,10 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.format.DateUtils;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Seconds;
 
 import java.util.ArrayList;
@@ -16,15 +17,13 @@ import java.util.TimeZone;
  * Created by joker on 27/07/17.
  */
 
-public class CalendarEvent {
+public class CalendarEvent implements Parcelable {
 
-    private Long id;
-    private String lookupKey;
+    private long id;
     private Date dateStart;
     private Date dateStop;
     private boolean allDay;
     private String title;
-
     private List<Reminder> reminders;
 
 
@@ -33,9 +32,21 @@ public class CalendarEvent {
     }
 
     public CalendarEvent(Date dateStart, Date dateStop) {
+        this.id = -1;
         this.dateStart = dateStart;
         this.dateStop = dateStop;
+        this.allDay = false;
+        this.title = "";
         this.reminders = new ArrayList<>();
+    }
+
+    private CalendarEvent(Parcel in) {
+        id = in.readLong();
+        dateStart = (Date) in.readSerializable();
+        dateStop = (Date) in.readSerializable();
+        allDay = in.readByte() != 0;
+        title = in.readString();
+        reminders = in.readArrayList(Reminder.class.getClassLoader());
     }
 
     public Long getId() {
@@ -44,14 +55,6 @@ public class CalendarEvent {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLookupKey() {
-        return lookupKey;
-    }
-
-    public void setLookupKey(String lookupKey) {
-        this.lookupKey = lookupKey;
     }
 
     public Date getDate() {
@@ -159,4 +162,29 @@ public class CalendarEvent {
                 ", title='" + title + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeSerializable(dateStart);
+        parcel.writeSerializable(dateStop);
+        parcel.writeByte((byte) (allDay ? 1 : 0));
+        parcel.writeString(title);
+        parcel.writeList(reminders);
+    }
+
+    public static final Parcelable.Creator<CalendarEvent> CREATOR = new Parcelable.Creator<CalendarEvent>() {
+        public CalendarEvent createFromParcel(Parcel in) {
+            return new CalendarEvent(in);
+        }
+
+        public CalendarEvent[] newArray(int size) {
+            return new CalendarEvent[size];
+        }
+    };
 }
