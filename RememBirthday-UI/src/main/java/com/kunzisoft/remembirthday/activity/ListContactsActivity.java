@@ -14,8 +14,8 @@ import android.view.View;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
-import com.kunzisoft.remembirthday.task.AddBirthdayToContactTask;
+import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.AddBirthdayToContactTask;
 
 /**
  * Created by joker on 19/01/17.

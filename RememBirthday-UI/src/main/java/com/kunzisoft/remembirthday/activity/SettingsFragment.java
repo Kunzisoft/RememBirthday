@@ -42,7 +42,7 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
 
     public static final int SETTING_RESULT_CODE = 1647;
 
-    private EditTextPreference notificationsDaysEditTextPreference;
+    private EditTextPreference remindersDaysEditTextPreference;
 
     private SwitchPreferenceCompat customCalendar;
     private AccountResolver accountResolver;
@@ -50,11 +50,11 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
-        notificationsDaysEditTextPreference = (EditTextPreference) findPreference(getString(R.string.pref_notifications_days_key));
+        remindersDaysEditTextPreference = (EditTextPreference) findPreference(getString(R.string.pref_reminders_days_key));
 
         if (!BuildConfig.FULL_VERSION) {
             // Disable switch and show pro dialog if free version
-            SwitchPreferenceCompat preference = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_notifications_service_key));
+            SwitchPreferenceCompat preference = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_special_service_key));
             preference.setDefaultValue(false);
             preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -149,25 +149,25 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
         // Verify values of notifications
-        if (key.equals(getString(R.string.pref_notifications_days_key))) {
+        if (key.equals(getString(R.string.pref_reminders_days_key))) {
             // Only for 99 days maximum before the event
             Pattern p = Pattern.compile(PreferencesManager.PATTERN_REMINDER_PREF);
-            Matcher m = p.matcher(notificationsDaysEditTextPreference.getText());
+            Matcher m = p.matcher(remindersDaysEditTextPreference.getText());
 
             SharedPreferences.Editor sharedPreferenceEditor = sharedPreferences.edit();
             if(!m.matches()) {
                 // If error in value
-                Log.e(getClass().getSimpleName(), notificationsDaysEditTextPreference.getText()
+                Log.e(getClass().getSimpleName(), remindersDaysEditTextPreference.getText()
                         + " not matches " + p);
                 Toast.makeText(getContext(), R.string.error_pref_notifications_days, Toast.LENGTH_LONG).show();
                 sharedPreferenceEditor.putString(
-                        getString(R.string.pref_notifications_days_key),
-                        getString(R.string.pref_notifications_days_default));
+                        getString(R.string.pref_reminders_days_key),
+                        getString(R.string.pref_reminders_days_default));
             } else {
                 // Save value
                 sharedPreferenceEditor.putString(
-                        getString(R.string.pref_notifications_days_key),
-                        notificationsDaysEditTextPreference.getText());
+                        getString(R.string.pref_reminders_days_key),
+                        remindersDaysEditTextPreference.getText());
             }
             sharedPreferenceEditor.apply();
         }

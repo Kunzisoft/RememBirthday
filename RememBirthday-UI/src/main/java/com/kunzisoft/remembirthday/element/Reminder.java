@@ -1,6 +1,7 @@
 package com.kunzisoft.remembirthday.element;
 
 import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public class Reminder {
     public static final long ID_UNDEFINED = -1;
 
     private long id;
-    protected Date anniversary;
+    protected Date dateEvent;
     protected int hourOfDay;
     protected int minuteOfHour;
     protected int daysBefore;
@@ -20,10 +21,10 @@ public class Reminder {
     /**
      * Create default auto message
      */
-    public Reminder(Date anniversary, int hourOfDay, int minuteOfHour, int deltaDay) {
+    public Reminder(Date dateEvent, int hourOfDay, int minuteOfHour, int deltaDay) {
         this.id = ID_UNDEFINED;
-        this.anniversary = anniversary;
-        this.anniversary = new DateTime(this.anniversary)
+        this.dateEvent = dateEvent;
+        this.dateEvent = new DateTime(this.dateEvent)
                 .withHourOfDay(0)
                 .withMinuteOfHour(0)
                 .toDate();
@@ -48,11 +49,15 @@ public class Reminder {
     }
 
     public Date getDate() {
-        return new DateTime(anniversary)
+        return new DateTime(dateEvent)
                 .withMinuteOfHour(minuteOfHour)
                 .withHourOfDay(hourOfDay)
                 .minusDays(daysBefore)
                 .toDate();
+    }
+
+    public int getMinutesBeforeEvent() {
+        return Minutes.minutesBetween(new DateTime(getDate()), new DateTime(dateEvent)).getMinutes();
     }
 
     public int getDeltaDay() {

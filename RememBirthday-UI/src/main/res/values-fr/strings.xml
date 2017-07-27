@@ -106,7 +106,7 @@
     <string name="notifications_anniversary_later">Ce sera l\anniversaire de %1$s dans %1$d days.</string>
 
     <!-- Preferences -->
-    <string name="pref_category_notifications_title">Notifications</string>
+    <string name="pref_category_calendar_title">Calendrier</string>
 
     <string name="pref_open_calendar_title">Ouvrir le Calendrier</string>
     <string name="pref_open_calendar_summary">Gérer les notifications directement dans le calendrier</string>
@@ -117,14 +117,18 @@
     <string name="pref_calendar_color_title">Couleur du calendrier</string>
     <string name="pref_calendar_color_summary">Définit la couleur du calendrier avec [color]</string>
 
-    <string name="pref_notifications_days_title">Jours par défaut</string>
-    <string name="pref_notifications_days_summary">Ex : "0#2#7" Notification de démon visible pour le jour, 2 et 7 jours avant l\'événement.</string>
+    <string name="pref_category_reminders_title">Rappels</string>
 
-    <string name="pref_notifications_time_title">Heure par défaut</string>
-    <string name="pref_notifications_time_summary">Heure de l\événement du démon : [time]</string>
+    <string name="pref_reminders_days_title">Jours par défaut</string>
+    <string name="pref_reminders_days_summary">Ex : "0#2#7" Notification de démon visible pour le jour, 2 et 7 jours avant l\'événement.</string>
 
-    <string name="pref_notifications_service_title">Puissants démons</string>
-    <string name="pref_notifications_service_summary">Créer des démons pour la gestion de cadeaux ou l\'envoie automatique de messages.</string>
+    <string name="pref_reminders_time_title">Heure par défaut</string>
+    <string name="pref_reminders_time_summary">Heure de l\événement du démon : [time]</string>
+
+    <string name="pref_category_special_title">Special</string>
+
+    <string name="pref_special_service_title">Puissants démons</string>
+    <string name="pref_special_service_summary">Créer des démons pour la gestion de cadeaux ou l\'envoie automatique de messages.</string>
 
     <string name="pref_category_contacts_sort_title">Trie de contacts</string>
 

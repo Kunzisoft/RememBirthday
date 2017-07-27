@@ -5,7 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
 
 /**
  * Utility class for callback management

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
-import com.kunzisoft.remembirthday.database.ContactBuild;
+import com.kunzisoft.remembirthday.provider.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
 
 /**

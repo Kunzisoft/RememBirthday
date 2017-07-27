@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday.database;
+package com.kunzisoft.remembirthday.provider;
 
 import android.content.ContentResolver;
 import android.content.Context;

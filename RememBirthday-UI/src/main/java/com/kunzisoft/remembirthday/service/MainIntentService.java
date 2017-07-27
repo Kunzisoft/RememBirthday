@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.account.BackgroundStatusHandler;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
+import com.kunzisoft.remembirthday.provider.CalendarProvider;
 
 /**
  * An IntentServices queues incoming Intents and works them one by one.
@@ -39,28 +40,23 @@ public class MainIntentService extends IntentService {
         Bundle extras = intent.getExtras();
         if (extras == null) {
             Log.e(getClass().getSimpleName(), "Extras bundle is null!");
-            return;
+        } else if (extras.containsKey(EXTRA_MESSENGER)) {
+            mMessenger = (Messenger) extras.get(EXTRA_MESSENGER);
         }
+        setProgressCircleWithHandler(true);
 
         if (intent.getAction() == null) {
             Log.e(getClass().getSimpleName(), "Intent must contain an action!");
             return;
         }
-
-        if (extras.containsKey(EXTRA_MESSENGER)) {
-            mMessenger = (Messenger) extras.get(EXTRA_MESSENGER);
-        }
-
         String action = intent.getAction();
-
-        setProgressCircleWithHandler(true);
 
         // execute action
         switch (action) {
             case ACTION_CHANGE_COLOR:
                 // update calendar color if enabled
                 if (CalendarAccount.isAccountActivated(this)) {
-                    CalendarSyncAdapterService.updateCalendarColor(this);
+                    CalendarProvider.updateCalendarColor(this);
                 }
                 break;
             case ACTION_MANUAL_COMPLETE_SYNC:

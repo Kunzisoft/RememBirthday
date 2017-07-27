@@ -53,8 +53,8 @@ public class PreferencesManager {
      */
     public static int[] getDefaultDays(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String prefNotificationsDay = prefs.getString(context.getString(R.string.pref_notifications_days_key),
-                context.getString(R.string.pref_notifications_days_default));
+        String prefNotificationsDay = prefs.getString(context.getString(R.string.pref_reminders_days_key),
+                context.getString(R.string.pref_reminders_days_default));
         Pattern p = Pattern.compile(PATTERN_REMINDER_PREF);
         int[] days;
         Matcher m = p.matcher(prefNotificationsDay);
@@ -79,8 +79,8 @@ public class PreferencesManager {
      */
     public static int[] getDefaultTime(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String prefNotificationsTime = prefs.getString(context.getString(R.string.pref_notifications_time_key),
-                context.getString(R.string.pref_notifications_time_default));
+        String prefNotificationsTime = prefs.getString(context.getString(R.string.pref_reminders_time_key),
+                context.getString(R.string.pref_reminders_time_default));
         int[] time = new int[2];
         time[0] = TimePreference.parseHour(prefNotificationsTime);
         time[1] = TimePreference.parseMinute(prefNotificationsTime);
@@ -111,6 +111,6 @@ public class PreferencesManager {
      */
     public static boolean isDaemonsActive(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.pref_notifications_service_key), false);
+        return prefs.getBoolean(context.getString(R.string.pref_special_service_key), false);
     }
 }

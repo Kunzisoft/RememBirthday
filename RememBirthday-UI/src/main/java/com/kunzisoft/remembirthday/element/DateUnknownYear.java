@@ -33,6 +33,15 @@ public class DateUnknownYear implements Parcelable {
     private Date date;
 
     /**
+     * Construct date with unknown year indication, contains year by default
+     * @param date date to store
+     */
+    public DateUnknownYear(Date date) {
+        this.containsYear = true;
+        setDate(date);
+    }
+
+    /**
      * Construct date with unknown year indication
      * @param date date to store
      * @param containsYear true if year is known, false elsewhere

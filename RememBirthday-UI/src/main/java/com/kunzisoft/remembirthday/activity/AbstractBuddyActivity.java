@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.task.ActionBirthdayInDatabaseTask;
-import com.kunzisoft.remembirthday.task.UpdateBirthdayToContactTask;
+import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.UpdateBirthdayToContactTask;
 
 /**
  * Abstract class to encapsulate the management of the birthday dialog.

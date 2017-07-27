@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday.task;
+package com.kunzisoft.remembirthday.provider;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;

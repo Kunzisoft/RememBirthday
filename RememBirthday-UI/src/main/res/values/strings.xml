@@ -112,41 +112,45 @@
     <string name="notifications_anniversary_later">This will be %1$s\'s birthday in %1$d days.</string>
 
     <!-- Preferences -->
-    <string name="pref_category_notifications_title">Notifications</string>
+    <string name="pref_category_calendar_title">Calendar</string>
 
+    <string name="pref_open_calendar_key" translatable="false">open_calendar_key</string>
     <string name="pref_open_calendar_title">Open Calendar</string>
     <string name="pref_open_calendar_summary">Manage notifications directly in calendar</string>
-    <string name="pref_open_calendar_key" translatable="false">open_calendar_key</string>
 
+    <string name="pref_create_calendar_key" translatable="false">create_calendar_key</string>
     <string name="pref_create_calendar_title">Customized calendar</string>
     <string name="pref_create_calendar_summary">Create a customized calendar for manage notifications</string>
-    <string name="pref_create_calendar_key" translatable="false">create_calendar_key</string>
     <string name="pref_create_calendar_default" translatable="false">true</string>
 
+    <string name="pref_calendar_color_key" translatable="false">calendar_color_key</string>
     <string name="pref_calendar_color_title">Calendar color</string>
     <string name="pref_calendar_color_summary">Define the calendar color with [color]</string>
-    <string name="pref_calendar_color_key" translatable="false">calendar_color_key</string>
 
-    <string name="pref_notifications_days_title">Default days</string>
-    <string name="pref_notifications_days_summary">Ex : "0#2#7" Daemon notification visible on the day, 2 and 7 days before the event.</string>
-    <string name="pref_notifications_days_key" translatable="false">notifications_day_enable</string>
-    <string name="pref_notifications_days_default" translatable="false">0</string>
+    <string name="pref_category_reminders_title">Reminders</string>
 
-    <string name="pref_notifications_time_title">Default time</string>
-    <string name="pref_notifications_time_summary">Demon Event Time : [time]</string>
-    <string name="pref_notifications_time_key" translatable="false">notifications_time_enable</string>
-    <string name="pref_notifications_time_default" translatable="false">10:00</string>
+    <string name="pref_reminders_days_key" translatable="false">notifications_day_enable</string>
+    <string name="pref_reminders_days_title">Default days</string>
+    <string name="pref_reminders_days_summary">Ex : "0#2#7" Daemon notification visible on the day, 2 and 7 days before the event.</string>
+    <string name="pref_reminders_days_default" translatable="false">0</string>
 
-    <string name="pref_notifications_service_title">Powerful daemons</string>
-    <string name="pref_notifications_service_summary">Creates daemons for gift management or automatic message sending.</string>
-    <string name="pref_notifications_service_key" translatable="false">notifications_service_enable</string>
-    <string name="pref_notifications_service_default" translatable="false">false</string>
+    <string name="pref_reminders_time_key" translatable="false">notifications_time_enable</string>
+    <string name="pref_reminders_time_title">Default time</string>
+    <string name="pref_reminders_time_summary">Demon Event Time : [time]</string>
+    <string name="pref_reminders_time_default" translatable="false">10:00</string>
+
+    <string name="pref_category_special_title">Special</string>
+
+    <string name="pref_special_service_key" translatable="false">notifications_service_enable</string>
+    <string name="pref_special_service_title">Powerful daemons</string>
+    <string name="pref_special_service_summary">Creates daemons for gift management or automatic message sending.</string>
+    <string name="pref_special_service_default" translatable="false">false</string>
 
     <string name="pref_category_contacts_sort_title">Contact sort</string>
 
+    <string name="pref_contacts_sort_list_key" translatable="false">contacts_sort_list</string>
     <string name="pref_contacts_sort_list_title">Sort</string>
     <string name="pref_contacts_sort_list_summary">Select the sort mode of contacts</string>
-    <string name="pref_contacts_sort_list_key" translatable="false">contacts_sort_list</string>
     <string-array name="pref_contacts_sort_list_array">
         <item>By Name</item>
         <item>By Anniversary</item>
@@ -163,9 +167,9 @@
         <item>@string/pref_contacts_sort_list_value_days_left</item>
     </string-array>
 
+    <string name="pref_contacts_order_list_key" translatable="false">contacts_order_list</string>
     <string name="pref_contacts_order_list_title">Order</string>
     <string name="pref_contacts_order_list_summary">Ascending or Descending</string>
-    <string name="pref_contacts_order_list_key" translatable="false">contacts_order_list</string>
     <string-array name="pref_contacts_order_list_array">
         <item>Ascending</item>
         <item>Descending</item>
@@ -180,9 +184,9 @@
 
     <string name="pref_category_theme_title">Theme</string>
 
+    <string name="pref_theme_key" translatable="false">themes_sort_list</string>
     <string name="pref_theme_title">Theme Selection</string>
     <string name="pref_theme_summary">Select the theme of the application</string>
-    <string name="pref_theme_key" translatable="false">themes_sort_list</string>
     <string-array name="pref_theme_array">
         <item>Chocolate</item>
     </string-array>

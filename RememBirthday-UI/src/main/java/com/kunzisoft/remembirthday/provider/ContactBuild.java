@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday.database;
+package com.kunzisoft.remembirthday.provider;
 
 import android.content.Context;
 import android.database.Cursor;
