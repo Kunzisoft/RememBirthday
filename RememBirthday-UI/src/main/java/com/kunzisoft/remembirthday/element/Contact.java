@@ -28,7 +28,7 @@ public class Contact implements Parcelable{
     private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
-    private CalendarEvent birthdayEvent;
+    private EventWithoutYear birthdayEvent;
     private List<PhoneNumber> phoneNumbers;
 
     public Contact(long id, String lookupKey, String name) {
@@ -139,17 +139,13 @@ public class Contact implements Parcelable{
 
     public void setBirthday(DateUnknownYear date) {
         this.birthday = date;
-        if(date != null) {
-            setBirthdayEvent(new CalendarEvent(date.getDate()));
-        } else
-            setBirthdayEvent(null);
     }
 
-    public CalendarEvent getBirthdayEvent() {
+    public EventWithoutYear getBirthdayEvent() {
         return birthdayEvent;
     }
 
-    private void setBirthdayEvent(CalendarEvent birthdayEvent) {
+    public void setBirthdayEvent(EventWithoutYear birthdayEvent) {
         this.birthdayEvent = birthdayEvent;
     }
 

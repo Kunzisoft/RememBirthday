@@ -125,12 +125,12 @@ public class CalendarProvider {
         }
     }
 
-    public static void cleanTables(Context context, ContentResolver contentResolver, long calendarId) {
+    public static void cleanTables(Context context, long calendarId) {
 
         // empty table
         // with additional selection of calendar id, necessary on Android < 4 to remove events only
         // from birthday calendar
-        int delEventsRows = contentResolver.delete(getBirthdayAdapterUri(context, CalendarContract.Events.CONTENT_URI),
+        int delEventsRows = context.getContentResolver().delete(getBirthdayAdapterUri(context, CalendarContract.Events.CONTENT_URI),
                 CalendarContract.Events.CALENDAR_ID + " = ?", new String[]{String.valueOf(calendarId)});
         Log.i(TAG, "Events of birthday calendar is now empty, deleted " + delEventsRows
                 + " rows!");

@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,26 +22,18 @@ import com.kunzisoft.remembirthday.account.CalendarAccount;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.Reminder;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
 import com.kunzisoft.remembirthday.provider.EventProvider;
-
-import org.joda.time.DateTime;
+import com.kunzisoft.remembirthday.provider.ReminderProvider;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @SuppressLint("NewApi")
 public class CalendarSyncAdapterService extends Service {
 
     private static final String TAG = "CalendarSyncService";
-
-    /**
-     * Manage calendar between X years and Y Years of current year
-     */
-    private static final int X_YEAR = 3;
-    private static final int Y_YEAR = 5;
 
     public CalendarSyncAdapterService() {
         super();
@@ -75,46 +68,31 @@ public class CalendarSyncAdapterService extends Service {
 
         // Sync flow:
         // 1. Clear events table for this account completely
-        CalendarProvider.cleanTables(context, contentResolver, calendarId);
+        CalendarProvider.cleanTables(context, calendarId);
         // 2. Get birthdays from contacts
         // 3. Create events and reminders for each birthday
 
-        // collection of birthdays that will later be added to the calendar
-        ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
+        List<ContactEventOperation> contactEventOperationList = new ArrayList<>();
+        ArrayList<ContentProviderOperation> reminderOperationList = new ArrayList<>();
 
-        // iterate through all Contact Events
-        List<Contact> contactList = EventProvider.getContacts(context, contentResolver);
+        // iterate through all Contact
+        List<Contact> contactList = ContactProvider.getAllContacts(context);
 
         int backRef = 0;
         for (Contact contact : contactList) {
+            ContactEventOperation contactEventOperation = new ContactEventOperation(contact);
 
-            /*
-             * Insert events for the past 3 years and the next 5 years.
-             */
-            Calendar currCal = Calendar.getInstance();
-            int currYear = currCal.get(Calendar.YEAR);
-            int startYear = currYear - X_YEAR;
-            int endYear = currYear + Y_YEAR;
+            for (CalendarEvent calendarEvent : contact.getBirthdayEvent().getEventsAroundThisYear()) {
 
-            for (int iteratedYear = startYear; iteratedYear <= endYear; iteratedYear++) {
-                Log.d(TAG, "iteratedYear: " + iteratedYear);
-
-                // calculate age
-                int age = iteratedYear - new DateTime(contact.getBirthday().getDate()).getYear();
-                CalendarEvent calendarEvent = new CalendarEvent(contact.getBirthday().getDate());
-                calendarEvent.setYear(iteratedYear);
-                calendarEvent.setAllDay(true);
-                calendarEvent.setTitle(contact.getName() + " " + age);
-                // Assign new reminder with default values
-                int[] defaultTime = PreferencesManager.getDefaultTime(context);
-                for(int dayBefore : PreferencesManager.getDefaultDays(context))
-                calendarEvent.addReminder(new Reminder(calendarEvent.getDate(),
-                        defaultTime[0], defaultTime[1],
-                        dayBefore));
-                Log.d(TAG, "Add event : " + calendarEvent);
                 // TODO Ids
                 Log.d(TAG, "BackRef is " + backRef);
-                operationList.add(EventProvider.insert(context, calendarId, calendarEvent, contact));
+
+                // Add event operation in list of contact manager
+                contactEventOperation.addContentProviderOperation(
+                        EventProvider.insert(context, calendarId, calendarEvent, contact));
+
+                //TODO REMOVE REMINDERS BUG
+
                 /*
                  * Gets ContentProviderOperation to insert new reminder to the
                  * ContentProviderOperation with the given backRef. This is done using
@@ -122,57 +100,76 @@ public class CalendarSyncAdapterService extends Service {
                  */
                 int noOfReminderOperations = 0;
                 for(Reminder reminder : calendarEvent.getReminders()) {
-
-                    ContentProviderOperation.Builder builder = ContentProviderOperation
-                            .newInsert(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI));
-
-                    /*
-                     * add reminder to last added event identified by backRef
-                     *
-                     * see http://stackoverflow.com/questions/4655291/semantics-of-
-                     * withvaluebackreference
-                     */
-                    builder.withValueBackReference(CalendarContract.Reminders.EVENT_ID, backRef);
-                    builder.withValue(CalendarContract.Reminders.MINUTES, reminder.getMinutesBeforeEvent());
-                    builder.withValue(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-                    operationList.add(builder.build());
-                    Log.d(TAG, "Add reminder : " + reminder);
-
+                    reminderOperationList.add(ReminderProvider.insert(context, reminder, backRef));
                     noOfReminderOperations += 1;
                 }
-
                 // back references for the next reminders, 1 is for the event
                 backRef += 1 + noOfReminderOperations;
-
-                /*
-                 * intermediate commit - otherwise the binder transaction fails on large
-                 * operationList
-                 */
-                applyBatchByOperationListSize(operationList, contentResolver, 200);
             }
+
+            contactEventOperationList.add(contactEventOperation);
+
         }
 
-        /* Create events */
-        applyBatchByOperationListSize(operationList, contentResolver, 0);
+        /* Create events with reminders and linkEventContract
+         * intermediate commit - otherwise the binder transaction fails on large
+         * operationList
+         * TODO for large list > 200, make multiple apply
+         */
+        try {
+            Log.d(TAG, "Start applying the batch...");
+
+            /*
+             * Apply all Event Operations and do link with contact
+             */
+            for(ContactEventOperation contactEventOperation : contactEventOperationList) {
+                ContentProviderResult[] contentProviderResults =
+                        contentResolver.applyBatch(CalendarContract.AUTHORITY, contactEventOperation.getContentProviderOperations());
+
+                for(ContentProviderResult contentProviderResult : contentProviderResults) {
+                    Log.d(TAG, "EventOperation apply : " + contentProviderResult.toString());
+                    long eventId = Long.parseLong(contentProviderResult.uri.getLastPathSegment());
+                    //Log.d(TAG, contactEventOperation.getContact() + " : " + eventId);
+                }
+            }
+
+            /*
+             * Apply all Reminder Operations
+             */
+            ContentProviderResult[] contentProviderResults =
+                    contentResolver.applyBatch(CalendarContract.AUTHORITY, reminderOperationList);
+            for(ContentProviderResult contentProviderResult : contentProviderResults) {
+                Log.d(TAG, "ReminderOperation apply : " + contentProviderResult.toString());
+            }
+
+            Log.d(TAG, "Applying the batch was successful!");
+        } catch (Exception e) {
+            Log.e(TAG, "Applying batch error!", e);
+        }
     }
 
     /**
-     * Apply batch if operationList is larger than "listSize"
-     * @param operationList List of Operations
-     * @param contentResolver Content Resolver
-     * @param listSize Size minimal
+     * Utility class for link a contact to specific ContentProviderOperation of event
      */
-    private static void applyBatchByOperationListSize(ArrayList<ContentProviderOperation> operationList,
-                                               ContentResolver contentResolver,
-                                               int listSize) {
-        if (operationList.size() > listSize) {
-            try {
-                Log.d(TAG, "Start applying the batch...");
-                contentResolver.applyBatch(CalendarContract.AUTHORITY, operationList);
-                Log.d(TAG, "Applying the batch was successful!");
-            } catch (Exception e) {
-                Log.e(TAG, "Applying batch error!", e);
-            }
+    private static class ContactEventOperation {
+        private Contact contact;
+        private ArrayList<ContentProviderOperation>  contentProviderOperations;
+
+        ContactEventOperation(Contact contact) {
+            this.contact = contact;
+            this.contentProviderOperations = new ArrayList<>();
+        }
+
+        public Contact getContact() {
+            return contact;
+        }
+
+        void addContentProviderOperation(ContentProviderOperation contentProviderOperation) {
+            contentProviderOperations.add(contentProviderOperation);
+        }
+
+        ArrayList<ContentProviderOperation> getContentProviderOperations() {
+            return contentProviderOperations;
         }
     }
 

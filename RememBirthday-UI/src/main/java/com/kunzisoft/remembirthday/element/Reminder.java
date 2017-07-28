@@ -27,6 +27,7 @@ public class Reminder {
         this.dateEvent = new DateTime(this.dateEvent)
                 .withHourOfDay(0)
                 .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
                 .toDate();
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minuteOfHour;
@@ -38,6 +39,23 @@ public class Reminder {
      */
     public Reminder(Date anniversary, int hourOfDay, int minuteOfHour) {
         this(anniversary, hourOfDay, minuteOfHour, 0);
+    }
+
+    /**
+     * Create a copy of Reminder
+     * @param another
+     */
+    public Reminder(Reminder another) {
+        this.id = ID_UNDEFINED;
+        this.dateEvent = another.dateEvent;
+        this.dateEvent = another.dateEvent;
+        this.hourOfDay = another.hourOfDay;
+        this.minuteOfHour = another.minuteOfHour;
+        this.daysBefore = another.daysBefore;
+    }
+
+    public boolean hasId() {
+        return id != ID_UNDEFINED;
     }
 
     public long getId() {
@@ -82,5 +100,13 @@ public class Reminder {
 
     public void setMinuteOfHour(int minute) {
         this.minuteOfHour = minute;
+    }
+
+    @Override
+    public String toString() {
+        return "Reminder{" +
+                "id=" + id +
+                ", date=" + getDate() +
+                '}';
     }
 }

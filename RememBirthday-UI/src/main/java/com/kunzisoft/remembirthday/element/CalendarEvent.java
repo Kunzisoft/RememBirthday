@@ -19,6 +19,8 @@ import java.util.TimeZone;
 
 public class CalendarEvent implements Parcelable {
 
+    public static final long ID_UNDEFINED = -1;
+
     private long id;
     private Date dateStart;
     private Date dateStop;
@@ -27,17 +29,38 @@ public class CalendarEvent implements Parcelable {
     private List<Reminder> reminders;
 
 
-    public CalendarEvent(Date date) {
-        this(date, date);
+    public CalendarEvent(String title, Date date) {
+        this(title, date, date);
     }
 
-    public CalendarEvent(Date dateStart, Date dateStop) {
-        this.id = -1;
+    public CalendarEvent(String title, Date date, boolean allDay) {
+        this(title, date, date);
+        setAllDay(allDay);
+    }
+
+    public CalendarEvent(String title, Date dateStart, Date dateStop) {
+        this.id = ID_UNDEFINED;
         this.dateStart = dateStart;
         this.dateStop = dateStop;
         this.allDay = false;
-        this.title = "";
+        this.title = title;
         this.reminders = new ArrayList<>();
+    }
+
+    /**
+     * Create a copy of event
+     * @param another Base event
+     */
+    public CalendarEvent(CalendarEvent another) {
+        this.id = another.id;
+        this.dateStart = another.dateStart;
+        this.dateStop = another.dateStop;
+        setAllDay(another.allDay);
+        this.title = another.title;
+        this.reminders = new ArrayList<>();
+        for(Reminder reminder : another.reminders) {
+            reminders.add(new Reminder(reminder));
+        }
     }
 
     private CalendarEvent(Parcel in) {
@@ -47,6 +70,10 @@ public class CalendarEvent implements Parcelable {
         allDay = in.readByte() != 0;
         title = in.readString();
         reminders = in.readArrayList(Reminder.class.getClassLoader());
+    }
+
+    public boolean hasId() {
+        return id != ID_UNDEFINED;
     }
 
     public Long getId() {
