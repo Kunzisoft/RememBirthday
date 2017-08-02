@@ -1,16 +1,17 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Messenger;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,7 +20,6 @@ import com.kunzisoft.androidclearchroma.ChromaPreferenceFragmentCompat;
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.account.AccountResolver;
-import com.kunzisoft.remembirthday.account.BackgroundStatusHandler;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.preference.TimePreference;
@@ -31,12 +31,21 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
+
 /**
  * Fragment used to manage application preferences. <br />
  * WARNING : Use compatibility library known for display bugs
  * @see <a href="http://stackoverflow.com/questions/32070670/preferencefragmentcompat-requires-preferencetheme-to-be-set">StackOverflow Question</a>
  */
-public class SettingsFragment extends ChromaPreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+@RuntimePermissions
+public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
+        SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     private static final String TAG_FRAGMENT_DIALOG = "com.kunzisoft.remembirthday.TAG_FRAGMENT_DIALOG";
 
@@ -44,8 +53,9 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
 
     private EditTextPreference remindersDaysEditTextPreference;
 
-    private SwitchPreferenceCompat customCalendar;
     private AccountResolver accountResolver;
+
+    private SwitchPreferenceCompat preferenceCreateCalendar;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -65,15 +75,9 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
                 }
             });
         }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
         Preference openCalendar = findPreference(getString(R.string.pref_open_calendar_key));
         openCalendar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
             @SuppressLint("NewApi")
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -83,21 +87,27 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
         });
 
         accountResolver = CalendarAccount.getAccount(getContext());
-        customCalendar = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_create_calendar_key));
-        customCalendar.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (newValue instanceof Boolean) {
-                    Boolean boolVal = (Boolean) newValue;
-                    if (boolVal) {
-                        accountResolver.addAccountAndSync();
-                    } else {
-                        accountResolver.removeAccount();
-                    }
-                }
-                return true;
-            }
-        });
+        preferenceCreateCalendar = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_create_calendar_key));
+        preferenceCreateCalendar.setDefaultValue(false);
+        preferenceCreateCalendar.setOnPreferenceClickListener(this);
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        SettingsFragmentPermissionsDispatcher.onPreferencePermissionClickWithCheck(SettingsFragment.this);
+        onPreferencePermissionClick();
+        return false;
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_CALENDAR)
+    public void onPreferencePermissionClick() {
+        if (!preferenceCreateCalendar.isChecked()) {
+            preferenceCreateCalendar.setChecked(true);
+            accountResolver.addAccountAndSync();
+        } else {
+            preferenceCreateCalendar.setChecked(false);
+            accountResolver.removeAccount();
+        }
     }
 
     @Override
@@ -147,6 +157,13 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        SettingsFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
         // Verify values of notifications
         if (key.equals(getString(R.string.pref_reminders_days_key))) {
@@ -180,24 +197,37 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements 
 
         // set new color
         if (key.equals(getString(R.string.pref_calendar_color_key))) {
-            startServiceAction(MainIntentService.ACTION_CHANGE_COLOR);
+            MainIntentService.startServiceAction(getContext(), MainIntentService.ACTION_CHANGE_COLOR);
         }
     }
 
-    /**
-     * Start service with action, while executing, show progress
-     */
-    public void startServiceAction(String action) {
-        // Send all information needed to service to do in other thread
-        Intent intent = new Intent(getContext(), MainIntentService.class);
+    @OnShowRationale(Manifest.permission.WRITE_CALENDAR)
+    public void showRationaleForCalendar(final PermissionRequest request) {
+        new AlertDialog.Builder(getContext())
+                .setMessage(R.string.permission_write_calendar_rationale)
+                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-        // Create a new Messenger for the communication back
-        Messenger messenger = new Messenger(new BackgroundStatusHandler(null));
-        intent.putExtra(MainIntentService.EXTRA_MESSENGER, messenger);
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton(R.string.button_deny, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        request.cancel();
+                    }
+                })
+                .show();
+    }
 
-        intent.setAction(action);
+    @OnPermissionDenied(Manifest.permission.WRITE_CALENDAR)
+    void showDeniedForCamera() {
+        Toast.makeText(getContext(), R.string.permission_write_calendar_denied, Toast.LENGTH_LONG).show();
+    }
 
-        // start service with intent
-        getContext().startService(intent);
+    @OnNeverAskAgain(Manifest.permission.WRITE_CALENDAR)
+    void showNeverAskForCamera() {
+        Toast.makeText(getContext(), R.string.permission_write_calendar_never_ask, Toast.LENGTH_LONG).show();
     }
 }

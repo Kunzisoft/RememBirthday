@@ -99,6 +99,11 @@
     <string name="permission_get_accounts_denied">The application will not be able to manage calendar.</string>
     <string name="permission_get_accounts_never_ask">Never Ask</string>
 
+    <string name="permission_read_calendar_start">The application needs to write calendar to manage the custom calendar.</string>
+    <string name="permission_write_calendar_rationale">Write calendar permissions are required to manage the calendar.</string>
+    <string name="permission_write_calendar_denied">The application will not be able to manage calendar.</string>
+    <string name="permission_write_calendar_never_ask">Never Ask</string>
+
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
 
@@ -121,7 +126,7 @@
     <string name="pref_create_calendar_key" translatable="false">create_calendar_key</string>
     <string name="pref_create_calendar_title">Customized calendar</string>
     <string name="pref_create_calendar_summary">Create a customized calendar for manage notifications</string>
-    <string name="pref_create_calendar_default" translatable="false">true</string>
+    <string name="pref_create_calendar_default" translatable="false">false</string>
 
     <string name="pref_calendar_color_key" translatable="false">calendar_color_key</string>
     <string name="pref_calendar_color_title">Calendar color</string>

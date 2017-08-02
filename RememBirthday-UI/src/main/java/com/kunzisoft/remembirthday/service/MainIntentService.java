@@ -1,8 +1,10 @@
 package com.kunzisoft.remembirthday.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -10,6 +12,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.account.BackgroundStatusHandler;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
 
 /**
@@ -22,6 +25,7 @@ public class MainIntentService extends IntentService {
 
     /* possible actions */
     public static final String ACTION_MANUAL_COMPLETE_SYNC = "MANUAL_SYNC";
+    public static final String ACTION_CLEAN = "CLEAN";
     public static final String ACTION_CHANGE_COLOR = "CHANGE_COLOR";
 
     private Messenger mMessenger;
@@ -31,41 +35,65 @@ public class MainIntentService extends IntentService {
     }
 
     /**
+     * Start service with action, while executing, show progress
+     */
+    public static void startServiceAction(Context context, String action) {
+        startServiceAction(context, action, new BackgroundStatusHandler(null));
+    }
+
+    public static void startServiceAction(Context context, String action, Handler handler) {
+        Intent intent = new Intent(context, MainIntentService.class);
+
+        // Create a new Messenger for the communication back
+        if (handler != null) {
+            Messenger messenger = new Messenger(handler);
+            intent.putExtra(MainIntentService.EXTRA_MESSENGER, messenger);
+        }
+        intent.setAction(action);
+
+        // start service with intent
+        context.startService(intent);
+    }
+
+    /**
      * The IntentService calls this method from the default worker thread with the intent that
      * started the service. When this method returns, IntentService stops the service, as
      * appropriate.
      */
     @Override
     protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras == null) {
-            Log.e(getClass().getSimpleName(), "Extras bundle is null!");
-        } else if (extras.containsKey(EXTRA_MESSENGER)) {
-            mMessenger = (Messenger) extras.get(EXTRA_MESSENGER);
-        }
-        setProgressCircleWithHandler(true);
+        // Only if calendar is active
+        if(PreferencesManager.isCustomCalendarActive(this)) {
 
-        if (intent.getAction() == null) {
-            Log.e(getClass().getSimpleName(), "Intent must contain an action!");
-            return;
-        }
-        String action = intent.getAction();
+            Bundle extras = intent.getExtras();
+            if (extras == null) {
+                Log.e(getClass().getSimpleName(), "Extras bundle is null!");
+            } else if (extras.containsKey(EXTRA_MESSENGER)) {
+                mMessenger = (Messenger) extras.get(EXTRA_MESSENGER);
+            }
+            setProgressCircleWithHandler(true);
 
-        // execute action
-        switch (action) {
-            case ACTION_CHANGE_COLOR:
-                // update calendar color if enabled
-                if (CalendarAccount.isAccountActivated(this)) {
-                    CalendarProvider.updateCalendarColor(this);
-                }
-                break;
-            case ACTION_MANUAL_COMPLETE_SYNC:
-                // perform blocking sync
-                CalendarSyncAdapterService.performSync(this);
-                break;
-        }
+            if (intent.getAction() == null) {
+                Log.e(getClass().getSimpleName(), "Intent must contain an action!");
+                return;
+            }
+            String action = intent.getAction();
 
-        setProgressCircleWithHandler(false);
+            // execute action
+            switch (action) {
+                case ACTION_CHANGE_COLOR:
+                    // update calendar color if enabled
+                    if (CalendarAccount.isAccountActivated(this)) {
+                        CalendarProvider.updateCalendarColor(this);
+                    }
+                    break;
+                case ACTION_MANUAL_COMPLETE_SYNC:
+                    // perform blocking sync
+                    CalendarSyncAdapterService.performSync(this);
+                    break;
+            }
+            setProgressCircleWithHandler(false);
+        }
     }
 
     private void setProgressCircleWithHandler(boolean value) {

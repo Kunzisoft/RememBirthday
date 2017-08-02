@@ -23,7 +23,6 @@ import com.kunzisoft.remembirthday.account.AccountResolver;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.element.EventWithoutYear;
 import com.kunzisoft.remembirthday.element.Reminder;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
@@ -134,31 +133,6 @@ public class CalendarSyncAdapterService extends Service {
             Log.d(TAG, "Applying the batch was successful!");
         } catch (RemoteException|OperationApplicationException e) {
             Log.e(TAG, "Applying batch error!", e);
-        }
-    }
-
-    /**
-     * Utility class for link a contact to specific ContentProviderOperation of event
-     */
-    private static class ContactEventOperation {
-        private Contact contact;
-        private ArrayList<ContentProviderOperation>  contentProviderOperations;
-
-        ContactEventOperation(Contact contact) {
-            this.contact = contact;
-            this.contentProviderOperations = new ArrayList<>();
-        }
-
-        public Contact getContact() {
-            return contact;
-        }
-
-        void addContentProviderOperation(ContentProviderOperation contentProviderOperation) {
-            contentProviderOperations.add(contentProviderOperation);
-        }
-
-        ArrayList<ContentProviderOperation> getContentProviderOperations() {
-            return contentProviderOperations;
         }
     }
 

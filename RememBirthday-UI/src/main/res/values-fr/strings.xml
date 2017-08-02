@@ -92,6 +92,12 @@
     <string name="permission_get_accounts_start">L\'application a besoin d\'obtenir l\'accès aux comptes pour gérer le calendrier personnalisé.</string>
     <string name="permission_get_accounts_rationale">Les autorisations de récupération des comptes sont nécessaires pour gérer le calendrier.</string>
     <string name="permission_get_accounts_denied">L\'application ne sera pas en mesure de gérer le calendrier.</string>
+    <string name="permission_get_accounts_never_ask">Ne plus demander</string>
+
+    <string name="permission_read_calendar_start">L\'application a besoin d\'écrire le calendrier pour gérer le calendrier personnalisé.</string>
+    <string name="permission_write_calendar_rationale">Les permissions d\'écriture du calendrier sont nécessaires pour gérer le calendrier.</string>
+    <string name="permission_write_calendar_denied">L\'application ne sera pas en mesure de gérer le calendrier.</string>
+    <string name="permission_write_calendar_never_ask">Ne plus demander</string>
 
     <string name="button_allow">Autoriser</string>
     <string name="button_deny">Refuser</string>

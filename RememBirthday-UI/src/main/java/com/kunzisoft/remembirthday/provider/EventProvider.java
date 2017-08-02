@@ -137,6 +137,7 @@ public class EventProvider {
         if(contact.hasBirthday()) {
             String[] projection = new String[] {
                     CalendarContract.Events._ID,
+                    CalendarContract.Events.ORIGINAL_ID,
                     CalendarContract.Events.TITLE,
                     CalendarContract.Events.DESCRIPTION,
                     CalendarContract.Events.DTSTART,
@@ -145,6 +146,7 @@ public class EventProvider {
             String where = CalendarContract.Events.TITLE + " LIKE ?";
             String[] whereParam = {
                     "'%" + contact.getName() + "%'"};
+            // TODO better retrieve
 
             ContentResolver contentResolver = context.getContentResolver();
             Cursor cursor = contentResolver.query(
@@ -155,7 +157,7 @@ public class EventProvider {
                     null);
             if(cursor != null) {
                 cursor.moveToFirst();
-                while (cursor.isAfterLast()) {
+                while (!cursor.isAfterLast()) {
                     long id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.ORIGINAL_ID));
                     String title = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
                     String description = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));

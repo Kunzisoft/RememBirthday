@@ -7,11 +7,9 @@ import android.accounts.AccountManagerFuture;
 import android.app.AlarmManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Messenger;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -110,27 +108,9 @@ public class AccountResolver {
      * Force a manual sync now!
      */
     public void manualSync() {
-        Log.d(getClass().getSimpleName(), "Force manual synchronisation");
-
-        // Disabled: Force resync in Android OS
-        // Bundle extras = new Bundle();
-        // extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        // ContentResolver.requestSync(Constants.ACCOUNT, Constants.CONTENT_AUTHORITY, extras);
-
-        // Enabled: Force resync in own thread:
-        // Send all information needed to service to do in other thread
-        //TODO Service
-        Intent intent = new Intent(context, MainIntentService.class);
-
-        // Create a new Messenger for the communication back
-        if (backgroundStatusHandler != null) {
-            Messenger messenger = new Messenger(backgroundStatusHandler);
-            intent.putExtra(MainIntentService.EXTRA_MESSENGER, messenger);
-        }
-        intent.setAction(MainIntentService.ACTION_MANUAL_COMPLETE_SYNC);
-
-        // start service with intent
-        context.startService(intent);
+        MainIntentService.startServiceAction(context,
+                MainIntentService.ACTION_MANUAL_COMPLETE_SYNC,
+                backgroundStatusHandler);
     }
 
     /**
@@ -150,37 +130,6 @@ public class AccountResolver {
         }
         return false;
     }
-
-    /*
-    @OnShowRationale(Manifest.permission.GET_ACCOUNTS)
-    void showRationaleForGetAccounts(final PermissionRequest request) {
-        new AlertDialog.Builder(context)
-                .setMessage(R.string.permission_get_accounts_rationale)
-                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        request.proceed();
-                    }
-                })
-                .setNegativeButton(R.string.button_deny, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        request.cancel();
-                    }
-                })
-                .show();
-    }
-
-    @OnPermissionDenied(Manifest.permission.GET_ACCOUNTS)
-    void showDeniedForGetAccounts() {
-        Toast.makeText(context, R.string.permission_get_accounts_denied, Toast.LENGTH_LONG).show();
-    }
-
-    @OnNeverAskAgain(Manifest.permission.GET_ACCOUNTS)
-    void showNeverAskForGetAccounts() {
-        Toast.makeText(context, R.string.permission_get_accounts_never_ask, Toast.LENGTH_LONG).show();
-    }
-    */
 
     public String getName() {
         return name;

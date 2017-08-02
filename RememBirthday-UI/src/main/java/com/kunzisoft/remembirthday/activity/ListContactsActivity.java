@@ -21,6 +21,7 @@ import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.provider.AddBirthdayToContactTask;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
@@ -90,33 +91,33 @@ public class ListContactsActivity extends AppCompatActivity
                 finish();
 
                 // Add new event in calendar
-                // TODO Encapsulate
-                long calendarId = CalendarProvider.getCalendar(ListContactsActivity.this);
-                if (calendarId != -1) {
-                    CalendarEvent event = CalendarEvent.buildCalendarEventFromContact(
-                            ListContactsActivity.this,
-                            contactWithRawIdSelected);
-                    allOperationList.add(
-                            EventProvider.insert(ListContactsActivity.this,
-                                    calendarId,
-                                    event,
-                                    contactWithRawIdSelected));
-                    for(Reminder reminder : event.getReminders()) {
+                if(PreferencesManager.isCustomCalendarActive(ListContactsActivity.this)) {
+                    // TODO Encapsulate
+                    long calendarId = CalendarProvider.getCalendar(ListContactsActivity.this);
+                    if (calendarId != -1) {
+                        CalendarEvent event = CalendarEvent.buildCalendarEventFromContact(
+                                ListContactsActivity.this,
+                                contactWithRawIdSelected);
                         allOperationList.add(
-                                ReminderProvider.insert(
-                                        ListContactsActivity.this,
-                                        reminder,
-                                        0));
+                                EventProvider.insert(ListContactsActivity.this,
+                                        calendarId,
+                                        event,
+                                        contactWithRawIdSelected));
+                        for (Reminder reminder : event.getReminders()) {
+                            allOperationList.add(
+                                    ReminderProvider.insert(
+                                            ListContactsActivity.this,
+                                            reminder,
+                                            0));
+                        }
+                    } else {
+                        Log.e("CalendarSyncAdapter", "Unable to create calendar");
                     }
-                } else {
-                    Log.e("CalendarSyncAdapter", "Unable to create calendar");
-                }
-
-                // TODO Apply batch for all
-                try {
-                    getContentResolver().applyBatch(CalendarContract.AUTHORITY, allOperationList);
-                } catch (RemoteException | OperationApplicationException e) {
-                    Log.e(getClass().getSimpleName(), "Applying batch error!", e);
+                    try {
+                        getContentResolver().applyBatch(CalendarContract.AUTHORITY, allOperationList);
+                    } catch (RemoteException | OperationApplicationException e) {
+                        Log.e(getClass().getSimpleName(), "Applying batch error!", e);
+                    }
                 }
             }
 
