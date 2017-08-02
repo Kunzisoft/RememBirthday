@@ -18,13 +18,6 @@ public class ReminderNotificationsAdapter extends AbstractReminderAdapter<Remind
 
     public ReminderNotificationsAdapter(Context context, DateUnknownYear anniversary) {
         super(context, anniversary);
-
-        // Build default elements
-        int[] defaultDays = PreferencesManager.getDefaultDays(context);
-        // TODO get items from saved element
-        for (int day : defaultDays) {
-            addDefaultItem(day);
-        }
     }
 
     @Override

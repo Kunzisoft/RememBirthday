@@ -25,10 +25,11 @@ import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
 import com.kunzisoft.remembirthday.animation.AnimationCircle;
-import com.kunzisoft.remembirthday.provider.ContactBuild;
+import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.PhoneNumber;
+import com.kunzisoft.remembirthday.element.Reminder;
 import com.kunzisoft.remembirthday.exception.NoPhoneNumberException;
 import com.kunzisoft.remembirthday.exception.PhoneNumberNotInitializedException;
 import com.kunzisoft.remembirthday.factory.ActionContactMenu;
@@ -43,6 +44,9 @@ import com.kunzisoft.remembirthday.factory.MenuContact;
 import com.kunzisoft.remembirthday.factory.MenuContactCreator;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.ContactBuild;
+import com.kunzisoft.remembirthday.provider.EventProvider;
+import com.kunzisoft.remembirthday.provider.ReminderProvider;
 import com.kunzisoft.remembirthday.provider.RemoveBirthdayFromContactTask;
 import com.kunzisoft.remembirthday.provider.RetrievePhoneNumberFromContactTask;
 import com.kunzisoft.remembirthday.utility.IntentCall;
@@ -55,7 +59,7 @@ import java.util.List;
  */
 public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
-    private static final String TAG = "DETAILS_BUDDY_FRAGMENT";
+    private static final String TAG = "DetailsBuddyFragment";
 
     private static final String CONTACT_KEY = "CONTACT_KEY";
 
@@ -179,6 +183,17 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 // Add default reminders and link view to adapter
                 remindersAdapter = new ReminderNotificationsAdapter(getContext(), contact.getBirthday());
                 remindersListView.setAdapter(remindersAdapter);
+
+                // Build default elements
+                CalendarEvent event = EventProvider.getNextEventFromContact(getContext(), contact);
+                if(event != null) {
+                    List<Reminder> reminders = ReminderProvider.getRemindersFromEvent(getContext(), event);
+                    event.addReminders(reminders);
+                    Log.d(TAG, "Get event from calendar : " + event.toString());
+                    remindersAdapter.addReminders(reminders);
+                } else {
+                    Log.e(TAG, "Error when get event from calendar");
+                }
             }
 
             // Build adapters only if daemons active

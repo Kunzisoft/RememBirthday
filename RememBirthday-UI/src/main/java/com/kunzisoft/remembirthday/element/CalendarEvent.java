@@ -1,7 +1,6 @@
 package com.kunzisoft.remembirthday.element;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
@@ -117,7 +116,7 @@ public class CalendarEvent implements Parcelable {
      * @return
      */
     public int getYear() {
-        return new DateTime(getDate().getDate()).getYear();
+        return new DateTime(getDate()).getYear();
     }
 
     /**
@@ -201,7 +200,11 @@ public class CalendarEvent implements Parcelable {
     }
 
     public void addReminder(Reminder reminder) {
-        reminders.add(reminder);
+        this.reminders.add(reminder);
+    }
+
+    public void addReminders(List<Reminder> reminders) {
+        this.reminders.addAll(reminders);
     }
 
     public List<Reminder> getReminders() {
@@ -215,10 +218,13 @@ public class CalendarEvent implements Parcelable {
     @Override
     public String toString() {
         return "CalendarEvent{" +
-                "dateStart=" + dateStart +
+                "id=" + id +
+                ", dateStart=" + dateStart +
                 ", dateStop=" + dateStop +
                 ", allDay=" + allDay +
                 ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", reminders=" + reminders +
                 '}';
     }
 

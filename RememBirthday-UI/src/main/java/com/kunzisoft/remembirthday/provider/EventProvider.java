@@ -16,6 +16,7 @@ import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.Date;
 
@@ -131,47 +132,54 @@ public class EventProvider {
             - Get events days of anniversary and filter with name (use for the first time)
             - Create links Event-Contact in custom table (may have bugs if event remove manually from calendar)
         */
-
         CalendarEvent calendarEvent = null;
 
         if(contact.hasBirthday()) {
             String[] projection = new String[] {
                     CalendarContract.Events._ID,
-                    CalendarContract.Events.ORIGINAL_ID,
                     CalendarContract.Events.TITLE,
                     CalendarContract.Events.DESCRIPTION,
                     CalendarContract.Events.DTSTART,
                     CalendarContract.Events.DTEND,
                     CalendarContract.Events.ALL_DAY};
-            String where = CalendarContract.Events.TITLE + " LIKE ?";
+            String where = CalendarContract.Events.DTSTART + "=?" +
+                    " AND " + CalendarContract.Events.TITLE + " LIKE ?";
             String[] whereParam = {
-                    "'%" + contact.getName() + "%'"};
+                    String.valueOf(new DateTime(contact.getNextBirthday())
+                            .withZoneRetainFields(DateTimeZone.UTC)
+                            .toDateTime().toDate().getTime()),
+                    "%" + contact.getName() + "%"};
             // TODO better retrieve
 
             ContentResolver contentResolver = context.getContentResolver();
             Cursor cursor = contentResolver.query(
                     CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Events.CONTENT_URI),
                     projection,
-                    null,
-                    null,
+                    where,
+                    whereParam,
                     null);
             if(cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    long id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.ORIGINAL_ID));
+                    long id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events._ID));
                     String title = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
-                    String description = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
-                    Date dateStart = new DateTime(
-                            cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)))
-                            .toDate();
-                    Date dateEnd = new DateTime(
-                            cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND)))
-                            .toDate();
+                    String description = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION));
                     boolean allDay = cursor.getInt(cursor.getColumnIndex(CalendarContract.Events.ALL_DAY)) > 0;
-                    if(allDay)
+                    if(allDay) {
+                        Date dateStart = new DateTime(
+                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)),
+                                        DateTimeZone.UTC).toDate();
+                        // TODO Bug with date
                         calendarEvent = new CalendarEvent(title, dateStart, true);
-                    else
+                    } else {
+                        Date dateStart = new DateTime(
+                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)))
+                                .toDate();
+                        Date dateEnd = new DateTime(
+                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND)))
+                                .toDate();
                         calendarEvent = new CalendarEvent(title, dateStart, dateEnd);
+                    }
                     calendarEvent.setDescription(description);
                     calendarEvent.setId(id);
                     cursor.moveToNext();
