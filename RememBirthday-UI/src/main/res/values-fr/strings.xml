@@ -163,4 +163,8 @@
     <string name="account_pref_header">Paramètres</string>
     <string name="account_pref_settings">Configurer les rappels d\'anniversaires</string>
 
+    <!-- Event -->
+    <string name="event_title">"Anniversaire de %1$s (%2$d ans)"</string>
+    <string name="event_title_without_year">"Anniversaire de %1$s</string>
+
 </resources>

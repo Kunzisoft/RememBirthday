@@ -12,12 +12,8 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.element.EventWithoutYear;
-import com.kunzisoft.remembirthday.element.Reminder;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +26,28 @@ import java.util.List;
 public class ContactProvider {
 
     private static final String TAG = "ContactProvider";
+
+    /**
+     * Return Contact from URI
+     * @param context Context to call
+     * @param contactData Contact URI
+     * @return Contact from content resolver or null if not fund
+     */
+    public static Contact getContactFromURI(Context context, Uri contactData) {
+        Contact contact = null;
+        Cursor cursor =  context.getContentResolver().query(contactData, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contact = new Contact(
+                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)),
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Data.LOOKUP_KEY)),
+                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID)),
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME)));
+            }
+            cursor.close();
+        }
+        return contact;
+    }
 
     /**
      * Get Cursor of contacts with events, but only those from Accounts not in our blacklist!
@@ -192,10 +210,6 @@ public class ContactProvider {
             int eventDateColumn = matrixCursor
                     .getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
             int displayNameColumn = matrixCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            int eventTypeColumn = matrixCursor
-                    .getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE);
-            int eventCustomLabelColumn = matrixCursor
-                    .getColumnIndex(ContactsContract.CommonDataKinds.Event.LABEL);
             int eventLookupKeyColumn = matrixCursor
                     .getColumnIndex(ContactsContract.CommonDataKinds.Event.LOOKUP_KEY);
 
@@ -203,23 +217,7 @@ public class ContactProvider {
             while (matrixCursor.moveToNext()) {
                 Contact contact = new Contact(matrixCursor.getString(displayNameColumn));
                 contact.setBirthday(DateUnknownYear.stringToDate(matrixCursor.getString(eventDateColumn)));
-
-                if(contact.getBirthday() != null) {
-
-                    CalendarEvent calendarEvent = new CalendarEvent(
-                            contact.getName(),
-                            contact.getBirthday().getDate(),
-                            true);
-                    int[] defaultTime = PreferencesManager.getDefaultTime(context);
-                    calendarEvent.addReminder(
-                            new Reminder(calendarEvent.getDate(), defaultTime[0], defaultTime[1]));
-
-                    contact.setBirthdayEvent(new EventWithoutYear(calendarEvent));
-                }
-                //contact.setType(matrixCursor.getInt(eventTypeColumn));
-                //contact.setLabel(matrixCursor.getString(eventCustomLabelColumn));
                 contact.setLookUpKey(matrixCursor.getString(eventLookupKeyColumn));
-
                 contactList.add(contact);
             }
         } finally {

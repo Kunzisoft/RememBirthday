@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.CalendarProvider;
+import com.kunzisoft.remembirthday.provider.EventProvider;
 import com.kunzisoft.remembirthday.provider.UpdateBirthdayToContactTask;
 
 /**
@@ -14,7 +17,7 @@ import com.kunzisoft.remembirthday.provider.UpdateBirthdayToContactTask;
  * @author joker on 06/07/17.
  */
 public class AbstractBuddyActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, BirthdayDialogOpen {
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, AnniversaryDialogOpen {
 
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
 
@@ -68,7 +71,7 @@ public class AbstractBuddyActivity extends AppCompatActivity
     }
 
     @Override
-    public void openDialogSelection(long rawContactId) {
+    public void openAnniversaryDialogSelection(Contact contact) {
         try {
             dialogSelection.show(getSupportFragmentManager(), TAG_SELECT_DIALOG);
         } catch(NullPointerException e) {
@@ -82,6 +85,10 @@ public class AbstractBuddyActivity extends AppCompatActivity
         CallbackAction.showMessage(this, action, exception);
     }
 
+
+    /**
+     * Utility class for manage click on Anniversary Dialog Listener for each element
+     */
     private class OnClickDialogListener implements BirthdayDialogFragment.OnClickBirthdayListener {
 
         private Contact contact;
@@ -101,6 +108,22 @@ public class AbstractBuddyActivity extends AppCompatActivity
                             dateUnknownYear);
             updateBirthdayToContactTask.setCallbackActionBirthday(AbstractBuddyActivity.this);
             updateBirthdayToContactTask.execute();
+
+            // Update event in calendar
+            // TODO UPDATE
+            /*
+            long calendarId = CalendarProvider.getCalendar(AbstractBuddyActivity.this);
+            if (calendarId != -1) {
+                EventProvider.insert(AbstractBuddyActivity.this,
+                        calendarId,
+                        CalendarEvent.buildCalendarEventFromContact(
+                                AbstractBuddyActivity.this,
+                                contact),
+                        contact);
+            } else {
+                Log.e("CalendarSyncAdapter", "Unable to create calendar");
+            }
+            */
         }
 
         @Override

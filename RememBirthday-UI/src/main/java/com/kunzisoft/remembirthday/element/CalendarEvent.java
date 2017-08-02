@@ -1,8 +1,13 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
+
+import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
@@ -26,8 +31,27 @@ public class CalendarEvent implements Parcelable {
     private Date dateStop;
     private boolean allDay;
     private String title;
+    private String description;
     private List<Reminder> reminders;
 
+    public static String getEventTitleFromContact(Context context, Contact contact) {
+        if (contact.hasBirthday()) {
+            if(!contact.getBirthday().containsYear())
+                return context.getString(R.string.event_title_without_year, contact.getName());
+            else
+                return context.getString(R.string.event_title, contact.getName(), contact.getAgeToNextBirthday());
+        }
+        return "";
+    }
+
+    public static CalendarEvent buildCalendarEventFromContact(Context context, Contact contact) {
+        CalendarEvent event = new CalendarEvent(getEventTitleFromContact(context, contact),
+                contact.getNextBirthday(), true);
+        int[] defaultTime = PreferencesManager.getDefaultTime(context);
+        event.addReminder(
+                new Reminder(event.getDate(), defaultTime[0], defaultTime[1]));
+        return event;
+    }
 
     public CalendarEvent(String title, Date date) {
         this(title, date, date);
@@ -166,6 +190,14 @@ public class CalendarEvent implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void addReminder(Reminder reminder) {

@@ -1,27 +1,40 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.app.Activity;
+import android.content.ContentProviderOperation;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.element.CalendarEvent;
+import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.element.Reminder;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.provider.AddBirthdayToContactTask;
+import com.kunzisoft.remembirthday.provider.CalendarProvider;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
+import com.kunzisoft.remembirthday.provider.EventProvider;
+import com.kunzisoft.remembirthday.provider.ReminderProvider;
+
+import java.util.ArrayList;
 
 /**
  * Created by joker on 19/01/17.
  */
 public class ListContactsActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, BirthdayDialogOpen {
+        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, AnniversaryDialogOpen {
 
     public static final int INSERT_BIRTHDAY_RESULT_CODE = 1619;
     private static final int INSERT_CONTACT_RESULT_CODE = 1567;
@@ -29,7 +42,7 @@ public class ListContactsActivity extends AppCompatActivity
     // Dialog for birthday selection
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
     private BirthdayDialogFragment dialogSelection;
-    private long rawContactId;
+    private Contact contactWithRawIdSelected;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,27 +73,61 @@ public class ListContactsActivity extends AppCompatActivity
         dialogSelection.setOnClickListener(new BirthdayDialogFragment.OnClickBirthdayListener() {
             @Override
             public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
+                contactWithRawIdSelected.setBirthday(dateUnknownYear);
+
+                // All operations to apply
+                ArrayList<ContentProviderOperation> allOperationList = new ArrayList<>();
+
                 // Add new birthday in database
                 AddBirthdayToContactTask addBirthdayToContactTask =
                         new AddBirthdayToContactTask(
                                 ListContactsActivity.this,
-                                rawContactId,
+                                contactWithRawIdSelected.getRawId(),
                                 dateUnknownYear);
                 addBirthdayToContactTask.setCallbackActionBirthday(ListContactsActivity.this);
                 addBirthdayToContactTask.execute();
                 setResult(Activity.RESULT_OK);
                 finish();
+
+                // Add new event in calendar
+                // TODO Encapsulate
+                long calendarId = CalendarProvider.getCalendar(ListContactsActivity.this);
+                if (calendarId != -1) {
+                    CalendarEvent event = CalendarEvent.buildCalendarEventFromContact(
+                            ListContactsActivity.this,
+                            contactWithRawIdSelected);
+                    allOperationList.add(
+                            EventProvider.insert(ListContactsActivity.this,
+                                    calendarId,
+                                    event,
+                                    contactWithRawIdSelected));
+                    for(Reminder reminder : event.getReminders()) {
+                        allOperationList.add(
+                                ReminderProvider.insert(
+                                        ListContactsActivity.this,
+                                        reminder,
+                                        0));
+                    }
+                } else {
+                    Log.e("CalendarSyncAdapter", "Unable to create calendar");
+                }
+
+                // TODO Apply batch for all
+                try {
+                    getContentResolver().applyBatch(CalendarContract.AUTHORITY, allOperationList);
+                } catch (RemoteException | OperationApplicationException e) {
+                    Log.e(getClass().getSimpleName(), "Applying batch error!", e);
+                }
             }
 
             @Override
-            public void onClickNegativeButton(DateUnknownYear selectedDate) {
-            }
+            public void onClickNegativeButton(DateUnknownYear selectedDate) {}
         });
     }
 
     @Override
-    public void openDialogSelection(long rawContactId) {
-        this.rawContactId = rawContactId;
+    public void openAnniversaryDialogSelection(Contact contact) {
+        this.contactWithRawIdSelected = contact;
         dialogSelection.show(getSupportFragmentManager(), TAG_SELECT_DIALOG);
     }
 
@@ -108,13 +155,7 @@ public class ListContactsActivity extends AppCompatActivity
             case (INSERT_CONTACT_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
-                    Cursor cursor =  getContentResolver().query(contactData, null, null, null, null);
-                    if (cursor != null) {
-                        if (cursor.moveToFirst()) {
-                            rawContactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID));
-                        }
-                        cursor.close();
-                    }
+                    contactWithRawIdSelected = ContactProvider.getContactFromURI(this, contactData);
                 }
                 break;
         }

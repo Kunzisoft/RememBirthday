@@ -28,7 +28,6 @@ public class Contact implements Parcelable{
     private Uri imageThumbnailUri;
     private Uri imageUri;
     private DateUnknownYear birthday;
-    private EventWithoutYear birthdayEvent;
     private List<PhoneNumber> phoneNumbers;
 
     public Contact(long id, String lookupKey, String name) {
@@ -141,14 +140,6 @@ public class Contact implements Parcelable{
         this.birthday = date;
     }
 
-    public EventWithoutYear getBirthdayEvent() {
-        return birthdayEvent;
-    }
-
-    public void setBirthdayEvent(EventWithoutYear birthdayEvent) {
-        this.birthdayEvent = birthdayEvent;
-    }
-
     public boolean isPhoneNumberInit() {
         return phoneNumbers != null;
     }
@@ -205,6 +196,20 @@ public class Contact implements Parcelable{
     public int getAge() {
         if(birthday.containsYear())
             return Math.abs(birthday.getDeltaYears());
+        else
+            return -1;
+    }
+
+    /**
+     * Get years old of contact to next birthday
+     * @return Next years old of contact
+     */
+    public int getAgeToNextBirthday() {
+        if(birthday.containsYear())
+            if(birthday.nextAnniversaryIsToday())
+                return getAge();
+            else
+                return getAge() +1;
         else
             return -1;
     }

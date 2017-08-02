@@ -130,7 +130,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((BirthdayDialogOpen) getActivity()).openDialogSelection(contact.getRawId());
+                    ((AnniversaryDialogOpen) getActivity()).openAnniversaryDialogSelection(contact);
                 }
             });
 

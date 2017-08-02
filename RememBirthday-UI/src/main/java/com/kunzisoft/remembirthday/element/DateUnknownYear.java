@@ -128,6 +128,14 @@ public class DateUnknownYear implements Parcelable {
     }
 
     /**
+     * If next Anniversary of date is today
+     * @return True if it's the anniversary
+     */
+    public boolean nextAnniversaryIsToday() {
+        return getDeltaDaysInAYear() == 0;
+    }
+
+    /**
      * Gets the anniversary not yet passed
      * @return Next anniversary in the year
      */
@@ -289,6 +297,10 @@ public class DateUnknownYear implements Parcelable {
                 date = parseStringWithSimpleDateFormat(eventDateString, "--MM-dd", false);
             }
 
+            if (date == null) {
+                date = parseStringWithSimpleDateFormat(eventDateString, "MM-dd", false);
+            }
+
             // yyyyMMdd, HTC Desire
             if (date == null) {
                 if (eventDateString.length() == 8) {
@@ -302,7 +314,6 @@ public class DateUnknownYear implements Parcelable {
                         + " as a unix timestamp!");
                 try {
                     Date rawDate = new Date(Long.parseLong(eventDateString));
-
                 } catch (NumberFormatException e) {
                     Log.d(TAG, "Parsing failed!");
                 }
@@ -353,7 +364,6 @@ public class DateUnknownYear implements Parcelable {
             } else {
                 Log.e(TAG, "Event Date String " + eventDateString
                         + " could NOT be parsed! returning null!");
-
                 return null;
             }
         } else {

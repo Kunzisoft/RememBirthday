@@ -1,28 +1,23 @@
 package com.kunzisoft.remembirthday.provider;
 
-import android.accounts.Account;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.BaseColumns;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import org.joda.time.DateTime;
+
+import java.util.Date;
 
 /**
  * Created by joker on 27/07/17.
@@ -97,7 +92,8 @@ public class EventProvider {
 
         if(event.hasId()) {
             ContentProviderOperation.Builder builder;
-            builder = ContentProviderOperation.newUpdate(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
+            builder = ContentProviderOperation.newUpdate(
+                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
             // Push values
             assignValuesInBuilder(builder, event);
             return builder.build();
@@ -116,7 +112,8 @@ public class EventProvider {
 
         if(event.hasId()) {
             ContentProviderOperation.Builder builder;
-            builder = ContentProviderOperation.newDelete(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
+            builder = ContentProviderOperation.newDelete(
+                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
             return builder.build();
         } else {
             Log.e(TAG, "Can't delete the event, there is no id");
@@ -124,8 +121,64 @@ public class EventProvider {
         }
     }
 
-    public static List<CalendarEvent> getEventFromContact(Contact contact) {
-        return null;
+    /**
+     * Return each event from contact
+     * @param contact Contact associated with events
+     * @return Next event in the year or null if not fund
+     */
+    public static CalendarEvent getNextEventFromContact(Context context, Contact contact) {
+        /* Two ways
+            - Get events days of anniversary and filter with name (use for the first time)
+            - Create links Event-Contact in custom table (may have bugs if event remove manually from calendar)
+        */
+
+        CalendarEvent calendarEvent = null;
+
+        if(contact.hasBirthday()) {
+            String[] projection = new String[] {
+                    CalendarContract.Events._ID,
+                    CalendarContract.Events.TITLE,
+                    CalendarContract.Events.DESCRIPTION,
+                    CalendarContract.Events.DTSTART,
+                    CalendarContract.Events.DTEND,
+                    CalendarContract.Events.ALL_DAY};
+            String where = CalendarContract.Events.TITLE + " LIKE ?";
+            String[] whereParam = {
+                    "'%" + contact.getName() + "%'"};
+
+            ContentResolver contentResolver = context.getContentResolver();
+            Cursor cursor = contentResolver.query(
+                    CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Events.CONTENT_URI),
+                    projection,
+                    null,
+                    null,
+                    null);
+            if(cursor != null) {
+                cursor.moveToFirst();
+                while (cursor.isAfterLast()) {
+                    long id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.ORIGINAL_ID));
+                    String title = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
+                    String description = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
+                    Date dateStart = new DateTime(
+                            cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)))
+                            .toDate();
+                    Date dateEnd = new DateTime(
+                            cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND)))
+                            .toDate();
+                    boolean allDay = cursor.getInt(cursor.getColumnIndex(CalendarContract.Events.ALL_DAY)) > 0;
+                    if(allDay)
+                        calendarEvent = new CalendarEvent(title, dateStart, true);
+                    else
+                        calendarEvent = new CalendarEvent(title, dateStart, dateEnd);
+                    calendarEvent.setDescription(description);
+                    calendarEvent.setId(id);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        }
+
+        return calendarEvent;
     }
 
 

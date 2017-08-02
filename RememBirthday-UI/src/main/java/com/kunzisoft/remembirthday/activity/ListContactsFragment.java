@@ -54,11 +54,12 @@ public class ListContactsFragment extends AbstractListContactsFragment
         // Get raw contact id if undefined
         long contactRawId = ContactBuild.assignRawContactIdToContact(getContext(), contact);
         // TODO Verify if already a birthday
+        contact.setRawId(contactRawId);
 
         try {
-            ((BirthdayDialogOpen) getActivity()).openDialogSelection(contactRawId);
+            ((AnniversaryDialogOpen) getActivity()).openAnniversaryDialogSelection(contact);
         } catch(ClassCastException e) {
-            Log.e(TAG, "Wrong activity, must be 'BirthdayDialogOpen'");
+            Log.e(TAG, "Wrong activity, must be 'AnniversaryDialogOpen'");
         }
     }
 }

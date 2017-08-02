@@ -206,5 +206,8 @@
     <string name="account_pref_header">Settings</string>
     <string name="account_pref_settings">Configure Birthday Reminder</string>
 
+    <!-- Event -->
+    <string name="event_title">"%1$s's birthday (%2$d years old)"</string>
+    <string name="event_title_without_year">"%1$s's birthday</string>
 
 </resources>
