@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CalendarContract;
-import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Reminder;
@@ -61,7 +60,6 @@ public class ReminderProvider {
         builder.withValue(CalendarContract.Reminders.EVENT_ID, eventId);
         builder.withValue(CalendarContract.Reminders.MINUTES, reminder.getMinutesBeforeEvent());
         builder.withValue(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-        Log.d(TAG, "Add reminder : " + reminder);
         return builder.build();
     }
 
@@ -78,7 +76,6 @@ public class ReminderProvider {
         builder.withValueBackReference(CalendarContract.Reminders.EVENT_ID, backref);
         builder.withValue(CalendarContract.Reminders.MINUTES, reminder.getMinutesBeforeEvent());
         builder.withValue(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-        Log.d(TAG, "Add reminder : " + reminder);
         return builder.build();
     }
 }

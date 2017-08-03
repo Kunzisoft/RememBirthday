@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
+ * Manage Event of Calendar, all dates are in LocalTimeZone
  * Created by joker on 27/07/17.
  */
-
 public class CalendarEvent implements Parcelable {
 
     public static final long ID_UNDEFINED = -1;
@@ -154,33 +153,24 @@ public class CalendarEvent implements Parcelable {
     public void setAllDay(boolean allDay) {
         this.allDay = allDay;
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(getDate());
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        /*
-         * Allday events have to be set in UTC!
-         *
-         * Without UTC it results in: CalendarProvider2 W insertInTransaction: allDay is true but
-         * sec, min, hour were not 0.
-         * http://stackoverflow.com/questions/3440172/getting-exception-when
-         * -inserting-events-in-android-calendar
-         */
-        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-
+        if(allDay) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(getDate());
+            cal.set(Calendar.HOUR, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
         /*
          * Define over entire day.
-         *
          * Note: ALL_DAY is enough on original Android calendar, but some calendar apps (Business
          * Calendar) do not display the event if time between dtstart and dtend is 0
          */
-        long startMilliseconds = cal.getTimeInMillis();
-        long endMilliseconds = startMilliseconds + DateUtils.DAY_IN_MILLIS;
+            long startMilliseconds = cal.getTimeInMillis();
+            long endMilliseconds = startMilliseconds + DateUtils.DAY_IN_MILLIS;
 
-        dateStart = new Date(startMilliseconds);
-        dateStop = new Date(endMilliseconds);
+            dateStart = new Date(startMilliseconds);
+            dateStop = new Date(endMilliseconds);
+        }
     }
 
     public String getTitle() {

@@ -19,6 +19,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by joker on 27/07/17.
@@ -34,12 +35,19 @@ public class EventProvider {
      * @param event Event to add
      */
     private static void assignValuesInBuilder(ContentProviderOperation.Builder builder, CalendarEvent event) {
-        builder.withValue(CalendarContract.Events.DTSTART, event.getDateStart().getTime());
-        builder.withValue(CalendarContract.Events.DTEND, event.getDateStop().getTime());
+
         if(event.isAllDay()) {
             // ALL_DAY events must be UTC
+            DateTime dateTimeStartUTC = new DateTime(event.getDateStart()).withZoneRetainFields(DateTimeZone.UTC);
+            DateTime dateTimeStopUTC = new DateTime(event.getDateStop()).withZoneRetainFields(DateTimeZone.UTC);
+            builder.withValue(CalendarContract.Events.DTSTART, dateTimeStartUTC.toDate().getTime());
+            builder.withValue(CalendarContract.Events.DTEND, dateTimeStopUTC.toDate().getTime());
             builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
             builder.withValue(CalendarContract.Events.ALL_DAY, 1);
+        } else {
+            builder.withValue(CalendarContract.Events.DTSTART, event.getDateStart().getTime());
+            builder.withValue(CalendarContract.Events.DTEND, event.getDateStop().getTime());
+            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
         }
         builder.withValue(CalendarContract.Events.TITLE, event.getTitle());
     }
@@ -141,7 +149,11 @@ public class EventProvider {
                     CalendarContract.Events.DESCRIPTION,
                     CalendarContract.Events.DTSTART,
                     CalendarContract.Events.DTEND,
+                    CalendarContract.Events.EVENT_TIMEZONE,
                     CalendarContract.Events.ALL_DAY};
+            /*
+             * Get newt event who have an all day in the day of the event with name of contact in title
+             */
             String where = CalendarContract.Events.DTSTART + "=?" +
                     " AND " + CalendarContract.Events.TITLE + " LIKE ?";
             String[] whereParam = {
@@ -168,15 +180,20 @@ public class EventProvider {
                     if(allDay) {
                         Date dateStart = new DateTime(
                                 cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)),
-                                        DateTimeZone.UTC).toDate();
-                        // TODO Bug with date
+                                DateTimeZone.forID(cursor.getString(cursor.getColumnIndex(CalendarContract.Events.EVENT_TIMEZONE))))
+                                .withZone(DateTimeZone.getDefault())
+                                .toDate();
                         calendarEvent = new CalendarEvent(title, dateStart, true);
                     } else {
                         Date dateStart = new DateTime(
-                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)))
+                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)),
+                                DateTimeZone.forID(cursor.getString(cursor.getColumnIndex(CalendarContract.Events.EVENT_TIMEZONE))))
+                                .withZone(DateTimeZone.getDefault())
                                 .toDate();
                         Date dateEnd = new DateTime(
-                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND)))
+                                cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND)),
+                                DateTimeZone.forID(cursor.getString(cursor.getColumnIndex(CalendarContract.Events.EVENT_TIMEZONE))))
+                                .withZone(DateTimeZone.getDefault())
                                 .toDate();
                         calendarEvent = new CalendarEvent(title, dateStart, dateEnd);
                     }

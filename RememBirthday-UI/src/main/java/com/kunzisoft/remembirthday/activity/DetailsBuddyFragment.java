@@ -348,7 +348,6 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             case R.id.action_delete:
                 if(contact != null) {
                     AlertDialog.Builder builderDialog = new AlertDialog.Builder(getContext());
-                    builderDialog.setTitle(R.string.dialog_select_birthday_title);
                     builderDialog.setMessage(R.string.dialog_delete_birthday_message);
                     builderDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {

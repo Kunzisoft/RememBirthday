@@ -41,7 +41,7 @@
     <string name="dialog_select_birthday_number_days_left">Anniversaire dans %1$d jours.</string>
 
     <string name="dialog_delete_birthday_title">Effacer l\'Anniversaire</string>
-    <string name="dialog_delete_birthday_message">Etes-vous sûr de vouloir la date d\'anniversaire et les événements associés?</string>
+    <string name="dialog_delete_birthday_message">Etes-vous sûr de vouloir supprimer la date d\'anniversaire et les événements associés?</string>
 
     <string name="dialog_need_calendar_message">Cette fonctionnalité a besoin du calendrier customisé pour fonctionner, vous pouvez l\'activer dans les paramètres.</string>
 
