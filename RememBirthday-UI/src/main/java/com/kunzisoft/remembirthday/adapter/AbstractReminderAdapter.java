@@ -31,10 +31,25 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
 
     private SimpleDateFormat reminderDateFormatter;
 
+    private List<ReminderDataObserver<E>> reminderDataObservers;
+
     public AbstractReminderAdapter(Context context, DateUnknownYear anniversary) {
         this.context = context;
         this.anniversary = anniversary;
-        listReminders = new LinkedList<>();
+        this.listReminders = new LinkedList<>();
+        this.reminderDataObservers = new ArrayList<>();
+    }
+
+    public void registerReminderObserver(ReminderDataObserver<E> reminderDataObserver) {
+        this.reminderDataObservers.add(reminderDataObserver);
+    }
+
+    public void unregisterReminderObserver(ReminderDataObserver<E> reminderDataObserver) {
+        this.reminderDataObservers.remove(reminderDataObserver);
+    }
+
+    public void unregisterAllReminderObservers() {
+        this.reminderDataObservers.clear();
     }
 
     /**
@@ -46,6 +61,10 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
         if(!reminders.isEmpty()) {
             listReminders.addAll(reminders);
             this.notifyItemRangeChanged(start, reminders.size() - 1);
+            // Notify all customs observers
+            for(ReminderDataObserver<E> observer : reminderDataObservers) {
+                observer.onRemindersAdded(reminders);
+            }
         }
     }
 
@@ -56,12 +75,11 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
     public void addReminder(E reminder) {
         listReminders.add(reminder);
         this.notifyItemChanged(listReminders.size() - 1);
+        // Notify all customs observers
+        for(ReminderDataObserver<E> observer : reminderDataObservers) {
+            observer.onReminderAdded(reminder);
+        }
     }
-
-    /**
-     * Add a default reminder to the list, init day with delta of anniversary, hour and minute to default
-     */
-    public abstract void addDefaultItem(int deltaDay);
 
     /**
      * Add a default reminder to the list with the day of anniversary, init hour and minute to default
@@ -121,6 +139,10 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
             int position = listReminders.indexOf(reminder);
             notifyItemRemoved(position);
             listReminders.remove(position);
+            // Notify observable
+            for(ReminderDataObserver<E> observer : reminderDataObservers) {
+                observer.onReminderDeleted(reminder);
+            }
         }
     }
 
@@ -148,6 +170,11 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
 
                     // Set text in view
                     ((TextView) view).setText(reminderDateFormatter.format(reminder.getDate()));
+
+                    // Notify observable
+                    for(ReminderDataObserver<E> observer : reminderDataObservers) {
+                        observer.onReminderUpdated(reminder);
+                    }
                 }
             }, reminder.getHourOfDay(), reminder.getMinuteOfHour(), true);
             timePickerDialog.show();
@@ -171,10 +198,30 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
             // New Date when delta days is selected
             reminder.setDeltaDay(listDays.get(position));
+            // Notify observable
+            for(ReminderDataObserver<E> observer : reminderDataObservers) {
+                observer.onReminderUpdated(reminder);
+            }
             Log.d(this.getClass().getSimpleName(), "Assign new date for reminder : " + reminder.getDate().toString());
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {}
+    }
+
+    /**
+     * Use to create observers of reminders
+     * @param <E> Reminder type
+     */
+    public interface ReminderDataObserver<E> {
+
+        void onReminderAdded(E reminder);
+        void onRemindersAdded(List<E> reminders);
+
+        void onReminderUpdated(E reminder);
+        void onRemindersUpdated(List<E> reminders);
+
+        void onReminderDeleted(E reminder);
+        void onRemindersDeleted(List<E> reminders);
     }
 }

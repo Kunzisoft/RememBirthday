@@ -22,8 +22,8 @@ public class ReminderProvider {
 
     public static List<Reminder> getRemindersFromEvent(Context context, CalendarEvent calendarEvent) {
         List<Reminder> reminderList = new ArrayList<>();
-
         String[] projection = new String[] {
+                CalendarContract.Reminders._ID,
                 CalendarContract.Reminders.EVENT_ID,
                 CalendarContract.Reminders.MINUTES,
                 CalendarContract.Reminders.METHOD};
@@ -43,6 +43,7 @@ public class ReminderProvider {
                 Reminder reminder = new Reminder(
                         calendarEvent.getDate(),
                         cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+                reminder.setId(cursor.getLong(cursor.getColumnIndex(CalendarContract.Reminders._ID)));
                 reminderList.add(reminder);
                 cursor.moveToNext();
             }
@@ -51,31 +52,50 @@ public class ReminderProvider {
         return reminderList;
     }
 
-    // TODO mutualize
     public static ContentProviderOperation insert(Context context, long eventId, Reminder reminder) {
-
         ContentProviderOperation.Builder builder = ContentProviderOperation
                 .newInsert(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI));
-
         builder.withValue(CalendarContract.Reminders.EVENT_ID, eventId);
-        builder.withValue(CalendarContract.Reminders.MINUTES, reminder.getMinutesBeforeEvent());
-        builder.withValue(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-        return builder.build();
+        return insert(builder, reminder);
     }
 
 
     public static ContentProviderOperation insert(Context context, Reminder reminder, int backref) {
         ContentProviderOperation.Builder builder = ContentProviderOperation
                 .newInsert(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI));
-
         /*
          * add reminder to last added event identified by backRef
          * see http://stackoverflow.com/questions/4655291/semantics-of-
          * withvaluebackreference
          */
         builder.withValueBackReference(CalendarContract.Reminders.EVENT_ID, backref);
+        return insert(builder, reminder);
+    }
+
+    private static ContentProviderOperation insert(ContentProviderOperation.Builder builder, Reminder reminder) {
         builder.withValue(CalendarContract.Reminders.MINUTES, reminder.getMinutesBeforeEvent());
         builder.withValue(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         return builder.build();
+    }
+
+    public static ContentProviderOperation update(Context context, long eventId, Reminder reminder) {
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newUpdate(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI))
+            .withSelection(CalendarContract.Reminders._ID + " =?"
+                    + " AND " + CalendarContract.Reminders.EVENT_ID + " =?"
+                , new String[]{String.valueOf(reminder.getId()),
+                    String.valueOf(eventId)})
+            .withValue(CalendarContract.Reminders.MINUTES, reminder.getMinutesBeforeEvent());
+        return  builder.build();
+    }
+
+    public static ContentProviderOperation delete(Context context, long eventId, Reminder reminder) {
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newDelete(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI))
+                .withSelection(CalendarContract.Reminders._ID + " =?"
+                                + " AND " + CalendarContract.Reminders.EVENT_ID + " =?"
+                        , new String[]{String.valueOf(reminder.getId()),
+                                String.valueOf(eventId)});
+        return  builder.build();
     }
 }

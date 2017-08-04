@@ -1,6 +1,11 @@
 package com.kunzisoft.remembirthday.activity;
 
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
+import android.content.OperationApplicationException;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -11,6 +16,8 @@ import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
 import com.kunzisoft.remembirthday.provider.EventProvider;
 import com.kunzisoft.remembirthday.provider.UpdateBirthdayToContactTask;
+
+import java.util.ArrayList;
 
 /**
  * Abstract class to encapsulate the management of the birthday dialog.
@@ -110,20 +117,39 @@ public class AbstractBuddyActivity extends AppCompatActivity
             updateBirthdayToContactTask.execute();
 
             // Update event in calendar
-            // TODO UPDATE
-            /*
-            long calendarId = CalendarProvider.getCalendar(AbstractBuddyActivity.this);
-            if (calendarId != -1) {
-                EventProvider.insert(AbstractBuddyActivity.this,
-                        calendarId,
-                        CalendarEvent.buildCalendarEventFromContact(
-                                AbstractBuddyActivity.this,
-                                contact),
-                        contact);
+            CalendarEvent event = EventProvider.getNextEventFromContact(AbstractBuddyActivity.this, contact);
+            if(event == null) {
+                long calendarId = CalendarProvider.getCalendar(AbstractBuddyActivity.this);
+                if (calendarId != -1) {
+                    EventProvider.insert(AbstractBuddyActivity.this,
+                            calendarId,
+                            // TODO get reminders from list
+                            CalendarEvent.buildCalendarEventFromContact(
+                                    AbstractBuddyActivity.this,
+                                    contact),
+                            contact);
+                } else {
+                    Log.e("CalendarSyncAdapter", "Unable to create calendar");
+                }
             } else {
-                Log.e("CalendarSyncAdapter", "Unable to create calendar");
+                event.setDateStart(DateUnknownYear.getNextAnniversary(dateUnknownYear));
+                event.setAllDay(true);
+                Log.e(getClass().getSimpleName(), event.toString());
+                ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+                ContentProviderOperation contentProviderOperation = EventProvider.update(event);
+                operations.add(contentProviderOperation);
+                try {
+                    ContentProviderResult[] contentProviderResults =
+                            getContentResolver().applyBatch(CalendarContract.AUTHORITY, operations);
+                    for(ContentProviderResult contentProviderResult : contentProviderResults) {
+                        Log.d(getClass().getSimpleName(), contentProviderResult.toString());
+                        if (contentProviderResult.uri != null)
+                            Log.d(getClass().getSimpleName(), contentProviderResult.uri.toString());
+                    }
+                } catch (RemoteException|OperationApplicationException e) {
+                    Log.e(this.getClass().getSimpleName(), "Unable to update event : " + e.getMessage());
+                }
             }
-            */
         }
 
         @Override

@@ -35,7 +35,6 @@ public class EventProvider {
      * @param event Event to add
      */
     private static void assignValuesInBuilder(ContentProviderOperation.Builder builder, CalendarEvent event) {
-
         if(event.isAllDay()) {
             // ALL_DAY events must be UTC
             DateTime dateTimeStartUTC = new DateTime(event.getDateStart()).withZoneRetainFields(DateTimeZone.UTC);
@@ -98,7 +97,6 @@ public class EventProvider {
      * @return ContentProviderOperation to apply or null if no id
      */
     public static ContentProviderOperation update(CalendarEvent event) {
-
         if(event.hasId()) {
             ContentProviderOperation.Builder builder;
             builder = ContentProviderOperation.newUpdate(

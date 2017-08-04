@@ -23,7 +23,8 @@ import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
-import com.kunzisoft.remembirthday.adapter.ReminderNotificationsAdapter;
+import com.kunzisoft.remembirthday.adapter.ReminderCalendarObserver;
+import com.kunzisoft.remembirthday.adapter.ReminderCalendarNotificationsAdapter;
 import com.kunzisoft.remembirthday.animation.AnimationCircle;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
@@ -71,7 +72,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     protected AutoMessageAdapter autoMessagesAdapter;
 
     protected RecyclerView remindersListView;
-    protected ReminderNotificationsAdapter remindersAdapter;
+    protected ReminderCalendarNotificationsAdapter remindersAdapter;
 
     private RecyclerView menuListView;
     private GridLayoutManager gridLayoutManager;
@@ -181,7 +182,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
             if(PreferencesManager.isCustomCalendarActive(getContext())) {
                 // Add default reminders and link view to adapter
-                remindersAdapter = new ReminderNotificationsAdapter(getContext(), contact.getBirthday());
+                remindersAdapter = new ReminderCalendarNotificationsAdapter(getContext(), contact.getBirthday());
                 remindersListView.setAdapter(remindersAdapter);
 
                 // Build default elements
@@ -191,6 +192,10 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     event.addReminders(reminders);
                     Log.d(TAG, "Get event from calendar : " + event.toString());
                     remindersAdapter.addReminders(reminders);
+
+                    // Attach observer for changes
+                    remindersAdapter.registerReminderObserver(
+                            new ReminderCalendarObserver(getContext(), event));
                 } else {
                     Log.e(TAG, "Error when get event from calendar");
                 }

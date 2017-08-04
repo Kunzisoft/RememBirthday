@@ -21,14 +21,9 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
     }
 
     @Override
-    public void addDefaultItem(int deltaDay) {
-        int[] defaultTime = PreferencesManager.getDefaultTime(context);
-        addReminder(new AutoMessage(anniversary.getDate(), defaultTime[0], defaultTime[1], deltaDay));
-    }
-
-    @Override
     public void addDefaultItem() {
-        addDefaultItem(0);
+        int[] defaultTime = PreferencesManager.getDefaultTime(context);
+        addReminder(new AutoMessage(anniversary.getDate(), defaultTime[0], defaultTime[1], 0));
     }
 
     @Override

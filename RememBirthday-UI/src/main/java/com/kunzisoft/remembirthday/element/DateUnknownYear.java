@@ -141,6 +141,24 @@ public class DateUnknownYear implements Parcelable {
      */
     // TODO TEST
     public Date getNextAnniversary() {
+        return getNextAnniversary(this.date);
+    }
+
+    /**
+     * Gets the anniversary date not yet passed
+     * @param date Date without year
+     * @return Next anniversary in the year
+     */
+    public static Date getNextAnniversary(DateUnknownYear date) {
+        return getNextAnniversary(date.getDate());
+    }
+
+    /**
+     * Gets the anniversary date not yet passed
+     * @param date Date
+     * @return Next anniversary in the year
+     */
+    public static Date getNextAnniversary(Date date) {
         DateTime dateTimeNow = DateTime.now();
         MonthDay monthDayNow = MonthDay.now();
         MonthDay monthDayOfNextDate = MonthDay.fromDateFields(date);
@@ -153,6 +171,7 @@ public class DateUnknownYear implements Parcelable {
             return dateTimeOfNextDate.toDate();
         }
     }
+
 
     /**
      * Number of years between a date and today
