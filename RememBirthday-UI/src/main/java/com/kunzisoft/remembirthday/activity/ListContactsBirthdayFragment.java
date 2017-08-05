@@ -19,16 +19,17 @@ import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.provider.ContactLoader;
 
 /**
  * Created by joker on 08/01/17.
  */
-public class ListBuddiesFragment extends AbstractListContactsFragment implements OnClickItemContactListener {
+public class ListContactsBirthdayFragment extends AbstractListContactsFragment implements OnClickItemContactListener {
 
     public final static String TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT";
     private final static String CONTACT_KEY = "CONTACT_KEY";
     private final static String CONTACT_POSITION_KEY = "CONTACT_POSITION_KEY";
-    private static final String TAG = "ListBuddiesFragment";
+    private static final String TAG = "ListContactsBirthdayFragment";
 
     private Contact currentContact;
     private int currentContactPosition = ContactAdapter.POSITION_UNDEFINED;
@@ -36,34 +37,14 @@ public class ListBuddiesFragment extends AbstractListContactsFragment implements
     private boolean dualPanel;
 
     @Override
+    protected ContactLoader initializeLoader() {
+        return new ContactLoader.ContactBirthdayLoader(getContext());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        // Redefined Query
-        uri = ContactsContract.Data.CONTENT_URI;
-        projection = new String[]{
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.LOOKUP_KEY,
-                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
-                ContactsContract.Contacts.PHOTO_URI,
-                ContactsContract.Contacts.Data._ID,
-                ContactsContract.CommonDataKinds.Event.START_DATE,
-                ContactsContract.CommonDataKinds.Event.TYPE
-        };
-        selection =
-                ContactsContract.Data.MIMETYPE + "= ? AND (" +
-                        ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + //" OR " +
-                        //ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        //ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
-                        " ) ";
-        selectionArgs = new String[] {
-                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-        };
-        // Define the default sort
-        contactSort = PreferencesManager.getDefaultContactSort(getContext());
 
         View rootView = inflater.inflate(R.layout.fragment_list_buddies, container, false);
 

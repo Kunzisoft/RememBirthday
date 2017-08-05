@@ -156,14 +156,14 @@ public class BuddyActivity extends AbstractBuddyActivity {
     }
 
     /**
-     * Deselect any contact in ListBuddiesFragment
+     * Deselect any contact in ListContactsBirthdayFragment
      */
     private void deselectContactInListForDualPanel() {
-        ListBuddiesFragment listBuddiesFragment =
-                (ListBuddiesFragment) getSupportFragmentManager()
+        ListContactsBirthdayFragment listContactsBirthdayFragment =
+                (ListContactsBirthdayFragment) getSupportFragmentManager()
                         .findFragmentByTag(getString(R.string.tag_list_birthdays));
-        if(listBuddiesFragment!=null) {
-            listBuddiesFragment.deselectForDualPanel();
+        if(listContactsBirthdayFragment !=null) {
+            listContactsBirthdayFragment.deselectForDualPanel();
         }
     }
 

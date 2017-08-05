@@ -1,12 +1,8 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,11 +14,12 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.factory.ContactSort;
+import com.kunzisoft.remembirthday.provider.ContactLoader;
 
 /**
  * Fragment that retrieves and displays the list of contacts
  */
-public abstract class AbstractListContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class AbstractListContactsFragment extends Fragment implements ContactLoader.LoaderContactCallbacks{
 
     private static final String TAG = "AbstractListContactsFragment";
 
@@ -30,20 +27,13 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
     protected ContactAdapter contactAdapter;
     protected LinearLayoutManager linearLayoutManager;
 
-    // Connexion to content provider
-    protected Uri uri = ContactsContract.Contacts.CONTENT_URI;
-    protected String[] projection = {
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.LOOKUP_KEY,
-            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
-            ContactsContract.Contacts.PHOTO_URI
-    };
-    protected String selection = null;
-    protected String[] selectionArgs = null;
-    protected String sortOrder = null;
+    protected ContactLoader contactLoader;
 
-    protected ContactSort contactSort = ContactSort.CONTACT_SORT_BY_NAME;
+    /**
+     * Must return a Loader of contacts
+     * @return ContactLoader
+     */
+    protected abstract ContactLoader initializeLoader();
 
     // A UI Fragment must inflate its View
     @Override
@@ -59,6 +49,9 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contactsListView.setLayoutManager(linearLayoutManager);
 
+        contactLoader = initializeLoader();
+        contactLoader.setLoaderContactCallback(this);
+
         return rootView;
     }
 
@@ -67,36 +60,21 @@ public abstract class AbstractListContactsFragment extends Fragment implements L
         super.onActivityCreated(savedInstanceState);
 
         // Initializes the loader
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(0, null, contactLoader);
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        if(contactSort != null && contactSort.getOrderByQuery() != null) {
-            sortOrder = contactSort.getOrderByQuery();
-        }
-        // Starts the query
-        return new CursorLoader(
-                getActivity(),
-                uri,
-                projection,
-                selection,
-                selectionArgs,
-                sortOrder
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onContactLoadFinished(Loader<Cursor> loader, android.database.Cursor cursor) {
         contactAdapter.swapCursor(cursor);
+        ContactSort contactSort = contactLoader.getContactSort();
         if(contactSort != null && contactSort.getContactComparator() != null)
             contactAdapter.sortElements(contactSort.getContactComparator());
         contactAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onContactLoaderReset(Loader<Cursor> loader) {
         contactAdapter.resetCursor();
     }
+
 }

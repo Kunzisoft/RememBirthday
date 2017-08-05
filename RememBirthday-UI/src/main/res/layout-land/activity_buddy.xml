@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             tools:context="com.kunzisoft.remembirthday.activity.BuddyActivity">
 
-            <fragment android:name="com.kunzisoft.remembirthday.activity.ListBuddiesFragment"
+            <fragment android:name="com.kunzisoft.remembirthday.activity.ListContactsBirthdayFragment"
                 android:id="@+id/activity_buddy_fragment_list_buddies"
                 android:tag="@string/tag_list_birthdays"
                 android:layout_width="wrap_content"

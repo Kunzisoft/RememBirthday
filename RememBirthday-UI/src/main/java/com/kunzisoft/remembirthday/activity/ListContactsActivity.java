@@ -23,7 +23,6 @@ import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
-import com.kunzisoft.remembirthday.provider.AddBirthdayToContactTask;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
 import com.kunzisoft.remembirthday.provider.EventProvider;
@@ -80,8 +79,8 @@ public class ListContactsActivity extends AppCompatActivity
                 ArrayList<ContentProviderOperation> allOperationList = new ArrayList<>();
 
                 // Add new birthday in database
-                AddBirthdayToContactTask addBirthdayToContactTask =
-                        new AddBirthdayToContactTask(
+                ActionBirthdayInDatabaseTask.AddBirthdayToContactTask addBirthdayToContactTask =
+                        new ActionBirthdayInDatabaseTask.AddBirthdayToContactTask(
                                 ListContactsActivity.this,
                                 contactWithRawIdSelected.getRawId(),
                                 dateUnknownYear);

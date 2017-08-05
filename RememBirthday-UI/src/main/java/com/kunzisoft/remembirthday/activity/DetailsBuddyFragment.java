@@ -45,10 +45,9 @@ import com.kunzisoft.remembirthday.factory.MenuContact;
 import com.kunzisoft.remembirthday.factory.MenuContactCreator;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
-import com.kunzisoft.remembirthday.provider.ContactBuild;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
 import com.kunzisoft.remembirthday.provider.EventProvider;
 import com.kunzisoft.remembirthday.provider.ReminderProvider;
-import com.kunzisoft.remembirthday.provider.RemoveBirthdayFromContactTask;
 import com.kunzisoft.remembirthday.provider.RetrievePhoneNumberFromContactTask;
 import com.kunzisoft.remembirthday.utility.IntentCall;
 import com.kunzisoft.remembirthday.utility.Utility;
@@ -130,7 +129,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             // For save memory get RawId only when showMessage details
             setHasOptionsMenu(true);
 
-            ContactBuild.assignRawContactIdToContact(getContext(), contact);
+            ContactProvider.assignRawContactIdToContact(getContext(), contact);
 
             selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -357,8 +356,8 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     builderDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // Delete anniversary in database
-                            RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
-                                    new RemoveBirthdayFromContactTask(
+                            ActionBirthdayInDatabaseTask.RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
+                                    new ActionBirthdayInDatabaseTask.RemoveBirthdayFromContactTask(
                                             getActivity(),
                                             contact.getDataAnniversaryId(),
                                             contact.getBirthday());

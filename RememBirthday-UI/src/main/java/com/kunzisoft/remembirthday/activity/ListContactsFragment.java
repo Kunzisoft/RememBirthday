@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
-import com.kunzisoft.remembirthday.provider.ContactBuild;
 import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.provider.ContactLoader;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
 
 /**
  * Fragment that retrieves and displays the list of contacts
@@ -22,6 +23,11 @@ public class ListContactsFragment extends AbstractListContactsFragment
         implements OnClickItemContactListener {
 
     private static final String TAG = "ListContactsFragment";
+
+    @Override
+    protected ContactLoader initializeLoader() {
+        return new ContactLoader.ContactBaseLoader(getContext());
+    }
 
     // A UI Fragment must inflate its View
     @Override
@@ -52,7 +58,7 @@ public class ListContactsFragment extends AbstractListContactsFragment
     @Override
     public void onItemContactClick(View view, Contact contact, Cursor cursor, int position) {
         // Get raw contact id if undefined
-        long contactRawId = ContactBuild.assignRawContactIdToContact(getContext(), contact);
+        long contactRawId = ContactProvider.assignRawContactIdToContact(getContext(), contact);
         // TODO Verify if already a birthday
         contact.setRawId(contactRawId);
 

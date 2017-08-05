@@ -30,28 +30,6 @@ public class EventProvider {
     private static final String TAG = "EventProvider";
 
     /**
-     * Utility method for add values in Builder
-     * @param builder ContentProviderOperation.Builder
-     * @param event Event to add
-     */
-    private static void assignValuesInBuilder(ContentProviderOperation.Builder builder, CalendarEvent event) {
-        if(event.isAllDay()) {
-            // ALL_DAY events must be UTC
-            DateTime dateTimeStartUTC = new DateTime(event.getDateStart()).withZoneRetainFields(DateTimeZone.UTC);
-            DateTime dateTimeStopUTC = new DateTime(event.getDateStop()).withZoneRetainFields(DateTimeZone.UTC);
-            builder.withValue(CalendarContract.Events.DTSTART, dateTimeStartUTC.toDate().getTime());
-            builder.withValue(CalendarContract.Events.DTEND, dateTimeStopUTC.toDate().getTime());
-            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
-            builder.withValue(CalendarContract.Events.ALL_DAY, 1);
-        } else {
-            builder.withValue(CalendarContract.Events.DTSTART, event.getDateStart().getTime());
-            builder.withValue(CalendarContract.Events.DTEND, event.getDateStop().getTime());
-            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
-        }
-        builder.withValue(CalendarContract.Events.TITLE, event.getTitle());
-    }
-
-    /**
      * Get a new ContentProviderOperation to insert an event
      */
     public static ContentProviderOperation insert(Context context, long calendarId,
@@ -108,6 +86,28 @@ public class EventProvider {
             Log.e(TAG, "Can't update the event, there is no id");
             return null;
         }
+    }
+
+    /**
+     * Utility method for add values in Builder
+     * @param builder ContentProviderOperation.Builder
+     * @param event Event to add
+     */
+    private static void assignValuesInBuilder(ContentProviderOperation.Builder builder, CalendarEvent event) {
+        if(event.isAllDay()) {
+            // ALL_DAY events must be UTC
+            DateTime dateTimeStartUTC = new DateTime(event.getDateStart()).withZoneRetainFields(DateTimeZone.UTC);
+            DateTime dateTimeStopUTC = new DateTime(event.getDateStop()).withZoneRetainFields(DateTimeZone.UTC);
+            builder.withValue(CalendarContract.Events.DTSTART, dateTimeStartUTC.toDate().getTime());
+            builder.withValue(CalendarContract.Events.DTEND, dateTimeStopUTC.toDate().getTime());
+            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
+            builder.withValue(CalendarContract.Events.ALL_DAY, 1);
+        } else {
+            builder.withValue(CalendarContract.Events.DTSTART, event.getDateStart().getTime());
+            builder.withValue(CalendarContract.Events.DTEND, event.getDateStop().getTime());
+            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+        }
+        builder.withValue(CalendarContract.Events.TITLE, event.getTitle());
     }
 
     /**
@@ -205,7 +205,5 @@ public class EventProvider {
 
         return calendarEvent;
     }
-
-
 
 }

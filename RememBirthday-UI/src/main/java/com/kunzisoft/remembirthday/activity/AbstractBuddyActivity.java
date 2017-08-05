@@ -15,7 +15,6 @@ import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
 import com.kunzisoft.remembirthday.provider.CalendarProvider;
 import com.kunzisoft.remembirthday.provider.EventProvider;
-import com.kunzisoft.remembirthday.provider.UpdateBirthdayToContactTask;
 
 import java.util.ArrayList;
 
@@ -107,8 +106,8 @@ public class AbstractBuddyActivity extends AppCompatActivity
         @Override
         public void onClickPositiveButton(DateUnknownYear dateUnknownYear) {
             // Update current birthday in database
-            UpdateBirthdayToContactTask updateBirthdayToContactTask =
-                    new UpdateBirthdayToContactTask(
+            ActionBirthdayInDatabaseTask.UpdateBirthdayToContactTask updateBirthdayToContactTask =
+                    new ActionBirthdayInDatabaseTask.UpdateBirthdayToContactTask(
                             AbstractBuddyActivity.this,
                             contact.getDataAnniversaryId(),
                             contact.getBirthday(),
