@@ -25,7 +25,7 @@ import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderCalendarObserver;
 import com.kunzisoft.remembirthday.adapter.ReminderCalendarNotificationsAdapter;
-import com.kunzisoft.remembirthday.animation.AnimationCircle;
+import com.kunzisoft.remembirthday.animation.AnimationViewCircle;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
@@ -80,7 +80,8 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     private MenuContact menuContact;
 
     private View menuView;
-    private AnimationCircle menuAnimationCircle;
+    private View menuViewButton;
+    private AnimationViewCircle menuAnimationViewCircle;
 
     public void setBuddy(Contact currentContact) {
         Bundle args = new Bundle();
@@ -100,7 +101,8 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
         // Animation init
         menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
-        menuAnimationCircle = AnimationCircle.build(menuView);
+        menuViewButton = root.findViewById(R.id.fragment_details_buddy_add_button);
+        menuAnimationViewCircle = AnimationViewCircle.build(menuView);
 
         menuListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_menu_list);
         gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
@@ -157,11 +159,10 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
 
                 // Animation for menu
-                View addButton = root.findViewById(R.id.fragment_details_buddy_add_button);
-                addButton.setOnClickListener(new View.OnClickListener() {
+                menuViewButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        menuAnimationCircle
+                    public void onClick(View viewButton) {
+                        menuAnimationViewCircle
                                 .startPoint(menuView.getWidth() - 80, 0)
                                 .animate();
                     }
@@ -222,6 +223,12 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     Log.e(TAG, e.getLocalizedMessage());
                 }
             }
+
+            // Open the menu if no reminder
+            if((remindersAdapter == null || (remindersAdapter != null && remindersAdapter.getItemCount() < 1))
+                && (autoMessagesAdapter == null || (autoMessagesAdapter != null && autoMessagesAdapter.getItemCount() < 1))) {
+                menuView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -281,7 +288,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             if (!BuildConfig.FULL_VERSION)
                 new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_DIALOG_TAG");
         } else {
-            menuAnimationCircle.hide();
+            menuAnimationViewCircle.hide();
             switch (menuAction.getItemId()) {
                 case MenuActionCalendar.ITEM_ID :
                     IntentCall.openCalendarAt(getActivity(), contact.getNextBirthday());

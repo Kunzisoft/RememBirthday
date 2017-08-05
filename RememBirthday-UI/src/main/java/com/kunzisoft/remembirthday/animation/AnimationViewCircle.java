@@ -10,7 +10,7 @@ import io.codetail.animation.ViewAnimationUtils;
 /**
  * Builder class for make generic circle animation on view
  */
-public class AnimationCircle {
+public class AnimationViewCircle {
 
     private View view;
     private int startPointX;
@@ -21,7 +21,7 @@ public class AnimationCircle {
     private Interpolator interpolator;
     private Animator.AnimatorListener animatorListener;
 
-    private AnimationCircle(View view) {
+    private AnimationViewCircle(View view) {
         this.view = view;
 
         customRadius = false;
@@ -37,7 +37,7 @@ public class AnimationCircle {
         });
     }
 
-    public AnimationCircle animate() {
+    public AnimationViewCircle animate() {
         if(view.getVisibility() == View.VISIBLE) {
             hide();
         } else {
@@ -116,11 +116,11 @@ public class AnimationCircle {
         animatorRevealMenu.start();
     }
 
-    public static AnimationCircle build(View view) {
-        return new AnimationCircle(view);
+    public static AnimationViewCircle build(View view) {
+        return new AnimationViewCircle(view);
     }
 
-    public AnimationCircle startPoint(int startPointX, int startPointY) {
+    public AnimationViewCircle startPoint(int startPointX, int startPointY) {
         this.startPointX = startPointX;
         this.startPointY = startPointY;
         if(!customRadius) {
@@ -131,23 +131,23 @@ public class AnimationCircle {
         return this;
     }
 
-    public AnimationCircle duration(int duration) {
+    public AnimationViewCircle duration(int duration) {
         this.duration = duration;
         return this;
     }
 
-    public AnimationCircle radius(float radius) {
+    public AnimationViewCircle radius(float radius) {
         this.customRadius = true;
         this.radius = radius;
         return this;
     }
 
-    public AnimationCircle interpolator(Interpolator interpolator) {
+    public AnimationViewCircle interpolator(Interpolator interpolator) {
         this.interpolator = interpolator;
         return this;
     }
 
-    public AnimationCircle setAnimatorListener(Animator.AnimatorListener animatorListener) {
+    public AnimationViewCircle setAnimatorListener(Animator.AnimatorListener animatorListener) {
         this.animatorListener = animatorListener;
         return this;
     }
