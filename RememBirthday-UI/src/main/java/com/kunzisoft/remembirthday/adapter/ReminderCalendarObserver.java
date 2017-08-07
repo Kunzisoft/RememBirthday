@@ -10,7 +10,9 @@ import android.provider.CalendarContract;
 import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.CalendarEvent;
+import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.Reminder;
+import com.kunzisoft.remembirthday.provider.EventProvider;
 import com.kunzisoft.remembirthday.provider.ReminderProvider;
 
 import java.util.ArrayList;
@@ -23,20 +25,22 @@ import java.util.List;
 public class ReminderCalendarObserver implements AbstractReminderAdapter.ReminderDataObserver<Reminder> {
     
     private Context context;
-    private CalendarEvent event;
+    private CalendarEvent baseEvent;
+    private List<CalendarEvent> afterEvents;
     private ContentResolver contentResolver;
     private ArrayList<ContentProviderOperation> ops;
     
-    public ReminderCalendarObserver(Context context, CalendarEvent calendarEvent) {
+    public ReminderCalendarObserver(Context context, Contact contact, CalendarEvent baseEvent) {
         this.context = context;
-        this.event = calendarEvent;
+        this.afterEvents = EventProvider.getEventsSaveForeEachYearAfterNextEvent(context, contact);
+        this.baseEvent = baseEvent;
         this.contentResolver = context.getContentResolver();
         this.ops = new ArrayList<>();
     }
     
     @Override
     public void onReminderAdded(Reminder reminder) {
-        ops.add(ReminderProvider.insert(context, event.getId(), reminder));
+        ops.add(ReminderProvider.insert(context, baseEvent.getId(), reminder));
         //TODO Add id to reminder
         applyBatch();
     }
@@ -45,35 +49,50 @@ public class ReminderCalendarObserver implements AbstractReminderAdapter.Reminde
     public void onRemindersAdded(List<Reminder> reminders) {
         //TODO Add id to reminder
         for(Reminder reminder : reminders) {
-            ops.add(ReminderProvider.insert(context, event.getId(), reminder));
+            ops.add(ReminderProvider.insert(context, baseEvent.getId(), reminder));
         }
         applyBatch();
     }
 
     @Override
     public void onReminderUpdated(Reminder reminder) {
-        ops.add(ReminderProvider.update(context, event.getId(), reminder));
+        // TODO with link
+        ops.add(ReminderProvider.update(context, baseEvent.getId(), reminder));
+        for(CalendarEvent afterEvent : afterEvents) {
+            //ops.add(ReminderProvider.updateWithUnknownId(context, afterEvent.getId(), reminder, newMinutes));
+        }
         applyBatch();
     }
 
     @Override
     public void onRemindersUpdated(List<Reminder> reminders) {
         for(Reminder reminder : reminders) {
-            ops.add(ReminderProvider.update(context, event.getId(), reminder));
+            ops.add(ReminderProvider.update(context, baseEvent.getId(), reminder));
+            for(CalendarEvent afterEvent : afterEvents) {
+                // TODO with links
+                //ops.add(ReminderProvider.update(context, afterEvent.getId(), reminder));
+            }
         }
         applyBatch();
     }
 
     @Override
     public void onReminderDeleted(Reminder reminder) {
-        ops.add(ReminderProvider.delete(context, event.getId(), reminder));
+        ops.add(ReminderProvider.delete(context, baseEvent.getId(), reminder));
+        for(CalendarEvent afterEvent : afterEvents) {
+            ops.add(ReminderProvider.deleteWithUnknownId(context, afterEvent.getId(), reminder));
+        }
         applyBatch();
     }
 
     @Override
     public void onRemindersDeleted(List<Reminder> reminders) {
+        // TODO delete
         for(Reminder reminder : reminders) {
-            ops.add(ReminderProvider.delete(context, event.getId(), reminder));
+            ops.add(ReminderProvider.delete(context, baseEvent.getId(), reminder));
+            for(CalendarEvent afterEvent : afterEvents) {
+                ops.add(ReminderProvider.deleteWithUnknownId(context, afterEvent.getId(), reminder));
+            }
         }
         applyBatch();
     }
@@ -94,4 +113,5 @@ public class ReminderCalendarObserver implements AbstractReminderAdapter.Reminde
             ops.clear();
         }
     }
+
 }

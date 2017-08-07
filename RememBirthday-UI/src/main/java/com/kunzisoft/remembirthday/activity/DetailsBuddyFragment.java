@@ -187,6 +187,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
                 // Build default elements
                 CalendarEvent event = EventProvider.getNextEventFromContact(getContext(), contact);
+
                 if(event != null) {
                     List<Reminder> reminders = ReminderProvider.getRemindersFromEvent(getContext(), event);
                     event.addReminders(reminders);
@@ -194,8 +195,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     remindersAdapter.addReminders(reminders);
 
                     // Attach observer for changes
+                    // TODO Update each event with all reminders
                     remindersAdapter.registerReminderObserver(
-                            new ReminderCalendarObserver(getContext(), event));
+                            new ReminderCalendarObserver(getContext(), contact, event));
                 } else {
                     Log.e(TAG, "Error when get event from calendar");
                 }
@@ -372,6 +374,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                             removeBirthdayFromContactTask.setCallbackActionBirthday(
                                     (ActionBirthdayInDatabaseTask.CallbackActionBirthday) getActivity());
                             removeBirthdayFromContactTask.execute();
+
+                            // Delete event in calendar
+                            EventProvider.deleteEventsFromContact(getContext(), contact);
                         }
                     });
                     builderDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

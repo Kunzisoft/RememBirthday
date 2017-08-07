@@ -116,7 +116,6 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
                         .replace(R.id.activity_details_buddy_fragment_details_buddy, details, TAG_DETAILS_FRAGMENT)
                         .commit();
                         */
-                // TODO Change when new version of FABOptions
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;

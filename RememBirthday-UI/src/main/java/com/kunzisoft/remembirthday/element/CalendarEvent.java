@@ -42,7 +42,7 @@ public class CalendarEvent implements Parcelable {
         return "";
     }
 
-    public static CalendarEvent buildCalendarEventFromContact(Context context, Contact contact) {
+    public static CalendarEvent buildDefaultEventFromContactToSave(Context context, Contact contact) {
         CalendarEvent event = new CalendarEvent(getEventTitleFromContact(context, contact),
                 contact.getNextBirthday(), true);
         int[] defaultTime = PreferencesManager.getDefaultTime(context);
@@ -74,7 +74,7 @@ public class CalendarEvent implements Parcelable {
      * @param another Base event
      */
     public CalendarEvent(CalendarEvent another) {
-        this.id = another.id;
+        this.id = ID_UNDEFINED;
         this.dateStart = another.dateStart;
         this.dateStop = another.dateStop;
         setAllDay(another.allDay);
@@ -216,6 +216,33 @@ public class CalendarEvent implements Parcelable {
                 ", description='" + description + '\'' +
                 ", reminders=" + reminders +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CalendarEvent that = (CalendarEvent) o;
+
+        if (allDay != that.allDay) return false;
+        if (dateStart != null ? !dateStart.equals(that.dateStart) : that.dateStart != null)
+            return false;
+        if (dateStop != null ? !dateStop.equals(that.dateStop) : that.dateStop != null)
+            return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        return description != null ? description.equals(that.description) : that.description == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dateStart != null ? dateStart.hashCode() : 0;
+        result = 31 * result + (dateStop != null ? dateStop.hashCode() : 0);
+        result = 31 * result + (allDay ? 1 : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
     }
 
     @Override

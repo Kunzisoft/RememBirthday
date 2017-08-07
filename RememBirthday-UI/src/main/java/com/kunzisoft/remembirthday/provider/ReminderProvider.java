@@ -89,6 +89,18 @@ public class ReminderProvider {
         return  builder.build();
     }
 
+    public static ContentProviderOperation updateWithUnknownId(Context context, long eventId, Reminder reminder, int newMinutes) {
+        // TODO update
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newUpdate(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI))
+                .withSelection(CalendarContract.Reminders.EVENT_ID + " =?"
+                                + " AND " + CalendarContract.Reminders.MINUTES + " =?"
+                        , new String[]{String.valueOf(eventId),
+                                String.valueOf(reminder.getMinutesBeforeEvent())})
+                .withValue(CalendarContract.Reminders.MINUTES, newMinutes);
+        return  builder.build();
+    }
+
     public static ContentProviderOperation delete(Context context, long eventId, Reminder reminder) {
         ContentProviderOperation.Builder builder = ContentProviderOperation
                 .newDelete(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI))
@@ -96,6 +108,25 @@ public class ReminderProvider {
                                 + " AND " + CalendarContract.Reminders.EVENT_ID + " =?"
                         , new String[]{String.valueOf(reminder.getId()),
                                 String.valueOf(eventId)});
+        return  builder.build();
+    }
+
+    public static ContentProviderOperation deleteWithUnknownId(Context context, long eventId, Reminder reminder) {
+        // TODO delete
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newDelete(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI))
+                .withSelection(CalendarContract.Reminders.EVENT_ID + " =?"
+                                + " AND " + CalendarContract.Reminders.MINUTES + " =?"
+                        , new String[]{String.valueOf(eventId),
+                                String.valueOf(reminder.getMinutesBeforeEvent())});
+        return  builder.build();
+    }
+
+    public static ContentProviderOperation deleteAll(Context context, long eventId) {
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newDelete(CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI))
+                .withSelection(CalendarContract.Reminders.EVENT_ID + " =?"
+                        , new String[]{String.valueOf(eventId)});
         return  builder.build();
     }
 }

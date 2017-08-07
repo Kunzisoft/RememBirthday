@@ -88,6 +88,25 @@ public class DateUnknownYear implements Parcelable {
     }
 
     /**
+     * Get the date with a specific year
+     * @param year Year
+     * @return Date with year
+     */
+    public Date getDateWithYear(int year) {
+        return getDateWithYear(this.date, year);
+    }
+
+    /**
+     * Get the date with a specific year
+     * @param date Date
+     * @param year Year
+     * @return Date with year
+     */
+    public static Date getDateWithYear(Date date, int year) {
+        return new DateTime(date).withYear(year).toDate();
+    }
+
+    /**
      * Assign a new date, only day, month and year are used.
      * @param date The new date
      */
@@ -171,7 +190,6 @@ public class DateUnknownYear implements Parcelable {
             return dateTimeOfNextDate.toDate();
         }
     }
-
 
     /**
      * Number of years between a date and today

@@ -94,7 +94,7 @@ public class ListContactsActivity extends AppCompatActivity
                     // TODO Encapsulate
                     long calendarId = CalendarProvider.getCalendar(ListContactsActivity.this);
                     if (calendarId != -1) {
-                        CalendarEvent event = CalendarEvent.buildCalendarEventFromContact(
+                        CalendarEvent event = CalendarEvent.buildDefaultEventFromContactToSave(
                                 ListContactsActivity.this,
                                 contactWithRawIdSelected);
                         allOperationList.add(
