@@ -49,9 +49,6 @@ public abstract class AbstractListContactsFragment extends Fragment implements C
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contactsListView.setLayoutManager(linearLayoutManager);
 
-        contactLoader = initializeLoader();
-        contactLoader.setLoaderContactCallback(this);
-
         return rootView;
     }
 
@@ -60,6 +57,8 @@ public abstract class AbstractListContactsFragment extends Fragment implements C
         super.onActivityCreated(savedInstanceState);
 
         // Initializes the loader
+        contactLoader = initializeLoader();
+        contactLoader.setLoaderContactCallback(this);
         getLoaderManager().initLoader(0, null, contactLoader);
     }
 

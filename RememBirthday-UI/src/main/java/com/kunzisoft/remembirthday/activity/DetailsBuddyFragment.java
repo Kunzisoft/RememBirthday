@@ -23,8 +23,9 @@ import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
-import com.kunzisoft.remembirthday.adapter.ReminderCalendarObserver;
+import com.kunzisoft.remembirthday.adapter.ReminderCalendarProviderObserver;
 import com.kunzisoft.remembirthday.adapter.ReminderCalendarNotificationsAdapter;
+import com.kunzisoft.remembirthday.adapter.ReminderToastObserver;
 import com.kunzisoft.remembirthday.animation.AnimationViewCircle;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
@@ -186,8 +187,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 remindersListView.setAdapter(remindersAdapter);
 
                 // Build default elements
-                CalendarEvent event = EventProvider.getNextEventFromContact(getContext(), contact);
-
+                CalendarEvent event = EventProvider.getNextEventOrCreateNewFromContact(getContext(), contact);
                 if(event != null) {
                     List<Reminder> reminders = ReminderProvider.getRemindersFromEvent(getContext(), event);
                     event.addReminders(reminders);
@@ -197,7 +197,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     // Attach observer for changes
                     // TODO Update each event with all reminders
                     remindersAdapter.registerReminderObserver(
-                            new ReminderCalendarObserver(getContext(), contact, event));
+                            new ReminderCalendarProviderObserver(getContext(), contact, event));
+                    remindersAdapter.registerReminderObserver(
+                            new ReminderToastObserver(getContext()));
                 } else {
                     Log.e(TAG, "Error when get event from calendar");
                 }

@@ -22,7 +22,7 @@ import java.util.List;
  * Observer who do actions for reminders
  * Created by joker on 04/08/17.
  */
-public class ReminderCalendarObserver implements AbstractReminderAdapter.ReminderDataObserver<Reminder> {
+public class ReminderCalendarProviderObserver implements AbstractReminderAdapter.ReminderDataObserver<Reminder> {
     
     private Context context;
     private CalendarEvent baseEvent;
@@ -30,9 +30,9 @@ public class ReminderCalendarObserver implements AbstractReminderAdapter.Reminde
     private ContentResolver contentResolver;
     private ArrayList<ContentProviderOperation> ops;
     
-    public ReminderCalendarObserver(Context context, Contact contact, CalendarEvent baseEvent) {
+    public ReminderCalendarProviderObserver(Context context, Contact contact, CalendarEvent baseEvent) {
         this.context = context;
-        this.afterEvents = EventProvider.getEventsSaveForeEachYearAfterNextEvent(context, contact);
+        this.afterEvents = EventProvider.getEventsSaveOrCreateNewForEachYearAfterNextEvent(context, contact);
         this.baseEvent = baseEvent;
         this.contentResolver = context.getContentResolver();
         this.ops = new ArrayList<>();

@@ -57,6 +57,8 @@ public class Reminder {
         this.hourOfDay = dateReminder.getHourOfDay();
         this.minuteOfHour = dateReminder.getMinuteOfHour();
         this.daysBefore = Days.daysBetween(dateReminder, new DateTime(dateEvent)).getDays();
+        if(minuteBeforeEvent > 0)
+            this.daysBefore++;
     }
 
     /**

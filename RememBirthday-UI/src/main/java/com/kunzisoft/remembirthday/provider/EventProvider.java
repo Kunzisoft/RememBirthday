@@ -103,12 +103,6 @@ public class EventProvider {
 
         CalendarEvent eventToUpdate = EventProvider.getNextEventFromContact(context, contact);
 
-        // If next event do not exists, create all events missing (end of 5 years)
-        if(eventToUpdate == null) {
-            EventProvider.saveEventsIfNotExistsFromAllContactWithBirthday(context);
-            return getEventsSaveForEachYear(context, contact);
-        }
-
         // Update events for each year
         EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
         List<CalendarEvent> eventsAroundNeeded = eventWithoutYear.getEventsAroundAndForThisYear();
@@ -125,16 +119,10 @@ public class EventProvider {
         return eventsSaved;
     }
 
-    public static List<CalendarEvent> getEventsSaveForeEachYearAfterNextEvent(Context context, Contact contact) {
+    public static List<CalendarEvent> getEventsSaveOrCreateNewForEachYearAfterNextEvent(Context context, Contact contact) {
         List<CalendarEvent> eventsSaved = new ArrayList<>();
 
-        CalendarEvent eventToUpdate = EventProvider.getNextEventFromContact(context, contact);
-
-        // If next event do not exists, create all events missing (end of 5 years)
-        if(eventToUpdate == null) {
-            EventProvider.saveEventsIfNotExistsFromAllContactWithBirthday(context);
-            return getEventsSaveForeEachYearAfterNextEvent(context, contact);
-        }
+        CalendarEvent eventToUpdate = EventProvider.getNextEventOrCreateNewFromContact(context, contact);
 
         // Update events for each year
         EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
@@ -153,7 +141,7 @@ public class EventProvider {
     }
 
     public static void updateEvent(Context context, Contact contact, DateUnknownYear newBirthday) {
-        for (CalendarEvent event : getEventsSaveForEachYear(context, contact)) {
+        for (CalendarEvent event : getEventsSaveOrCreateNewForEachYearAfterNextEvent(context, contact)) {
             // Construct each anniversary of new birthday
             int year = new DateTime(event.getDate()).getYear();
             Date newBirthdayDate = DateUnknownYear.getDateWithYear(newBirthday.getDate(), year);
@@ -271,6 +259,16 @@ public class EventProvider {
             return null;
         else
             return calendarEvents.get(0);
+    }
+
+    public static CalendarEvent getNextEventOrCreateNewFromContact(Context context, Contact contact) {
+        CalendarEvent nextEvent = getNextEventFromContact(context, contact);
+        // If next event do not exists, create all events missing (end of 5 years)
+        if(nextEvent == null) {
+            EventProvider.saveEventsIfNotExistsFromAllContactWithBirthday(context);
+            nextEvent = EventProvider.getNextEventFromContact(context, contact);
+        }
+        return nextEvent;
     }
 
 

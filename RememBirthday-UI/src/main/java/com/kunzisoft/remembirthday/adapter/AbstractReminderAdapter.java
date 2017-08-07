@@ -186,6 +186,7 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
      */
     private class OnDaySelected implements AdapterView.OnItemSelectedListener {
 
+        private int check;
         private E reminder;
         private List<Integer> listDays;
 
@@ -196,13 +197,15 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
 
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            // New Date when delta days is selected
-            reminder.setDeltaDay(listDays.get(position));
-            // Notify observable
-            for(ReminderDataObserver<E> observer : reminderDataObservers) {
-                observer.onReminderUpdated(reminder);
+            if(++check > 1) {
+                // New Date when delta days is selected
+                reminder.setDeltaDay(listDays.get(position));
+                // Notify observable
+                for (ReminderDataObserver<E> observer : reminderDataObservers) {
+                    observer.onReminderUpdated(reminder);
+                }
+                Log.d(this.getClass().getSimpleName(), "Assign new date for reminder : " + reminder.getDate().toString());
             }
-            Log.d(this.getClass().getSimpleName(), "Assign new date for reminder : " + reminder.getDate().toString());
         }
 
         @Override

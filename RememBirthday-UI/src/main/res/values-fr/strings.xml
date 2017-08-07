@@ -173,4 +173,9 @@
     <string name="event_title">"Anniversaire de %1$s (%2$d ans)"</string>
     <string name="event_title_without_year">"Anniversaire de %1$s</string>
 
+    <!-- Reminder -->
+    <string name="reminder_added">Rappel ajouté à %1$s</string>
+    <string name="reminder_updated">Rappel mis à jour à %1$s</string>
+    <string name="reminder_deleted">Rappel supprimé</string>
+
 </resources>

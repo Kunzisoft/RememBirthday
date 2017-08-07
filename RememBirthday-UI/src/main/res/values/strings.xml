@@ -215,4 +215,9 @@
     <string name="event_title">"%1$s's birthday (%2$d years old)"</string>
     <string name="event_title_without_year">"%1$s's birthday</string>
 
+    <!-- Reminder -->
+    <string name="reminder_added">Reminder added to %1$s</string>
+    <string name="reminder_updated">Reminder updated to %1$s</string>
+    <string name="reminder_deleted">Reminder deleted</string>
+
 </resources>
