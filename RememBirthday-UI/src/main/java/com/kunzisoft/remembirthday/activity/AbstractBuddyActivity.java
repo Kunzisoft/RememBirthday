@@ -6,15 +6,15 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
-import com.kunzisoft.remembirthday.provider.EventProvider;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
+import com.kunzisoft.remembirthday.provider.EventLoader;
 
 /**
  * Abstract class to encapsulate the management of the birthday dialog.
  * @author joker on 06/07/17.
  */
 public class AbstractBuddyActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, AnniversaryDialogOpen {
+        implements ContactProvider.CallbackActionBirthday, AnniversaryDialogOpen {
 
     private static final String TAG_SELECT_DIALOG = "TAG_SELECT_DIALOG";
 
@@ -78,7 +78,7 @@ public class AbstractBuddyActivity extends AppCompatActivity
 
     @Override
     public void afterActionBirthdayInDatabase(
-            DateUnknownYear birthday, ActionBirthdayInDatabaseTask.CallbackActionBirthday.Action action, Exception exception) {
+            DateUnknownYear birthday, ContactProvider.CallbackActionBirthday.Action action, Exception exception) {
         CallbackAction.showMessage(this, action, exception);
     }
 
@@ -97,8 +97,8 @@ public class AbstractBuddyActivity extends AppCompatActivity
         @Override
         public void onClickPositiveButton(DateUnknownYear newBirthday) {
             // Update current birthday in database
-            ActionBirthdayInDatabaseTask.UpdateBirthdayToContactTask updateBirthdayToContactTask =
-                    new ActionBirthdayInDatabaseTask.UpdateBirthdayToContactTask(
+            ContactProvider.UpdateBirthdayToContactTask updateBirthdayToContactTask =
+                    new ContactProvider.UpdateBirthdayToContactTask(
                             AbstractBuddyActivity.this,
                             contact.getDataAnniversaryId(),
                             contact.getBirthday(),
@@ -107,7 +107,7 @@ public class AbstractBuddyActivity extends AppCompatActivity
             updateBirthdayToContactTask.execute();
 
             // Update event in calendar
-            EventProvider.updateEvent(AbstractBuddyActivity.this, contact, newBirthday);
+            EventLoader.updateEvent(AbstractBuddyActivity.this, contact, newBirthday);
         }
 
         @Override

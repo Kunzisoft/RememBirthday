@@ -13,7 +13,7 @@ import android.util.Log;
 import com.kunzisoft.remembirthday.account.BackgroundStatusHandler;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
-import com.kunzisoft.remembirthday.provider.CalendarProvider;
+import com.kunzisoft.remembirthday.provider.CalendarLoader;
 
 /**
  * An IntentServices queues incoming Intents and works them one by one.
@@ -84,7 +84,7 @@ public class MainIntentService extends IntentService {
                 case ACTION_CHANGE_COLOR:
                     // update calendar color if enabled
                     if (CalendarAccount.isAccountActivated(this)) {
-                        CalendarProvider.updateCalendarColor(this);
+                        CalendarLoader.updateCalendarColor(this);
                     }
                     break;
                 case ACTION_MANUAL_COMPLETE_SYNC:

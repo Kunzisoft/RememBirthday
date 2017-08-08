@@ -12,7 +12,7 @@ import android.util.Log;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.Reminder;
-import com.kunzisoft.remembirthday.provider.EventProvider;
+import com.kunzisoft.remembirthday.provider.EventLoader;
 import com.kunzisoft.remembirthday.provider.ReminderProvider;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ReminderCalendarProviderObserver implements AbstractReminderAdapter
     
     public ReminderCalendarProviderObserver(Context context, Contact contact, CalendarEvent baseEvent) {
         this.context = context;
-        this.afterEvents = EventProvider.getEventsSaveOrCreateNewForEachYearAfterNextEvent(context, contact);
+        this.afterEvents = EventLoader.getEventsSavedOrCreateNewsForEachYearAfterNextEvent(context, contact);
         this.baseEvent = baseEvent;
         this.contentResolver = context.getContentResolver();
         this.ops = new ArrayList<>();

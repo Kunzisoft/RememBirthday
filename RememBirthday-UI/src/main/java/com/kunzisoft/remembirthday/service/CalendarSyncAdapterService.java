@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.account.AccountResolver;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
-import com.kunzisoft.remembirthday.provider.EventProvider;
+import com.kunzisoft.remembirthday.provider.EventLoader;
 
 @SuppressLint("NewApi")
 public class CalendarSyncAdapterService extends Service {
@@ -39,7 +39,7 @@ public class CalendarSyncAdapterService extends Service {
 
     public static void performSync(Context context) {
         Log.d(TAG, "Starting sync...");
-        EventProvider.saveEventsIfNotExistsFromAllContactWithBirthday(context);
+        EventLoader.saveEventsIfNotExistsFromAllContactWithBirthday(context);
     }
 
 

@@ -9,34 +9,137 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
+import com.kunzisoft.remembirthday.element.Contact;
+import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.factory.ContactSort;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by joker on 05/08/17.
  */
 
-public abstract class ContactLoader implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class ContactLoader extends AbstractLoader {
 
-    private Context context;
-
-    // Connexion to content provider
-    protected Uri uri;
-    protected String[] projection;
-    protected String selection;
-    protected String[] selectionArgs;
-    protected String sortOrder;
+    private static final String TAG = "ContactLoader";
 
     protected ContactSort contactSort;
-
     private LoaderContactCallbacks loaderContactCallback;
 
     public ContactLoader(Context context) {
-        this.context = context;
+        super(context);
     }
 
-    public void setLoaderContactCallback(LoaderContactCallbacks loaderContactCallback) {
-        this.loaderContactCallback = loaderContactCallback;
+    /**
+     * Get RawContactId from ContactId
+     * @param context context to call
+     * @param contactId Id key of ContractsContract.Contacts
+     * @return Id of RawContact
+     */
+    public static long getRawContactId(Context context, long contactId) {
+        long rawContactId = -1;
+        Cursor cursor = context.getContentResolver().query(
+                ContactsContract.RawContacts.CONTENT_URI,
+                new String[]{ContactsContract.RawContacts._ID},
+                ContactsContract.RawContacts.CONTACT_ID + "=?",
+                new String[]{String.valueOf(contactId)}, null);
+        if(cursor != null) {
+            if (cursor.moveToFirst()) {
+                rawContactId = cursor.getLong(0);
+            }
+            cursor.close();
+        }
+        return rawContactId;
+    }
+
+    /**
+     * Assign RAW_CONTACT_ID to contact in parameter with CONTACT_ID,
+     * If CONTACT_ID is undefined, RAW_CONTACT_ID is set to undefined
+     * @param context Context to call
+     * @param contact Contact to modify
+     * @return first RAW_CONTACT_ID assign
+     */
+    public static long assignRawContactIdToContact(Context context, Contact contact) {
+        long rawId = Contact.ID_UNDEFINED;
+        if(contact.getId() != Contact.ID_UNDEFINED)
+            rawId = getRawContactId(context, contact.getId());
+        contact.setRawId(rawId);
+        return rawId;
+    }
+
+    /**
+     * Return Contact from URI
+     * @param context Context to call
+     * @param contactData Contact URI
+     * @return Contact from content resolver or null if not fund
+     */
+    public static Contact getContactFromURI(Context context, Uri contactData) {
+        Contact contact = null;
+        Cursor cursor =  context.getContentResolver().query(contactData, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contact = new Contact(
+                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)),
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Data.LOOKUP_KEY)),
+                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID)),
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME)));
+            }
+            cursor.close();
+        }
+        return contact;
+    }
+
+    /**
+     * Get List of contacts with birthdays in callback when loading is finished
+     * @param context Context to call
+     * @param loaderManager Loader Manager to init loader
+     * @param contactsCallbacks Callback to retrieve contacts
+     */
+    public static void getAllContacts(final Context context, LoaderManager loaderManager,
+                                               final ContactsCallbacks contactsCallbacks) {
+        ContactBirthdayLoader contactBirthdayLoader = new ContactBirthdayLoader(context);
+        contactBirthdayLoader.setLoaderContactCallback(new LoaderContactCallbacks() {
+            @Override
+            public void onContactLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                contactsCallbacks.onContactsLoadFinished(getContactsFromCursor(cursor));
+            }
+
+            @Override
+            public void onContactLoaderReset(Loader<Cursor> loader) {}
+        });
+        loaderManager.initLoader(0, null, contactBirthdayLoader);
+    }
+
+    public static List<Contact> getAllContacts(Context context) {
+        ContactBirthdayLoader contactBirthdayLoader = new ContactBirthdayLoader(context);
+        Cursor cursor = context.getContentResolver().query(
+                contactBirthdayLoader.uri,
+                contactBirthdayLoader.projection,
+                contactBirthdayLoader.selection,
+                contactBirthdayLoader.selectionArgs,
+                contactBirthdayLoader.sortOrder);
+        return getContactsFromCursor(cursor);
+    }
+
+    public static List<Contact> getContactsFromCursor(Cursor cursor) {
+        List<Contact> contactList = new ArrayList<>();
+        if(cursor != null) {
+            // TODO get only first for each contact
+            while (cursor.moveToNext()) {
+                int eventLookupKeyColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.LOOKUP_KEY);
+                int displayNameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                int eventDateColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
+
+                Contact contact = new Contact(cursor.getString(displayNameColumn));
+                contact.setBirthday(DateUnknownYear.stringToDate(cursor.getString(eventDateColumn)));
+                contact.setLookUpKey(cursor.getString(eventLookupKeyColumn));
+                contactList.add(contact);
+            }
+            cursor.close();
+        }
+        return contactList;
     }
 
     @Override
@@ -65,6 +168,14 @@ public abstract class ContactLoader implements LoaderManager.LoaderCallbacks<Cur
     public void onLoaderReset(Loader<Cursor> loader) {
         if(loaderContactCallback != null)
             loaderContactCallback.onContactLoaderReset(loader);
+    }
+
+    /**
+     * Assign listener for callback
+     * @param loaderContactCallback Contact callback
+     */
+    public void setLoaderContactCallback(LoaderContactCallbacks loaderContactCallback) {
+        this.loaderContactCallback = loaderContactCallback;
     }
 
     /**
@@ -137,5 +248,12 @@ public abstract class ContactLoader implements LoaderManager.LoaderCallbacks<Cur
     public interface LoaderContactCallbacks {
         void onContactLoadFinished(Loader<android.database.Cursor> loader, android.database.Cursor cursor);
         void onContactLoaderReset(Loader<Cursor> loader);
+    }
+
+    /**
+     * Interface for callback methods of LoaderContact
+     */
+    public interface ContactsCallbacks {
+        void onContactsLoadFinished(List<Contact> contacts);
     }
 }

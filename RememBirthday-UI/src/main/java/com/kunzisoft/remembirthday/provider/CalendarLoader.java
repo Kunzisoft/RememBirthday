@@ -23,9 +23,9 @@ import java.util.ArrayList;
  * Created by joker on 27/07/17.
  */
 
-public class CalendarProvider {
+public class CalendarLoader {
 
-    private static final String TAG = "CalendarProvider";
+    private static final String TAG = "CalendarLoader";
     private static String CALENDAR_COLUMN_NAME = "birthday_adapter";
 
     /**
@@ -47,7 +47,7 @@ public class CalendarProvider {
         ContentResolver contentResolver = context.getContentResolver();
 
         Uri uri = ContentUris.withAppendedId(
-                CalendarProvider.getBirthdayAdapterUri(context, CalendarContract.Calendars.CONTENT_URI),
+                CalendarLoader.getBirthdayAdapterUri(context, CalendarContract.Calendars.CONTENT_URI),
                 getCalendar(context));
 
         Log.d(TAG, "Updating calendar color to " + color + " with uri " + uri.toString());
@@ -135,71 +135,5 @@ public class CalendarProvider {
         Log.i(TAG, "Events of birthday calendar is now empty, deleted " + delEventsRows
                 + " rows!");
         Log.i(TAG, "Reminders of birthday calendar is now empty!");
-    }
-
-    /**
-     * Delete all reminders of birthday adapter by going through all events and delete corresponding
-     * reminders. This is needed as ContentResolver can not join directly.
-     * <p>
-     * TODO: not used currently
-     */
-    private static void deleteAllReminders(Context context) {
-        Log.d(TAG, "Going through all events and deleting all reminders...");
-
-        ContentResolver contentResolver = context.getContentResolver();
-
-        // get cursor for all events
-        Cursor eventsCursor = contentResolver.query(getBirthdayAdapterUri(context, CalendarContract.Events.CONTENT_URI),
-                new String[]{CalendarContract.Events._ID}, CalendarContract.Events.CALENDAR_ID + "= ?",
-                new String[]{String.valueOf(getCalendar(context))}, null);
-        int eventIdColumn = eventsCursor.getColumnIndex(CalendarContract.Events._ID);
-
-        ArrayList<ContentProviderOperation> operationList = new ArrayList<ContentProviderOperation>();
-
-        Uri remindersUri = getBirthdayAdapterUri(context, CalendarContract.Reminders.CONTENT_URI);
-
-        ContentProviderOperation.Builder builder = null;
-
-        // go through all events
-        try {
-            while (eventsCursor.moveToNext()) {
-                long eventId = eventsCursor.getLong(eventIdColumn);
-
-                Log.d(TAG, "Delete reminders for event id: " + eventId);
-
-                // get all reminders for this specific event
-                Cursor remindersCursor = contentResolver.query(remindersUri, new String[]{
-                                CalendarContract.Reminders._ID, CalendarContract.Reminders.MINUTES}, CalendarContract.Reminders.EVENT_ID + "= ?",
-                        new String[]{String.valueOf(eventId)}, null);
-                int remindersIdColumn = remindersCursor.getColumnIndex(CalendarContract.Reminders._ID);
-
-                /* Delete reminders for this event */
-                try {
-                    while (remindersCursor.moveToNext()) {
-                        long currentReminderId = remindersCursor.getLong(remindersIdColumn);
-                        Uri currentReminderUri = ContentUris.withAppendedId(remindersUri,
-                                currentReminderId);
-
-                        builder = ContentProviderOperation.newDelete(currentReminderUri);
-
-                        // add operation to list, later executed
-                        if (builder != null) {
-                            operationList.add(builder.build());
-                        }
-                    }
-                } finally {
-                    remindersCursor.close();
-                }
-            }
-        } finally {
-            eventsCursor.close();
-        }
-
-        try {
-            contentResolver.applyBatch(CalendarContract.AUTHORITY, operationList);
-        } catch (Exception e) {
-            Log.e(TAG, "Error: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 }

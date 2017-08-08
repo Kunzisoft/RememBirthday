@@ -5,7 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
 
 /**
  * Utility class for callback management
@@ -19,7 +19,7 @@ public class CallbackAction {
      * @param action Action performed
      * @param exception Exception if error, null if all is ok
      */
-    public static void showMessage(Context context, ActionBirthdayInDatabaseTask.CallbackActionBirthday.Action action, Exception exception) {
+    public static void showMessage(Context context, ContactProvider.CallbackActionBirthday.Action action, Exception exception) {
         String message = "";
         switch (action) {
             case ADD:

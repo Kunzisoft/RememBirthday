@@ -45,11 +45,11 @@ import com.kunzisoft.remembirthday.factory.MenuActionReminder;
 import com.kunzisoft.remembirthday.factory.MenuContact;
 import com.kunzisoft.remembirthday.factory.MenuContactCreator;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
-import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
+import com.kunzisoft.remembirthday.provider.ContactPhoneNumberLoader;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
-import com.kunzisoft.remembirthday.provider.EventProvider;
-import com.kunzisoft.remembirthday.provider.ReminderProvider;
-import com.kunzisoft.remembirthday.provider.RetrievePhoneNumberFromContactTask;
+import com.kunzisoft.remembirthday.provider.ContactLoader;
+import com.kunzisoft.remembirthday.provider.EventLoader;
+import com.kunzisoft.remembirthday.provider.ReminderLoader;
 import com.kunzisoft.remembirthday.utility.IntentCall;
 import com.kunzisoft.remembirthday.utility.Utility;
 
@@ -132,7 +132,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             // For save memory get RawId only when showMessage details
             setHasOptionsMenu(true);
 
-            ContactProvider.assignRawContactIdToContact(getContext(), contact);
+            ContactLoader.assignRawContactIdToContact(getContext(), contact);
 
             selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -187,9 +187,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 remindersListView.setAdapter(remindersAdapter);
 
                 // Build default elements
-                CalendarEvent event = EventProvider.getNextEventOrCreateNewFromContact(getContext(), contact);
+                CalendarEvent event = EventLoader.getNextEventOrCreateNewFromContact(getContext(), contact);
                 if(event != null) {
-                    List<Reminder> reminders = ReminderProvider.getRemindersFromEvent(getContext(), event);
+                    List<Reminder> reminders = ReminderLoader.getRemindersFromEvent(getContext(), event);
                     event.addReminders(reminders);
                     Log.d(TAG, "Get event from calendar : " + event.toString());
                     remindersAdapter.addReminders(reminders);
@@ -265,19 +265,16 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
      * Assign the list of phone numbers to "phoneNumbers"
      */
     private void retrievePhoneNumber() {
-        RetrievePhoneNumberFromContactTask retrievePhoneNumberFromContactTask =
-                new RetrievePhoneNumberFromContactTask(getActivity(), contact.getId(), contact.getLookUpKey());
-        retrievePhoneNumberFromContactTask.setCallbackActionPhoneNumber(
-                new RetrievePhoneNumberFromContactTask.CallbackActionPhoneNumber() {
-                    @Override
-                    public void afterActionPhoneNumberInDatabase(List<PhoneNumber> phoneNumberList) {
-                        defineMenuContact(phoneNumberList);
-                        // Assign phone numbers to current contact
-                        contact.setPhoneNumbers(phoneNumberList);
-                    }
-                }
-        );
-        retrievePhoneNumberFromContactTask.execute();
+        ContactPhoneNumberLoader phoneNumberLoader = new ContactPhoneNumberLoader(getContext(), contact);
+        phoneNumberLoader.setCallbackActionPhoneNumber(new ContactPhoneNumberLoader.CallbackActionPhoneNumber() {
+            @Override
+            public void afterActionPhoneNumberInDatabase(List<PhoneNumber> phoneNumberList) {
+                defineMenuContact(phoneNumberList);
+                // Assign phone numbers to current contact
+                contact.setPhoneNumbers(phoneNumberList);
+            }
+        });
+        getLoaderManager().initLoader(0, null, phoneNumberLoader);
     }
 
     @Override
@@ -367,18 +364,18 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     builderDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // Delete anniversary in database
-                            ActionBirthdayInDatabaseTask.RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
-                                    new ActionBirthdayInDatabaseTask.RemoveBirthdayFromContactTask(
+                            ContactProvider.RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
+                                    new ContactProvider.RemoveBirthdayFromContactTask(
                                             getActivity(),
                                             contact.getDataAnniversaryId(),
                                             contact.getBirthday());
                             // Response in activity
                             removeBirthdayFromContactTask.setCallbackActionBirthday(
-                                    (ActionBirthdayInDatabaseTask.CallbackActionBirthday) getActivity());
+                                    (ContactProvider.CallbackActionBirthday) getActivity());
                             removeBirthdayFromContactTask.execute();
 
                             // Delete event in calendar
-                            EventProvider.deleteEventsFromContact(getContext(), contact);
+                            EventLoader.deleteEventsFromContact(getContext(), contact);
                         }
                     });
                     builderDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

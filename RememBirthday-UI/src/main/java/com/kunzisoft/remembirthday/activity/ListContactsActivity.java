@@ -22,9 +22,9 @@ import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
-import com.kunzisoft.remembirthday.provider.ActionBirthdayInDatabaseTask;
-import com.kunzisoft.remembirthday.provider.CalendarProvider;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
+import com.kunzisoft.remembirthday.provider.CalendarLoader;
+import com.kunzisoft.remembirthday.provider.ContactLoader;
 import com.kunzisoft.remembirthday.provider.EventProvider;
 import com.kunzisoft.remembirthday.provider.ReminderProvider;
 
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * Created by joker on 19/01/17.
  */
 public class ListContactsActivity extends AppCompatActivity
-        implements ActionBirthdayInDatabaseTask.CallbackActionBirthday, AnniversaryDialogOpen {
+        implements ContactProvider.CallbackActionBirthday, AnniversaryDialogOpen {
 
     public static final int INSERT_BIRTHDAY_RESULT_CODE = 1619;
     private static final int INSERT_CONTACT_RESULT_CODE = 1567;
@@ -79,8 +79,8 @@ public class ListContactsActivity extends AppCompatActivity
                 ArrayList<ContentProviderOperation> allOperationList = new ArrayList<>();
 
                 // Add new birthday in database
-                ActionBirthdayInDatabaseTask.AddBirthdayToContactTask addBirthdayToContactTask =
-                        new ActionBirthdayInDatabaseTask.AddBirthdayToContactTask(
+                ContactProvider.AddBirthdayToContactTask addBirthdayToContactTask =
+                        new ContactProvider.AddBirthdayToContactTask(
                                 ListContactsActivity.this,
                                 contactWithRawIdSelected.getRawId(),
                                 dateUnknownYear);
@@ -92,7 +92,7 @@ public class ListContactsActivity extends AppCompatActivity
                 // Add new event in calendar
                 if(PreferencesManager.isCustomCalendarActive(ListContactsActivity.this)) {
                     // TODO Encapsulate
-                    long calendarId = CalendarProvider.getCalendar(ListContactsActivity.this);
+                    long calendarId = CalendarLoader.getCalendar(ListContactsActivity.this);
                     if (calendarId != -1) {
                         CalendarEvent event = CalendarEvent.buildDefaultEventFromContactToSave(
                                 ListContactsActivity.this,
@@ -155,7 +155,7 @@ public class ListContactsActivity extends AppCompatActivity
             case (INSERT_CONTACT_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
-                    contactWithRawIdSelected = ContactProvider.getContactFromURI(this, contactData);
+                    contactWithRawIdSelected = ContactLoader.getContactFromURI(this, contactData);
                 }
                 break;
         }

@@ -1,132 +1,172 @@
 package com.kunzisoft.remembirthday.provider;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
+import android.app.Activity;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.Log;
 
-import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by joker on 28/07/17.
+ * Created by joker on 19/04/17.
  */
-// TODO
-public class ContactProvider {
+// TODO ContactAsyncQueryHandler
+public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
 
-    private static final String TAG = "ContactProvider";
+    protected DateUnknownYear birthday;
+    protected Activity context;
 
-    /**
-     * Get RawContactId from ContactId
-     * @param context context to call
-     * @param contactId Id key of ContractsContract.Contacts
-     * @return Id of RawContact
-     */
-    public static long getRawContactId(Context context, long contactId) {
-        long rawContactId = -1;
-        Cursor cursor = context.getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI,
-                new String[]{ContactsContract.RawContacts._ID},
-                ContactsContract.RawContacts.CONTACT_ID + "=?",
-                new String[]{String.valueOf(contactId)}, null);
-        if(cursor != null) {
-            if (cursor.moveToFirst()) {
-                rawContactId = cursor.getLong(0);
-            }
-            cursor.close();
-        }
-        return rawContactId;
+    protected CallbackActionBirthday callbackActionBirthday;
+    protected CallbackActionBirthday.Action action;
+
+    public ContactProvider(Activity context, DateUnknownYear birthday) {
+        this.birthday = birthday;
+        this.context = context;
+        this.action = CallbackActionBirthday.Action.UNDEFINED;
+    }
+
+    @Override
+    protected void onPostExecute(Exception exception) {
+        if(callbackActionBirthday != null)
+            callbackActionBirthday.afterActionBirthdayInDatabase(birthday, action, exception);
+    }
+
+    public CallbackActionBirthday getCallbackActionBirthday() {
+        return callbackActionBirthday;
+    }
+
+    public void setCallbackActionBirthday(CallbackActionBirthday callbackActionBirthday) {
+        this.callbackActionBirthday = callbackActionBirthday;
     }
 
     /**
-     * Return Contact from URI
-     * @param context Context to call
-     * @param contactData Contact URI
-     * @return Contact from content resolver or null if not fund
+     * Callback for do action after insert/update/delete birthday of contact in database
      */
-    public static Contact getContactFromURI(Context context, Uri contactData) {
-        Contact contact = null;
-        Cursor cursor =  context.getContentResolver().query(contactData, null, null, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                contact = new Contact(
-                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)),
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Data.LOOKUP_KEY)),
-                        cursor.getLong(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID)),
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME)));
-            }
-            cursor.close();
+    public interface CallbackActionBirthday {
+
+        enum Action {
+            UNDEFINED,
+            ADD,
+            UPDATE,
+            REMOVE
         }
-        return contact;
+
+        void afterActionBirthdayInDatabase(DateUnknownYear birthday, Action action, Exception exception);
     }
 
     /**
-     * Get List of contacts with birthday
-     * @return Cursor over all contacts with events, where accounts are not blacklisted
+     * AsyncTask who store the birthday in database for a specific contact
      */
-    public static List<Contact> getAllContacts(Context context) {
-        Uri uri = ContactsContract.Data.CONTENT_URI;
-        String[] projection = new String[]{
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.LOOKUP_KEY,
-                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
-                ContactsContract.Contacts.PHOTO_URI,
-                ContactsContract.Contacts.Data._ID,
-                ContactsContract.CommonDataKinds.Event.START_DATE,
-                ContactsContract.CommonDataKinds.Event.TYPE
-        };
-        String selection =
-                ContactsContract.Data.MIMETYPE + "= ? AND (" +
-                        ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY + //" OR " +
-                        //ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                        //ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY +
-                        " ) ";
-        String[] selectionArgs = new String[] {
-                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-        };
+    public static class AddBirthdayToContactTask extends ContactProvider {
 
-        Cursor cursor =  context.getContentResolver().query(
-                uri,
-                projection,
-                selection,
-                selectionArgs,
-                null);
+        private long rawContactId;
 
-        List<Contact> contactList = new ArrayList<>();
-        if(cursor != null) {
-            // TODO get only first for each contact
-            while (cursor.moveToNext()) {
-                int eventLookupKeyColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.LOOKUP_KEY);
-                int displayNameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                int eventDateColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
-
-                Contact contact = new Contact(cursor.getString(displayNameColumn));
-                contact.setBirthday(DateUnknownYear.stringToDate(cursor.getString(eventDateColumn)));
-                contact.setLookUpKey(cursor.getString(eventLookupKeyColumn));
-                contactList.add(contact);
-            }
-            cursor.close();
+        public AddBirthdayToContactTask(Activity context, long rawContactId, DateUnknownYear birthday) {
+            super(context, birthday);
+            this.rawContactId = rawContactId;
+            this.action = CallbackActionBirthday.Action.ADD;
         }
 
-        return contactList;
+        @Override
+        protected Exception doInBackground(Void... params) {
+            try {
+                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+                ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                        .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactId)
+                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
+                        .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString())
+                        .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
+                ops.add(contentBuilder.build());
+                ContentProviderResult[] contentProviderResults = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                int dataId = Integer.parseInt(contentProviderResults[0].uri.getLastPathSegment());
+
+            } catch(Exception e) {
+                Log.e(getClass().getSimpleName(), e.getMessage()+" ");
+                return e;
+            }
+            return null;
+        }
     }
 
     /**
-     * Assign RAW_CONTACT_ID to contact in parameter with CONTACT_ID,
-     * If CONTACT_ID is undefined, RAW_CONTACT_ID is set to undefined
-     * @param context Context to call
-     * @param contact Contact to modify
-     * @return first RAW_CONTACT_ID assign
+     * AsyncTask who store the birthday in database for a specific contact
      */
-    public static long assignRawContactIdToContact(Context context, Contact contact) {
-        long rawId = Contact.ID_UNDEFINED;
-        if(contact.getId() != Contact.ID_UNDEFINED)
-            rawId = getRawContactId(context, contact.getId());
-        contact.setRawId(rawId);
-        return rawId;
+    public static class RemoveBirthdayFromContactTask extends ContactProvider {
+
+        protected long dataId;
+
+        public RemoveBirthdayFromContactTask(Activity context, long dataId, DateUnknownYear birthday) {
+            super(context, birthday);
+            this.dataId = dataId;
+            this.action = CallbackActionBirthday.Action.REMOVE;
+        }
+
+        @Override
+        protected Exception doInBackground(Void... params) {
+            try {
+                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+                ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newDelete(ContactsContract.Data.CONTENT_URI)
+                        .withSelection(
+                                ContactsContract.Data._ID + " =? AND " +
+                                ContactsContract.Data.MIMETYPE + " =? AND " +
+                                ContactsContract.CommonDataKinds.Event.START_DATE + " =? AND " +
+                                ContactsContract.CommonDataKinds.Event.TYPE + " =?"
+                                , new String[]{String.valueOf(dataId),
+                                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                                    birthday.toBackupString(),
+                                    String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)});
+                ops.add(contentBuilder.build());
+                context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            } catch(Exception e) {
+                Log.e(getClass().getSimpleName(), e.getMessage()+" ");
+                return e;
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Created by joker on 24/04/17.
+     */
+
+    public static class UpdateBirthdayToContactTask extends ContactProvider {
+
+        private long dataId;
+        private DateUnknownYear oldBirthday;
+
+        public UpdateBirthdayToContactTask(Activity context, long dataId, DateUnknownYear oldBirthday, DateUnknownYear newBirthday) {
+            super(context, newBirthday);
+            this.dataId = dataId;
+            this.oldBirthday = oldBirthday;
+            this.action = CallbackActionBirthday.Action.UPDATE;
+        }
+
+        @Override
+        protected Exception doInBackground(Void... voids) {
+            try {
+                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+                ContentProviderOperation.Builder contentBuilder =  ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                        .withSelection(ContactsContract.Data._ID + " =? AND " +
+                                        ContactsContract.Data.MIMETYPE + " =? AND " +
+                                        ContactsContract.CommonDataKinds.Event.START_DATE + " =? AND " +
+                                        ContactsContract.CommonDataKinds.Event.TYPE + " =?"
+                                , new String[]{String.valueOf(dataId),
+                                        ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                                        oldBirthday.toBackupString(),
+                                        String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)})
+                        .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString());
+                ops.add(contentBuilder.build());
+                context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+
+            } catch(Exception e) {
+                Log.e(getClass().getSimpleName(), e.getMessage()+" ");
+                return e;
+            }
+            return null;
+        }
     }
 }
