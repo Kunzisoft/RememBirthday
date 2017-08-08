@@ -132,7 +132,6 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
     /**
      * Created by joker on 24/04/17.
      */
-
     public static class UpdateBirthdayToContactTask extends ContactProvider {
 
         private long dataId;

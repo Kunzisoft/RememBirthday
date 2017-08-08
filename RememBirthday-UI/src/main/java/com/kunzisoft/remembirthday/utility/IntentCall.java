@@ -1,16 +1,19 @@
 package com.kunzisoft.remembirthday.utility;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kunzisoft.remembirthday.BuildConfig;
+import com.kunzisoft.remembirthday.element.Contact;
 
 import java.util.Calendar;
 
@@ -110,4 +113,21 @@ public class IntentCall {
         }
     }
 
+    public static final int MODIFY_CONTACT_RESULT_CODE = 1518;
+    /**
+     * Open activity for contact modifications
+     */
+     public static void openAppForContactModifications(Activity activity, Contact contact) {
+        Intent editIntent = new Intent(Intent.ACTION_EDIT);
+        editIntent.setDataAndType(contact.getUri(), ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+        // Response in activity
+        activity.startActivityForResult(editIntent, MODIFY_CONTACT_RESULT_CODE);
+    }
+
+    /**
+     * Created by joker on 08/08/17.
+     */
+    public interface OnContactModify {
+        void onEventContactModify();
+    }
 }

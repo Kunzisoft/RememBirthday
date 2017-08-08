@@ -7,16 +7,18 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.utility.IntentCall;
 import com.squareup.picasso.Picasso;
 
 /**
  * Activity that displays the details of a buddy
  */
-public class DetailsBuddyActivity extends AbstractBuddyActivity {
+public class DetailsBuddyActivity extends AbstractBuddyActivity implements IntentCall.OnContactModify {
 
     private static final String TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT";
 
@@ -63,6 +65,12 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
                 arr.recycle();
                 avatarImageView.setColorFilter(colorSecondary);
             }
+            avatarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    IntentCall.openAppForContactModifications(DetailsBuddyActivity.this, contactSelected);
+                }
+            });
         }
 
         // Build dialog
@@ -80,11 +88,16 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity {
     }
 
     @Override
+    public void onEventContactModify() {
+        IntentCall.openAppForContactModifications(DetailsBuddyActivity.this, contactSelected);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case (DetailsBuddyFragment.MODIFY_CONTACT_RESULT_CODE) :
+            case (IntentCall.MODIFY_CONTACT_RESULT_CODE) :
                 //if (resultCode == Activity.RESULT_OK) {
                     finish();
                 /*

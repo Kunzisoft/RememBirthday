@@ -39,7 +39,7 @@ public class ContactPhoneNumberLoader extends AbstractLoader {
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
-        if(cursor != null) {
+        if(cursor != null && !cursor.isClosed()) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String number = cursor.getString(cursor.getColumnIndex(

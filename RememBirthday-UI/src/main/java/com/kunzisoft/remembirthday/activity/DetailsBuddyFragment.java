@@ -1,9 +1,7 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -23,8 +21,8 @@ import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
-import com.kunzisoft.remembirthday.adapter.ReminderCalendarProviderObserver;
 import com.kunzisoft.remembirthday.adapter.ReminderCalendarNotificationsAdapter;
+import com.kunzisoft.remembirthday.adapter.ReminderCalendarProviderObserver;
 import com.kunzisoft.remembirthday.adapter.ReminderToastObserver;
 import com.kunzisoft.remembirthday.animation.AnimationViewCircle;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
@@ -45,9 +43,9 @@ import com.kunzisoft.remembirthday.factory.MenuActionReminder;
 import com.kunzisoft.remembirthday.factory.MenuContact;
 import com.kunzisoft.remembirthday.factory.MenuContactCreator;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.provider.ContactLoader;
 import com.kunzisoft.remembirthday.provider.ContactPhoneNumberLoader;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
-import com.kunzisoft.remembirthday.provider.ContactLoader;
 import com.kunzisoft.remembirthday.provider.EventLoader;
 import com.kunzisoft.remembirthday.provider.ReminderLoader;
 import com.kunzisoft.remembirthday.utility.IntentCall;
@@ -63,8 +61,6 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     private static final String TAG = "DetailsBuddyFragment";
 
     private static final String CONTACT_KEY = "CONTACT_KEY";
-
-    public static final int MODIFY_CONTACT_RESULT_CODE = 1518;
 
     private Contact contact;
 
@@ -351,10 +347,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 break;
             case R.id.action_modify_contact:
                 if(contact != null) {
-                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(contact.getUri(), ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-                    // Response in activity
-                    getActivity().startActivityForResult(editIntent, MODIFY_CONTACT_RESULT_CODE);
+                    ((IntentCall.OnContactModify) getActivity()).onEventContactModify();
                 }
                 break;
             case R.id.action_delete:

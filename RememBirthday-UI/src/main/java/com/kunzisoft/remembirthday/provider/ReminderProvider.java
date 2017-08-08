@@ -1,16 +1,10 @@
 package com.kunzisoft.remembirthday.provider;
 
 import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.provider.CalendarContract;
 
-import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Reminder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by joker on 28/07/17.

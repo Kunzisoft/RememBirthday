@@ -30,7 +30,7 @@ import permissions.dispatcher.RuntimePermissions;
  * Activity for showMessage list and details (depend of screen) of buddies
  */
 @RuntimePermissions
-public class BuddyActivity extends AbstractBuddyActivity {
+public class BuddyActivity extends AbstractBuddyActivity implements IntentCall.OnContactModify {
 
     private static final String TAG = "BuddyActivity";
     public static final String EXTRA_BUDDY = "EXTRA_BUDDY";
@@ -117,9 +117,9 @@ public class BuddyActivity extends AbstractBuddyActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case (DetailsBuddyFragment.MODIFY_CONTACT_RESULT_CODE) :
+            case (IntentCall.MODIFY_CONTACT_RESULT_CODE) :
                 if (resultCode == Activity.RESULT_OK) {
-                /*
+                    /*
                     Uri contactData = data.getData();
                     Cursor cursor =  getContentResolver().query(contactData, null, null, null, null);
                     if (cursor.moveToFirst()) {
@@ -146,6 +146,11 @@ public class BuddyActivity extends AbstractBuddyActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onEventContactModify() {
+        IntentCall.openAppForContactModifications(this, contactSelected);
     }
 
     @Override
