@@ -183,8 +183,8 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 remindersListView.setAdapter(remindersAdapter);
 
                 // Build default elements
-                CalendarEvent event = EventLoader.getNextEventOrCreateNewFromContact(getContext(), contact);
-                if(event != null) {
+                try {
+                    CalendarEvent event = EventLoader.getNextEventOrCreateNewFromContact(getContext(), contact);
                     List<Reminder> reminders = ReminderLoader.getRemindersFromEvent(getContext(), event);
                     event.addReminders(reminders);
                     Log.d(TAG, "Get event from calendar : " + event.toString());
@@ -196,9 +196,11 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                             new ReminderCalendarProviderObserver(getContext(), contact, event));
                     remindersAdapter.registerReminderObserver(
                             new ReminderToastObserver(getContext()));
-                } else {
-                    Log.e(TAG, "Error when get event from calendar");
+                } catch (EventLoader.EventException e) {
+                    Log.e(TAG, "Error when build event and reminders : " + e.getLocalizedMessage());
                 }
+            } else {
+                remindersListView.setVisibility(View.GONE);
             }
 
             // Build adapters only if daemons active
@@ -206,6 +208,8 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 // Link auto messages view to adapter
                 autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
                 autoMessagesListView.setAdapter(autoMessagesAdapter);
+            } else {
+                autoMessagesListView.setVisibility(View.GONE);
             }
 
             // Link menu to adapter
@@ -220,7 +224,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 try {
                     defineMenuContact(contact.getPhoneNumbers());
                 } catch (PhoneNumberNotInitializedException e) {
-                    Log.e(TAG, e.getLocalizedMessage());
+                    Log.e(TAG, "Error to get phone number : " + e.getLocalizedMessage());
                 }
             }
 
@@ -296,7 +300,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                                 contact.getMainPhoneNumber().getNumber(),
                                 ""); // TODO Default message
                     } catch (PhoneNumberNotInitializedException | NoPhoneNumberException e) {
-                        Log.e(TAG, e.getLocalizedMessage());
+                        Log.e(TAG, "Unable to call message action : " + e.getLocalizedMessage());
                     }
                     break;
                 case MenuActionCall.ITEM_ID :
@@ -304,7 +308,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                         IntentCall.openCallApp(getContext(),
                                 contact.getMainPhoneNumber().getNumber());
                     } catch (PhoneNumberNotInitializedException | NoPhoneNumberException e) {
-                        Log.e(TAG, e.getLocalizedMessage());
+                        Log.e(TAG, "Unable to make call action : " + e.getLocalizedMessage());
                     }
                     break;
                 case MenuActionReminder.ITEM_ID :
@@ -357,18 +361,20 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     builderDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // Delete anniversary in database
-                            ContactProvider.RemoveBirthdayFromContactTask removeBirthdayFromContactTask =
-                                    new ContactProvider.RemoveBirthdayFromContactTask(
+                            ContactProvider.RemoveBirthdayContactProvider removeBirthdayContactProvider =
+                                    new ContactProvider.RemoveBirthdayContactProvider(
                                             getActivity(),
                                             contact.getDataAnniversaryId(),
                                             contact.getBirthday());
                             // Response in activity
-                            removeBirthdayFromContactTask.setCallbackActionBirthday(
+                            removeBirthdayContactProvider.setCallbackActionBirthday(
                                     (ContactProvider.CallbackActionBirthday) getActivity());
-                            removeBirthdayFromContactTask.execute();
+                            removeBirthdayContactProvider.execute();
 
                             // Delete event in calendar
-                            EventLoader.deleteEventsFromContact(getContext(), contact);
+                            if(PreferencesManager.isCustomCalendarActive(getContext())) {
+                                EventLoader.deleteEventsFromContact(getContext(), contact);
+                            }
                         }
                     });
                     builderDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

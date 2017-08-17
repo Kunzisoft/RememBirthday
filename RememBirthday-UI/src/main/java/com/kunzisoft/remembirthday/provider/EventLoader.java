@@ -23,7 +23,6 @@ import org.joda.time.DateTimeZone;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Created by joker on 08/08/17.
@@ -33,47 +32,29 @@ public class EventLoader {
 
     private final static String TAG = "EventLoader";
 
-
-    public synchronized static List<CalendarEvent> getEventsSavedForEachYear(Context context, Contact contact) {
-        List<CalendarEvent> eventsSaved = new ArrayList<>();
-
-        CalendarEvent eventToUpdate = getNextEventFromContact(context, contact);
-
-        // Update events for each year
-        EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
-        List<CalendarEvent> eventsAroundNeeded = eventWithoutYear.getEventsAroundAndForThisYear();
-        List<CalendarEvent> eventsAroundSaved = getEventsFromContactWithYears(
-                context, contact, eventWithoutYear.getListOfYearsForEachEvent());
-
-        for (CalendarEvent event : eventsAroundNeeded) {
-            if (eventsAroundSaved.contains(event)) {
-                // For get id
-                event = eventsAroundSaved.get(eventsAroundSaved.indexOf(event));
-                eventsSaved.add(event);
-            }
+    /**
+     * Return new event from contact or null if not found
+     * @param context Context to call
+     * @param contact Contact associated with event
+     * @return Next event in the year or null if not fund
+     */
+    private synchronized static CalendarEvent getNextEventFromContact(Context context, Contact contact) throws EventException {
+        Long[] eventTimes = new Long[1];
+        eventTimes[0] = new DateTime(contact.getNextBirthday())
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0)
+                .withZoneRetainFields(DateTimeZone.UTC)
+                .toDateTime().toDate().getTime();
+        List<CalendarEvent> calendarEvents = getEventsFromContact(context, contact, eventTimes);
+        if(calendarEvents.isEmpty())
+            throw new EventException("Unable to get next event from contact : " + contact.toString());
+        else {
+            CalendarEvent event = calendarEvents.get(0);
+            Log.d(TAG, "Get next event " + event + " from contact " + contact);
+            return event;
         }
-        return eventsSaved;
-    }
-
-    public synchronized static List<CalendarEvent> getEventsSavedOrCreateNewsForEachYearAfterNextEvent(Context context, Contact contact) {
-        List<CalendarEvent> eventsSaved = new ArrayList<>();
-
-        CalendarEvent eventToUpdate = getNextEventOrCreateNewFromContact(context, contact);
-
-        // Update events for each year
-        EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
-        List<CalendarEvent> eventsAfterNeeded = eventWithoutYear.getEventsAfterThisYear();
-        List<CalendarEvent> eventsAfterSaved = getEventsFromContactWithYears(
-                context, contact, eventWithoutYear.getListOfYearsForEventsAfterThisYear());
-
-        for (CalendarEvent event : eventsAfterNeeded) {
-            if (eventsAfterSaved.contains(event)) {
-                // For get id
-                event = eventsAfterSaved.get(eventsAfterSaved.indexOf(event));
-                eventsSaved.add(event);
-            }
-        }
-        return eventsSaved;
     }
 
     /**
@@ -83,47 +64,31 @@ public class EventLoader {
      * @param years List of event's years
      * @return Events for each year
      */
-    public synchronized static List<CalendarEvent> getEventsFromContactWithYears(Context context, Contact contact, List<Integer> years) {
+    private synchronized static List<CalendarEvent> getEventsFromContactWithYears(Context context, Contact contact, List<Integer> years) {
         Long[] eventTimes = new Long[years.size()];
         for(int i = 0; i < years.size(); i++) {
             int year = years.get(i);
             long eventTime = new DateTime(contact.getBirthday().getDateWithYear(year))
+                    .withHourOfDay(0)
+                    .withMinuteOfHour(0)
+                    .withSecondOfMinute(0)
+                    .withMillisOfSecond(0)
                     .withZoneRetainFields(DateTimeZone.UTC)
                     .toDateTime().toDate().getTime();
             eventTimes[i] = eventTime;
         }
-        return getEventsFromContact(context, contact, eventTimes);
+        List<CalendarEvent> events = getEventsFromContact(context, contact, eventTimes);
+        Log.d(TAG, "Get events (" + events.size() + ") from contact " + contact + " with year " + years);
+        return events;
     }
 
     /**
-     * Return new event from contact or null if not found
+     * Utility class for get all events from contact with list of StartTime
      * @param context Context to call
-     * @param contact Contact associated with event
-     * @return Next event in the year or null if not fund
+     * @param contact Contact link
+     * @param eventTimes List of events' StartTime
+     * @return List of events
      */
-    public synchronized static CalendarEvent getNextEventFromContact(Context context, Contact contact) {
-        Long[] eventTimes = new Long[1];
-        eventTimes[0] = new DateTime(contact.getNextBirthday())
-                .withZoneRetainFields(DateTimeZone.UTC)
-                .toDateTime().toDate().getTime();
-        contact.getNextBirthday();
-        List<CalendarEvent> calendarEvents = getEventsFromContact(context, contact, eventTimes);
-        if(calendarEvents.isEmpty())
-            return null;
-        else
-            return calendarEvents.get(0);
-    }
-
-    public synchronized static CalendarEvent getNextEventOrCreateNewFromContact(Context context, Contact contact) {
-        CalendarEvent nextEvent = getNextEventFromContact(context, contact);
-        // If next event do not exists, create all events missing (end of 5 years)
-        if(nextEvent == null) {
-            saveEventsIfNotExistsFromAllContactWithBirthday(context);
-            nextEvent = getNextEventFromContact(context, contact);
-        }
-        return nextEvent;
-    }
-
     private synchronized static List<CalendarEvent> getEventsFromContact(Context context, Contact contact, Long[] eventTimes) {
         /* Two ways
             - Get events days of anniversary and filter with name (use for the first time)
@@ -195,6 +160,139 @@ public class EventLoader {
     }
 
     /**
+     * Get the next event or create a new event if not exists
+     * @param context Context to call
+     * @param contact Contact link
+     * @return The next event
+     * @throws EventException If event can't be get after creation
+     */
+    public synchronized static CalendarEvent getNextEventOrCreateNewFromContact(Context context, Contact contact) throws EventException {
+        try {
+            return getNextEventFromContact(context, contact);
+        } catch (EventException e) {
+            // If next event do not exists, create all events missing (end of 5 years)
+            // TODO Replace by saveEventIfNotExistsFromContactWithBirthday
+            saveEventsIfNotExistsFromAllContactWithBirthday(context);
+            return getNextEventFromContact(context, contact);
+        }
+    }
+
+    public synchronized static List<CalendarEvent> getEventsSavedOrCreateNewsForEachYearAfterNextEvent(Context context, Contact contact) throws EventException {
+        Log.d(TAG, "Retrieve events saved for each year after next event or create them");
+        List<CalendarEvent> eventsSaved = new ArrayList<>();
+        CalendarEvent eventToUpdate = getNextEventOrCreateNewFromContact(context, contact);
+        // Update events for each year
+        EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
+        List<CalendarEvent> eventsAfterNeeded = eventWithoutYear.getEventsAfterThisYear();
+        List<CalendarEvent> eventsAfterSaved = getEventsFromContactWithYears(
+                context, contact, eventWithoutYear.getListOfYearsForEventsAfterThisYear());
+
+        for (CalendarEvent event : eventsAfterNeeded) {
+            if (eventsAfterSaved.contains(event)) {
+                // For get id
+                event = eventsAfterSaved.get(eventsAfterSaved.indexOf(event));
+                eventsSaved.add(event);
+            }
+        }
+        return eventsSaved;
+    }
+
+    public synchronized static void updateEvent(Context context, Contact contact, DateUnknownYear newBirthday) throws EventException {
+        // TODO UNIFORMISE
+        for (CalendarEvent event : getEventsSavedOrCreateNewsForEachYear(context, contact)) {
+            // Construct each anniversary of new birthday
+            int year = new DateTime(event.getDate()).getYear();
+            Date newBirthdayDate = DateUnknownYear.getDateWithYear(newBirthday.getDate(), year);
+            event.setDateStart(newBirthdayDate);
+            event.setAllDay(true);
+            ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+            ContentProviderOperation contentProviderOperation = EventProvider.update(event);
+            operations.add(contentProviderOperation);
+            try {
+                ContentProviderResult[] contentProviderResults =
+                        context.getContentResolver().applyBatch(CalendarContract.AUTHORITY, operations);
+                for(ContentProviderResult contentProviderResult : contentProviderResults) {
+                    if (contentProviderResult.count != 0)
+                        Log.d(TAG, "Update event : " + event.toString());
+                }
+            } catch (RemoteException|OperationApplicationException e) {
+                Log.e(TAG, "Unable to update event : " + e.getMessage());
+            }
+        }
+    }
+
+    private synchronized static List<CalendarEvent> getEventsSavedForEachYear(Context context, Contact contact) throws EventException {
+        Log.d(TAG, "Retrieve events saved for each year");
+        List<CalendarEvent> eventsSaved = new ArrayList<>();
+
+        CalendarEvent eventToUpdate = getNextEventFromContact(context, contact);
+
+        // Update events for each year
+        EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
+        List<CalendarEvent> eventsAroundNeeded = eventWithoutYear.getEventsAroundAndForThisYear();
+        List<CalendarEvent> eventsAroundSaved = getEventsFromContactWithYears(
+                context, contact, eventWithoutYear.getListOfYearsForEachEvent());
+
+        for (CalendarEvent event : eventsAroundNeeded) {
+            if (eventsAroundSaved.contains(event)) {
+                // For get id
+                event = eventsAroundSaved.get(eventsAroundSaved.indexOf(event));
+                eventsSaved.add(event);
+            }
+        }
+        return eventsSaved;
+    }
+
+    private synchronized static List<CalendarEvent> getEventsSavedOrCreateNewsForEachYear(Context context, Contact contact) throws EventException {
+        Log.d(TAG, "Retrieve events saved for each year");
+        List<CalendarEvent> eventsSaved = new ArrayList<>();
+
+        CalendarEvent eventToUpdate = getNextEventFromContact(context, contact);
+
+        // Update events for each year
+        EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToUpdate);
+        List<CalendarEvent> eventsAroundNeeded = eventWithoutYear.getEventsAroundAndForThisYear();
+        List<CalendarEvent> eventsAroundSaved = getEventsFromContactWithYears(
+                context, contact, eventWithoutYear.getListOfYearsForEachEvent());
+
+        for (CalendarEvent event : eventsAroundNeeded) {
+            if (eventsAroundSaved.contains(event)) {
+                // For get id
+                event = eventsAroundSaved.get(eventsAroundSaved.indexOf(event));
+                eventsSaved.add(event);
+            } else {
+                // TODO Replace by saveEventIfNotExistsFromContactWithBirthday
+                saveEventsIfNotExistsFromAllContactWithBirthday(context);
+                // TODO get all news
+            }
+        }
+        return eventsSaved;
+    }
+
+    public synchronized static void deleteEventsFromContact(Context context, Contact contact) {
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+        try {
+            for (CalendarEvent event : getEventsSavedForEachYear(context, contact)) {
+                operations.add(ReminderProvider.deleteAll(context, event.getId()));
+                operations.add(EventProvider.delete(event));
+            }
+            ContentProviderResult[] contentProviderResults =
+                    context.getContentResolver().applyBatch(CalendarContract.AUTHORITY, operations);
+            for(ContentProviderResult contentProviderResult : contentProviderResults) {
+                Log.d(TAG, contentProviderResult.toString());
+                if (contentProviderResult.uri != null)
+                    Log.d(TAG, contentProviderResult.uri.toString());
+            }
+        } catch (RemoteException |OperationApplicationException |EventException e) {
+            Log.e(TAG, "Unable to delete events : " + e.getMessage());
+        }
+    }
+
+    public synchronized static void saveEventIfNotExistsFromContactWithBirthday(Context context, Contact contact) {
+        //TODO
+    }
+
+    /**
      * Save all events and default reminders from contacts with birthday
      * @param context Context to call
      */
@@ -208,7 +306,7 @@ public class EventLoader {
 
         long calendarId = CalendarLoader.getCalendar(context);
         if (calendarId == -1) {
-            Log.e("CalendarSyncAdapter", "Unable to create calendar");
+            Log.e(TAG, "Unable to create calendar");
             return;
         }
 
@@ -231,38 +329,28 @@ public class EventLoader {
             Log.d(TAG, "BackRef is " + backRef);
 
             // If next event in calendar is empty, add new event
-            CalendarEvent eventFromContentProvider = getNextEventFromContact(context, contact);
-            if (eventFromContentProvider == null) {
-                CalendarEvent eventToAdd = CalendarEvent.buildDefaultEventFromContactToSave(context, contact);
+            CalendarEvent eventToAdd = CalendarEvent.buildDefaultEventFromContactToSave(context, contact);
 
-                // TODO ENCAPSULATE
-                EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToAdd);
-                List<CalendarEvent> eventsAroundNeeded = eventWithoutYear.getEventsAroundAndForThisYear();
-                List<CalendarEvent> eventsAroundSaved = getEventsFromContactWithYears(
-                        context, contact, eventWithoutYear.getListOfYearsForEachEvent());
+            // TODO ENCAPSULATE
+            EventWithoutYear eventWithoutYear = new EventWithoutYear(eventToAdd);
+            List<CalendarEvent> eventsAroundNeeded = eventWithoutYear.getEventsAroundAndForThisYear();
+            List<CalendarEvent> eventsAroundSaved = getEventsFromContactWithYears(
+                    context, contact, eventWithoutYear.getListOfYearsForEachEvent());
 
-                for (CalendarEvent event : eventsAroundNeeded) {
-                    if (!eventsAroundSaved.contains(event)) {
+            for (CalendarEvent event : eventsAroundNeeded) {
+                if (!eventsAroundSaved.contains(event)) {
 
-                        // Add event operation in list of contact manager
-                        allOperationList.add(
-                                EventProvider.insert(context, calendarId, event, contact));
+                    // Add event operation in list of contact manager
+                    allOperationList.add(EventProvider.insert(context, calendarId, event, contact));
 
-                        //TODO REMOVE REMINDERS BUG
-                        /*
-                         * Gets ContentProviderOperation to insert new reminder to the
-                         * ContentProviderOperation with the given backRef. This is done using
-                         * "withValueBackReference"
-                         */
-                        int noOfReminderOperations = 0;
-                        for (Reminder reminder : eventToAdd.getReminders()) {
-                            allOperationList.add(ReminderProvider.insert(context, reminder, backRef));
-                            noOfReminderOperations += 1;
-                        }
-                        // back references for the next reminders, 1 is for the event
-                        backRef += 1 + noOfReminderOperations;
-
+                    int noOfReminderOperations = 0;
+                    for (Reminder reminder : eventToAdd.getReminders()) {
+                        allOperationList.add(ReminderProvider.insert(context, reminder, backRef));
+                        noOfReminderOperations += 1;
                     }
+                    // back references for the next reminders, 1 is for the event
+                    backRef += 1 + noOfReminderOperations;
+
                 }
             }
         }
@@ -291,68 +379,11 @@ public class EventLoader {
     }
 
     /**
-     * Utility method for add values in Builder
-     * @param builder ContentProviderOperation.Builder
-     * @param event Event to add
+     * Event exception class
      */
-    static synchronized void assignValuesInBuilder(ContentProviderOperation.Builder builder, CalendarEvent event) {
-        if(event.isAllDay()) {
-            // ALL_DAY events must be UTC
-            DateTime dateTimeStartUTC = new DateTime(event.getDateStart()).withZoneRetainFields(DateTimeZone.UTC);
-            DateTime dateTimeStopUTC = new DateTime(event.getDateStop()).withZoneRetainFields(DateTimeZone.UTC);
-            builder.withValue(CalendarContract.Events.DTSTART, dateTimeStartUTC.toDate().getTime());
-            builder.withValue(CalendarContract.Events.DTEND, dateTimeStopUTC.toDate().getTime());
-            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
-            builder.withValue(CalendarContract.Events.ALL_DAY, 1);
-        } else {
-            builder.withValue(CalendarContract.Events.DTSTART, event.getDateStart().getTime());
-            builder.withValue(CalendarContract.Events.DTEND, event.getDateStop().getTime());
-            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
-        }
-        builder.withValue(CalendarContract.Events.TITLE, event.getTitle());
-    }
-
-    public synchronized static void updateEvent(Context context, Contact contact, DateUnknownYear newBirthday) {
-        for (CalendarEvent event : getEventsSavedOrCreateNewsForEachYearAfterNextEvent(context, contact)) {
-            // Construct each anniversary of new birthday
-            int year = new DateTime(event.getDate()).getYear();
-            Date newBirthdayDate = DateUnknownYear.getDateWithYear(newBirthday.getDate(), year);
-            event.setDateStart(newBirthdayDate);
-            event.setAllDay(true);
-            Log.e(TAG, "Update event : " + event.toString());
-            ArrayList<ContentProviderOperation> operations = new ArrayList<>();
-            ContentProviderOperation contentProviderOperation = EventProvider.update(event);
-            operations.add(contentProviderOperation);
-            try {
-                ContentProviderResult[] contentProviderResults =
-                        context.getContentResolver().applyBatch(CalendarContract.AUTHORITY, operations);
-                for(ContentProviderResult contentProviderResult : contentProviderResults) {
-                    Log.d(TAG, contentProviderResult.toString());
-                    if (contentProviderResult.uri != null)
-                        Log.d(TAG, contentProviderResult.uri.toString());
-                }
-            } catch (RemoteException|OperationApplicationException e) {
-                Log.e(TAG, "Unable to update event : " + e.getMessage());
-            }
-        }
-    }
-
-    public synchronized static void deleteEventsFromContact(Context context, Contact contact) {
-        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
-        for (CalendarEvent event : getEventsSavedForEachYear(context, contact)) {
-            operations.add(ReminderProvider.deleteAll(context, event.getId()));
-            operations.add(EventProvider.delete(event));
-        }
-        try {
-            ContentProviderResult[] contentProviderResults =
-                    context.getContentResolver().applyBatch(CalendarContract.AUTHORITY, operations);
-            for(ContentProviderResult contentProviderResult : contentProviderResults) {
-                Log.d(TAG, contentProviderResult.toString());
-                if (contentProviderResult.uri != null)
-                    Log.d(TAG, contentProviderResult.uri.toString());
-            }
-        } catch (RemoteException |OperationApplicationException e) {
-            Log.e(TAG, "Unable to delete event : " + e.getMessage());
+    public static class EventException extends Exception {
+        public EventException(String message) {
+            super(message);
         }
     }
 }

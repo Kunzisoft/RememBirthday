@@ -79,13 +79,13 @@ public class ListContactsActivity extends AppCompatActivity
                 ArrayList<ContentProviderOperation> allOperationList = new ArrayList<>();
 
                 // Add new birthday in database
-                ContactProvider.AddBirthdayToContactTask addBirthdayToContactTask =
-                        new ContactProvider.AddBirthdayToContactTask(
+                ContactProvider.AddBirthdayContactProvider addBirthdayContactProvider =
+                        new ContactProvider.AddBirthdayContactProvider(
                                 ListContactsActivity.this,
                                 contactWithRawIdSelected.getRawId(),
                                 dateUnknownYear);
-                addBirthdayToContactTask.setCallbackActionBirthday(ListContactsActivity.this);
-                addBirthdayToContactTask.execute();
+                addBirthdayContactProvider.setCallbackActionBirthday(ListContactsActivity.this);
+                addBirthdayContactProvider.execute();
                 setResult(Activity.RESULT_OK);
                 finish();
 

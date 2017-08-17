@@ -32,7 +32,12 @@ public class ReminderCalendarProviderObserver implements AbstractReminderAdapter
     
     public ReminderCalendarProviderObserver(Context context, Contact contact, CalendarEvent baseEvent) {
         this.context = context;
-        this.afterEvents = EventLoader.getEventsSavedOrCreateNewsForEachYearAfterNextEvent(context, contact);
+        try {
+            this.afterEvents = EventLoader.getEventsSavedOrCreateNewsForEachYearAfterNextEvent(context, contact);
+        } catch (EventLoader.EventException e) {
+            Log.e(getClass().getSimpleName(), "Unable to get next events. " + e.getLocalizedMessage());
+            this.afterEvents = new ArrayList<>();
+        }
         this.baseEvent = baseEvent;
         this.contentResolver = context.getContentResolver();
         this.ops = new ArrayList<>();

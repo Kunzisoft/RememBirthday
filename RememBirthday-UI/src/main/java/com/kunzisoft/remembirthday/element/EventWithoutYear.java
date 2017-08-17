@@ -1,5 +1,7 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -44,8 +46,12 @@ public class EventWithoutYear {
             CalendarEvent calendarEvent = new CalendarEvent(baseEvent);
             calendarEvent.setYear(year);
             calendarEvent.setAllDay(true);
+            for(Reminder reminder : calendarEvent.getReminders()) {
+                reminder.setDateEvent(calendarEvent.getDate());
+            }
             calendarEvents.add(calendarEvent);
         }
+        Log.d(getClass().getSimpleName(), "Events around years : " + calendarEvents);
         return calendarEvents;
     }
 

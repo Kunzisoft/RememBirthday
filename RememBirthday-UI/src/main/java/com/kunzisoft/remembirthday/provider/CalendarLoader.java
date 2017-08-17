@@ -75,8 +75,6 @@ public class CalendarLoader {
      * Gets calendar id, when no calendar is present, create one!
      */
     public static long getCalendar(Context context) {
-        Log.d(TAG, "getCalendar Method...");
-
         ContentResolver contentResolver = context.getContentResolver();
 
         // Find the calendar if we've got one

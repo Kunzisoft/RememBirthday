@@ -94,6 +94,10 @@ public class Reminder {
                 .toDate();
     }
 
+    public void setDateEvent(Date dateEvent) {
+        this.dateEvent = dateEvent;
+    }
+
     public int getMinutesBeforeEvent() {
         return Minutes.minutesBetween(new DateTime(getDate()), new DateTime(dateEvent)).getMinutes();
     }

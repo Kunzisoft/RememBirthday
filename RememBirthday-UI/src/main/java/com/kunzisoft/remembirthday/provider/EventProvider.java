@@ -13,6 +13,11 @@ import android.util.Log;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
+import java.util.TimeZone;
+
 /**
  * Created by joker on 27/07/17.
  */
@@ -30,7 +35,7 @@ public class EventProvider {
 
         builder = ContentProviderOperation.newInsert(CalendarLoader.getBirthdayAdapterUri(context, CalendarContract.Events.CONTENT_URI));
         builder.withValue(CalendarContract.Events.CALENDAR_ID, calendarId);
-        EventLoader.assignValuesInBuilder(builder, event);
+        assignValuesInBuilder(builder, event);
 
         builder.withValue(CalendarContract.Events.STATUS, CalendarContract.Events.STATUS_CONFIRMED);
 
@@ -56,8 +61,7 @@ public class EventProvider {
                     ContactsContract.Contacts.CONTENT_LOOKUP_URI, contact.getLookUpKey());
             builder.withValue(CalendarContract.Events.CUSTOM_APP_URI, contactLookupUri.toString());
         }
-
-        Log.d(TAG, "Add event : " + event);
+        Log.d(TAG, "Build insert event : " + event);
         return builder.build();
     }
 
@@ -72,7 +76,8 @@ public class EventProvider {
             builder = ContentProviderOperation.newUpdate(
                     ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
             // Push values
-            EventLoader.assignValuesInBuilder(builder, event);
+            assignValuesInBuilder(builder, event);
+            Log.d(TAG, "Build update event : " + event);
             return builder.build();
         } else {
             Log.e(TAG, "Can't update the event, there is no id");
@@ -80,6 +85,27 @@ public class EventProvider {
         }
     }
 
+    /**
+     * Utility method for add values in Builder
+     * @param builder ContentProviderOperation.Builder
+     * @param event Event to add
+     */
+    private static synchronized void assignValuesInBuilder(ContentProviderOperation.Builder builder, CalendarEvent event) {
+        if(event.isAllDay()) {
+            // ALL_DAY events must be UTC
+            DateTime dateTimeStartUTC = new DateTime(event.getDateStart()).withZoneRetainFields(DateTimeZone.UTC);
+            DateTime dateTimeStopUTC = new DateTime(event.getDateStop()).withZoneRetainFields(DateTimeZone.UTC);
+            builder.withValue(CalendarContract.Events.DTSTART, dateTimeStartUTC.toDate().getTime());
+            builder.withValue(CalendarContract.Events.DTEND, dateTimeStopUTC.toDate().getTime());
+            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
+            builder.withValue(CalendarContract.Events.ALL_DAY, 1);
+        } else {
+            builder.withValue(CalendarContract.Events.DTSTART, event.getDateStart().getTime());
+            builder.withValue(CalendarContract.Events.DTEND, event.getDateStop().getTime());
+            builder.withValue(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+        }
+        builder.withValue(CalendarContract.Events.TITLE, event.getTitle());
+    }
 
     /**
      * Delete the specific event, id must be specified
@@ -91,6 +117,7 @@ public class EventProvider {
             ContentProviderOperation.Builder builder;
             builder = ContentProviderOperation.newDelete(
                     ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
+            Log.d(TAG, "Build delete event : " + event);
             return builder.build();
         } else {
             Log.e(TAG, "Can't delete the event, there is no id");

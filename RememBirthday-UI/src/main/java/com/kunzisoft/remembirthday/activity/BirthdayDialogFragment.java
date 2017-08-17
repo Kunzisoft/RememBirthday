@@ -36,7 +36,7 @@ import java.util.Locale;
  */
 public class BirthdayDialogFragment extends DialogFragment {
 
-    private final static String TAG = "SelectBirthdayDialogFrg";
+    private final static String TAG = "BirthdayDialogFragment";
 
     private final static int YEAR_DELTA = 150;
 
@@ -80,6 +80,7 @@ public class BirthdayDialogFragment extends DialogFragment {
         if(dateUnknownYearDefault != null) {
             switchYear.setChecked(dateUnknownYearDefault.containsYear());
             calendar.setTime(dateUnknownYearDefault.getDate());
+            Log.d(TAG, "Assign date for selection : " + calendar.getTime().toString());
         }
 
         // MONTHS
@@ -99,13 +100,18 @@ public class BirthdayDialogFragment extends DialogFragment {
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         // YEARS
-        int year = (new GregorianCalendar()).get(Calendar.YEAR);
-        List<Integer> listYears = new ArrayList<>();
-        for(int i = year-YEAR_DELTA; i<=year; i++) {
-            listYears.add(i);
-        }
         // Current year
         int currentYear = calendar.get(Calendar.YEAR);
+        // Defined min year and list of years
+        int year = (new GregorianCalendar()).get(Calendar.YEAR);
+        int minYear = year-YEAR_DELTA;
+        if(minYear > currentYear) {
+            minYear = currentYear;
+        }
+        List<Integer> listYears = new ArrayList<>();
+        for(int i = minYear; i<=year; i++) {
+            listYears.add(i);
+        }
 
         // Spinners and Adapters
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getContext(),
@@ -203,10 +209,12 @@ public class BirthdayDialogFragment extends DialogFragment {
         DateFormat dateFormat = new SimpleDateFormat("d MMMMM yyyy", Locale.getDefault());
         Date date = new Date();
         try {
+            // 4 chars for year
+            String formattedYear = String.format(Locale.getDefault(), "%04d", (Integer) spinnerYear.getSelectedItem());
             date = dateFormat.parse(
                     spinnerDay.getSelectedItem()+ " "+
                     spinnerMonth.getSelectedItem()+ " "+
-                    spinnerYear.getSelectedItem());
+                    formattedYear);
         } catch (ParseException e) {
             Log.e(TAG, e.getMessage());
         }

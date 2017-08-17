@@ -256,41 +256,6 @@ public class DateUnknownYear implements Parcelable {
     }
 
     /**
-     * Convert string formatted to DateUnknownYear
-     * @param string The string formatted
-     * @return The date corresponding to the string
-     * @throws ParseException If the string can not be parsed
-     */
-    /*
-     TODO Test
-    public static DateUnknownYear stringToDate(String string) throws ParseException {
-        String patternWithYear = "^\\d{4}-\\d{1,2}-\\d{1,2}$";
-        String patternWithoutYearA = "^--\\d{1,2}-\\d{1,2}$";
-        String patternWithoutYearB = "^\\d{1,2}-\\d{1,2}$";
-
-        // Default value
-        DateUnknownYear dateUnknownYear = DateUnknownYear.getDefault();
-
-        if(string.matches(patternWithYear)) {
-            dateUnknownYear.setDate(
-                    new SimpleDateFormat(WITH_YEAR_FORMAT_DEFAULT, Locale.getDefault()).parse(string));
-            dateUnknownYear.setContainsYear(true);
-        } else if(string.matches(patternWithoutYearA)) {
-            dateUnknownYear.setDate(
-                    new SimpleDateFormat(WITHOUT_YEAR_FORMAT_DEFAULT, Locale.getDefault()).parse(string));
-            dateUnknownYear.setContainsYear(false);
-        } else if(string.matches(patternWithoutYearB)) {
-            String WITHOUT_YEAR_FORMAT_B = "MM-dd";
-            dateUnknownYear.setDate(
-                    new SimpleDateFormat(WITHOUT_YEAR_FORMAT_B, Locale.getDefault()).parse(string));
-            dateUnknownYear.setContainsYear(false);
-        }
-
-        return dateUnknownYear;
-    }
-    */
-
-    /**
      * Try to parse input with SimpleDateFormat
      *
      * @param format SimpleDateFormat
@@ -299,7 +264,6 @@ public class DateUnknownYear implements Parcelable {
      */
     private static DateUnknownYear parseStringWithSimpleDateFormat(String input, String format,
                                                         boolean withYear) {
-        Log.d(TAG, "Trying to parse Event Date String " + input + " with " + format);
         SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getDefault());
         try {
@@ -309,7 +273,6 @@ public class DateUnknownYear implements Parcelable {
             dateUnknownYear.setDate(parsedDate);
             return dateUnknownYear;
         } catch (ParseException e) {
-            Log.d(TAG, "Parsing failed!");
             return null;
         }
     }
@@ -324,27 +287,25 @@ public class DateUnknownYear implements Parcelable {
      */
     public static DateUnknownYear stringToDate(String eventDateString) {
         DateUnknownYear date;
-
         if (eventDateString != null) {
             // yyyy-MM-dd, Most used format!
-            date = parseStringWithSimpleDateFormat(eventDateString, "yyyy-MM-dd", true);
-
+            date = parseStringWithSimpleDateFormat(eventDateString, "yy-MM-dd", true);
+            if (date == null) {
+                date = parseStringWithSimpleDateFormat(eventDateString, "yyyy-MM-dd", false);
+            }
             // --MM-dd, Most used format without year!
             if (date == null) {
                 date = parseStringWithSimpleDateFormat(eventDateString, "--MM-dd", false);
             }
-
             if (date == null) {
                 date = parseStringWithSimpleDateFormat(eventDateString, "MM-dd", false);
             }
-
             // yyyyMMdd, HTC Desire
             if (date == null) {
                 if (eventDateString.length() == 8) {
                     date = parseStringWithSimpleDateFormat(eventDateString, "yyyyMMdd", true);
                 }
             }
-
             // Unix timestamp, Some Motorola devices
             if (date == null) {
                 Log.d(TAG, "Trying to parse Event Date String " + eventDateString
@@ -355,44 +316,22 @@ public class DateUnknownYear implements Parcelable {
                     Log.d(TAG, "Parsing failed!");
                 }
             }
-
             // dd.MM.yyyy
             if (date == null) {
                 date = parseStringWithSimpleDateFormat(eventDateString, "dd.MM.yyyy", true);
             }
-
             // yyyy.MM.dd
             if (date == null) {
                 date = parseStringWithSimpleDateFormat(eventDateString, "yyyy.MM.dd", true);
             }
-
-            /**
-             * Prefer dd/MM/yyyy over MM/dd/yyyy ?
-             */
-            /*
-            if (PreferencesHelper.getPreferddSlashMM(context)) {
-                // dd/MM/yyyy
-                if (date == null) {
-                    date = parseStringWithSimpleDateFormat(eventDateString, "dd/MM/yyyy", false);
-                }
-
-                // dd/MM
-                if (date == null) {
-                    date = parseStringWithSimpleDateFormat(eventDateString, "dd/MM", true);
-                }
-            } else {
-            */
-                // MM/dd/yyyy, Used by Facebook
-                if (date == null) {
-                    date = parseStringWithSimpleDateFormat(eventDateString, "MM/dd/yyyy", true);
-                }
-
-                //MM/dd, Used by Facebook
-                if (date == null) {
-                    date = parseStringWithSimpleDateFormat(eventDateString, "MM/dd", false);
-                }
-            //}
-
+            // MM/dd/yyyy, Used by Facebook
+            if (date == null) {
+                date = parseStringWithSimpleDateFormat(eventDateString, "MM/dd/yyyy", true);
+            }
+            //MM/dd, Used by Facebook
+            if (date == null) {
+                date = parseStringWithSimpleDateFormat(eventDateString, "MM/dd", false);
+            }
             /* Return */
             if (date != null) {
                 Log.d(TAG, "Event Date String " + eventDateString + " was parsed as "

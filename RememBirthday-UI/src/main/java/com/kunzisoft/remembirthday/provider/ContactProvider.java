@@ -31,6 +31,8 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
 
     @Override
     protected void onPostExecute(Exception exception) {
+        if(exception != null)
+            Log.e(getClass().getSimpleName(), "Error in contact provider : " + exception.getMessage());
         if(callbackActionBirthday != null)
             callbackActionBirthday.afterActionBirthdayInDatabase(birthday, action, exception);
     }
@@ -61,11 +63,11 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
     /**
      * AsyncTask who store the birthday in database for a specific contact
      */
-    public static class AddBirthdayToContactTask extends ContactProvider {
+    public static class AddBirthdayContactProvider extends ContactProvider {
 
         private long rawContactId;
 
-        public AddBirthdayToContactTask(Activity context, long rawContactId, DateUnknownYear birthday) {
+        public AddBirthdayContactProvider(Activity context, long rawContactId, DateUnknownYear birthday) {
             super(context, birthday);
             this.rawContactId = rawContactId;
             this.action = CallbackActionBirthday.Action.ADD;
@@ -80,12 +82,12 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
                         .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
                         .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString())
                         .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
+                Log.d(getClass().getSimpleName(), "Add birthday " + birthday);
                 ops.add(contentBuilder.build());
-                ContentProviderResult[] contentProviderResults = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                int dataId = Integer.parseInt(contentProviderResults[0].uri.getLastPathSegment());
-
+                ContentProviderResult[] results = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                if(results[0] == null)
+                    throw new Exception("Unable to add new birthday");
             } catch(Exception e) {
-                Log.e(getClass().getSimpleName(), e.getMessage()+" ");
                 return e;
             }
             return null;
@@ -95,11 +97,11 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
     /**
      * AsyncTask who store the birthday in database for a specific contact
      */
-    public static class RemoveBirthdayFromContactTask extends ContactProvider {
+    public static class RemoveBirthdayContactProvider extends ContactProvider {
 
         protected long dataId;
 
-        public RemoveBirthdayFromContactTask(Activity context, long dataId, DateUnknownYear birthday) {
+        public RemoveBirthdayContactProvider(Activity context, long dataId, DateUnknownYear birthday) {
             super(context, birthday);
             this.dataId = dataId;
             this.action = CallbackActionBirthday.Action.REMOVE;
@@ -119,10 +121,10 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
                                     ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
                                     birthday.toBackupString(),
                                     String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)});
+                Log.d(getClass().getSimpleName(), "Delete birthday " + birthday);
                 ops.add(contentBuilder.build());
                 context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
             } catch(Exception e) {
-                Log.e(getClass().getSimpleName(), e.getMessage()+" ");
                 return e;
             }
             return null;
@@ -132,12 +134,12 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
     /**
      * Created by joker on 24/04/17.
      */
-    public static class UpdateBirthdayToContactTask extends ContactProvider {
+    public static class UpdateBirthdayContactProvider extends ContactProvider {
 
         private long dataId;
         private DateUnknownYear oldBirthday;
 
-        public UpdateBirthdayToContactTask(Activity context, long dataId, DateUnknownYear oldBirthday, DateUnknownYear newBirthday) {
+        public UpdateBirthdayContactProvider(Activity context, long dataId, DateUnknownYear oldBirthday, DateUnknownYear newBirthday) {
             super(context, newBirthday);
             this.dataId = dataId;
             this.oldBirthday = oldBirthday;
@@ -158,11 +160,12 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
                                         oldBirthday.toBackupString(),
                                         String.valueOf(ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)})
                         .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, birthday.toBackupString());
+                Log.d(getClass().getSimpleName(), "Update birthday " + oldBirthday + " to " + birthday);
                 ops.add(contentBuilder.build());
-                context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-
+                ContentProviderResult[] results = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                if(results[0].count == 0)
+                    return new Exception("Unable to update birthday");
             } catch(Exception e) {
-                Log.e(getClass().getSimpleName(), e.getMessage()+" ");
                 return e;
             }
             return null;

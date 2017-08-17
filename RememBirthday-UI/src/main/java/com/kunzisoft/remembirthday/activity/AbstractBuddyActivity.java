@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
+import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
 import com.kunzisoft.remembirthday.provider.EventLoader;
 
@@ -63,7 +64,7 @@ public class AbstractBuddyActivity extends AppCompatActivity
     public void attachDialogListener(Contact contactSelected) {
         this.onClickDialogListener.setContact(contactSelected);
         this.dialogSelection.setOnClickListener(onClickDialogListener);
-        if(contactSelected != null)
+        if(contactSelected != null && contactSelected.hasBirthday())
             this.dialogSelection.setDefaultBirthday(contactSelected.getBirthday());
     }
 
@@ -97,17 +98,23 @@ public class AbstractBuddyActivity extends AppCompatActivity
         @Override
         public void onClickPositiveButton(DateUnknownYear newBirthday) {
             // Update current birthday in database
-            ContactProvider.UpdateBirthdayToContactTask updateBirthdayToContactTask =
-                    new ContactProvider.UpdateBirthdayToContactTask(
+            ContactProvider.UpdateBirthdayContactProvider updateBirthdayContactProvider =
+                    new ContactProvider.UpdateBirthdayContactProvider(
                             AbstractBuddyActivity.this,
                             contact.getDataAnniversaryId(),
                             contact.getBirthday(),
                             newBirthday);
-            updateBirthdayToContactTask.setCallbackActionBirthday(AbstractBuddyActivity.this);
-            updateBirthdayToContactTask.execute();
+            updateBirthdayContactProvider.setCallbackActionBirthday(AbstractBuddyActivity.this);
+            updateBirthdayContactProvider.execute();
 
             // Update event in calendar
-            EventLoader.updateEvent(AbstractBuddyActivity.this, contact, newBirthday);
+            if(PreferencesManager.isCustomCalendarActive(AbstractBuddyActivity.this)) {
+                try {
+                    EventLoader.updateEvent(AbstractBuddyActivity.this, contact, newBirthday);
+                } catch (EventLoader.EventException e) {
+                    Log.e(getClass().getSimpleName(), "Error when updating event : " + e.getLocalizedMessage());
+                }
+            }
         }
 
         @Override

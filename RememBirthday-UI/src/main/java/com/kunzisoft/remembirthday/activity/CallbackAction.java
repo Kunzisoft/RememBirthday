@@ -1,7 +1,6 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
@@ -26,7 +25,6 @@ public class CallbackAction {
                 if (exception == null)
                     message = context.getString(R.string.activity_list_contacts_success_add);
                 else {
-                    Log.e(CallbackAction.class.getSimpleName(), exception.getMessage());
                     message = context.getString(R.string.activity_list_contacts_error_add);
                 }
                 break;
@@ -34,7 +32,6 @@ public class CallbackAction {
                 if(exception == null)
                     message = context.getString(R.string.activity_list_contacts_success_update);
                 else {
-                    Log.e(CallbackAction.class.getSimpleName(), exception.getMessage());
                     message = context.getString(R.string.activity_list_contacts_error_update);
                 }
                 break;
@@ -42,7 +39,6 @@ public class CallbackAction {
                 if(exception == null)
                     message = context.getString(R.string.activity_list_contacts_success_remove);
                 else {
-                    Log.e(CallbackAction.class.getSimpleName(), exception.getMessage());
                     message = context.getString(R.string.activity_list_contacts_error_remove);
                 }
                 break;
