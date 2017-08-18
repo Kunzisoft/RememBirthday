@@ -50,6 +50,8 @@
 
     <string name="dialog_need_calendar_message">This feature needs the customized calendar to work, you can enable it in the settings.</string>
 
+    <string name="dialog_need_special_feature_message">This feature needs the \"special features\" enabled to work, you can enable it in the settings.</string>
+
     <string name="dialog_pro_feature_message">This feature is available on the pro version currently in development.</string>
     <string name="dialog_pro_feature_positive_button">Download</string>
 
@@ -99,10 +101,15 @@
     <string name="permission_get_accounts_denied">The application will not be able to manage calendar.</string>
     <string name="permission_get_accounts_never_ask">Never Ask</string>
 
-    <string name="permission_read_calendar_start">The application needs to write calendar to manage the custom calendar.</string>
+    <string name="permission_write_calendar_start">The application needs to write calendar to manage the custom calendar.</string>
     <string name="permission_write_calendar_rationale">Write calendar permissions are required to manage the calendar.</string>
     <string name="permission_write_calendar_denied">The application will not be able to manage calendar.</string>
     <string name="permission_write_calendar_never_ask">Never Ask</string>
+
+    <string name="permission_send_sms_start">The application needs to send SMS to manage the Auto-SMS.</string>
+    <string name="permission_send_sms_rationale">Send SMS permissions are required to manage the Auto-SMS.</string>
+    <string name="permission_send_sms_denied">The application will not be able to send Auto-SMS.</string>
+    <string name="permission_send_sms_never_ask">Never Ask</string>
 
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
@@ -150,6 +157,16 @@
     <string name="pref_special_service_title">Powerful daemons</string>
     <string name="pref_special_service_summary">Creates daemons for gift management or automatic message sending.</string>
     <string name="pref_special_service_default" translatable="false">false</string>
+
+    <string name="pref_auto_sms_reminders_key" translatable="false">auto_sms_reminders</string>
+    <string name="pref_auto_sms_reminders_title">Auto-SMS Reminders</string>
+    <string name="pref_auto_sms_reminders_summary">Remind before sending SMS.</string>
+    <string name="pref_auto_sms_reminders_default" translatable="false">false</string>
+
+    <string name="pref_hide_inactive_features_key" translatable="false">hide_inactive_feature</string>
+    <string name="pref_hide_inactive_features_title">Hide inactive features</string>
+    <string name="pref_hide_inactive_features_summary">Hide or show the buttons for inactive features</string>
+    <string name="pref_hide_inactive_features_default" translatable="false">false</string>
 
     <string name="pref_category_contacts_sort_title">Contact sort</string>
 
@@ -219,5 +236,8 @@
     <string name="reminder_added">Reminder added to %1$s</string>
     <string name="reminder_updated">Reminder updated to %1$s</string>
     <string name="reminder_deleted">Reminder deleted</string>
+    <string name="auto_sms_added">Auto-SMS added to %1$s</string>
+    <string name="auto_sms_updated">Auto-SMS updated to %1$s</string>
+    <string name="auto_sms_deleted">Auto-SMS deleted</string>
 
 </resources>

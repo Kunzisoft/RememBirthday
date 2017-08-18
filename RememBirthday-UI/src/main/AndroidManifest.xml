@@ -22,6 +22,8 @@
 
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application android:name="com.kunzisoft.remembirthday.RememBirthday"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

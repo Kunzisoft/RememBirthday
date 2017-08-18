@@ -3,6 +3,7 @@ package com.kunzisoft.remembirthday.activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,8 +23,10 @@ import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
 import com.kunzisoft.remembirthday.adapter.MenuAdapter;
 import com.kunzisoft.remembirthday.adapter.ReminderCalendarNotificationsAdapter;
-import com.kunzisoft.remembirthday.adapter.ReminderCalendarProviderObserver;
-import com.kunzisoft.remembirthday.adapter.ReminderToastObserver;
+import com.kunzisoft.remembirthday.adapter.observer.AutoSmsDatabaseObserver;
+import com.kunzisoft.remembirthday.adapter.observer.AutoSmsToastObserver;
+import com.kunzisoft.remembirthday.adapter.observer.ReminderCalendarProviderObserver;
+import com.kunzisoft.remembirthday.adapter.observer.ReminderToastObserver;
 import com.kunzisoft.remembirthday.animation.AnimationViewCircle;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
@@ -62,6 +65,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
     private static final String CONTACT_KEY = "CONTACT_KEY";
 
+    private static final String CALENDAR_DIALOG_TAG = "CALENDAR_DIALOG_TAG";
+    private static final String SPECIAL_FEATURES_DIALOG_TAG = "SPECIAL_FEATURES_DIALOG_TAG";
+
     private Contact contact;
 
     protected RecyclerView autoMessagesListView;
@@ -79,6 +85,9 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     private View menuView;
     private View menuViewButton;
     private AnimationViewCircle menuAnimationViewCircle;
+
+    private DialogFragment calendarDialog;
+    private DialogFragment specialFeaturesDialog;
 
     public void setBuddy(Contact currentContact) {
         Bundle args = new Bundle();
@@ -175,8 +184,12 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if(contact != null && contact.hasBirthday()) {
+        // Initialize dialogs
+        calendarDialog = new NeedCalendarDialogFragment();
+        specialFeaturesDialog = new NeedSpecialFeaturesDialogFragment();
 
+        // Initialize adapters
+        if(contact != null && contact.hasBirthday()) {
             if(PreferencesManager.isCustomCalendarActive(getContext())) {
                 // Add default reminders and link view to adapter
                 remindersAdapter = new ReminderCalendarNotificationsAdapter(getContext(), contact.getBirthday());
@@ -208,6 +221,11 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 // Link auto messages view to adapter
                 autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
                 autoMessagesListView.setAdapter(autoMessagesAdapter);
+                // Attach observers
+                autoMessagesAdapter.registerReminderObserver(
+                        new AutoSmsDatabaseObserver());
+                autoMessagesAdapter.registerReminderObserver(
+                        new AutoSmsToastObserver(getContext()));
             } else {
                 autoMessagesListView.setVisibility(View.GONE);
             }
@@ -315,17 +333,23 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     if(PreferencesManager.isCustomCalendarActive(getContext())) {
                         remindersAdapter.addDefaultItem();
                     } else {
-                        new NeedCalendarDialogFragment().show(getFragmentManager(), "CALENDAR_DIALOG_TAG");
+                        calendarDialog.show(getFragmentManager(), CALENDAR_DIALOG_TAG);
                     }
-                    // TODO reminder for pro
                     break;
                 case MenuActionGift.ITEM_ID :
-
-                    // TODO Gift for pro
+                    if(PreferencesManager.isDaemonsActive(getContext())) {
+                        // TODO Gift for pro
+                    } else {
+                        specialFeaturesDialog.show(getFragmentManager(), SPECIAL_FEATURES_DIALOG_TAG);
+                    }
                     break;
                 case MenuActionAutoMessage.ITEM_ID :
-                    autoMessagesAdapter.addDefaultItem();
-                    // TODO Auto-message for pro
+                    if(PreferencesManager.isDaemonsActive(getContext())) {
+                        autoMessagesAdapter.addDefaultItem();
+                        // TODO Auto-message for pro
+                    } else {
+                        specialFeaturesDialog.show(getFragmentManager(), SPECIAL_FEATURES_DIALOG_TAG);
+                    }
                     break;
             }
         }

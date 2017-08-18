@@ -1,4 +1,4 @@
-package com.kunzisoft.remembirthday.adapter;
+package com.kunzisoft.remembirthday.adapter.observer;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.provider.CalendarContract;
 import android.util.Log;
 
+import com.kunzisoft.remembirthday.adapter.AbstractReminderAdapter;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.Reminder;

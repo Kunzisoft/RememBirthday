@@ -16,9 +16,11 @@ public abstract class MenuFactoryBase extends MenuContact {
             listMenuAction.add(new MenuActionMessage());
             listMenuAction.add(new MenuActionCall());
         }
-        if(PreferencesManager.isCustomCalendarActive(context))
+
+        if(PreferencesManager.isCustomCalendarActive(context)) {
             listMenuAction.add(new MenuActionReminder());
-        else
-            listMenuAction.add(new MenuActionReminder(MenuAction.STATE.INACTIVE));
+        } else if (!PreferencesManager.isButtonsForInactiveFeaturesHidden(context)) {
+                listMenuAction.add(new MenuActionReminder(MenuAction.STATE.INACTIVE));
+        }
     }
 }

@@ -31,7 +31,7 @@ public abstract class AbstractReminderAdapter<E extends Reminder, T extends Remi
 
     private SimpleDateFormat reminderDateFormatter;
 
-    private List<ReminderDataObserver<E>> reminderDataObservers;
+    protected List<ReminderDataObserver<E>> reminderDataObservers;
 
     public AbstractReminderAdapter(Context context, DateUnknownYear anniversary) {
         this.context = context;

@@ -13,11 +13,16 @@ public class MenuFactoryPro extends MenuFactoryBase {
     public MenuFactoryPro(Context context, boolean asPhoneNumber) {
         super(context, asPhoneNumber);
         if(PreferencesManager.isDaemonsActive(context)) {
-            listMenuAction.add(new MenuActionReminder());
             listMenuAction.add(new MenuActionGift());
             if(asPhoneNumber) {
                 listMenuAction.add(new MenuActionAutoMessage());
-                //listMenuAction.add(new MenuActionAutoVoice());
+            }
+        } else {
+            if(!PreferencesManager.isButtonsForInactiveFeaturesHidden(context)) {
+                listMenuAction.add(new MenuActionGift(MenuAction.STATE.INACTIVE));
+                if (asPhoneNumber) {
+                    listMenuAction.add(new MenuActionAutoMessage(MenuAction.STATE.INACTIVE));
+                }
             }
         }
     }

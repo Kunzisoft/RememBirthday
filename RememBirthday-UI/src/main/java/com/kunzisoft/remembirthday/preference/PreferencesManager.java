@@ -113,4 +113,24 @@ public class PreferencesManager {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.pref_special_service_key), false);
     }
+
+    /**
+     * Return true if reminders for auto-SMS is active
+     * @param context Context to call
+     * @return Reminders active
+     */
+    public static boolean isAutoSmsRemindersActive(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.pref_auto_sms_reminders_key), false);
+    }
+
+    /**
+     * Return true if buttons for inactive features are hidden
+     * @param context Context to call
+     * @return Hidden buttons
+     */
+    public static boolean isButtonsForInactiveFeaturesHidden(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.pref_hide_inactive_features_key), false);
+    }
 }

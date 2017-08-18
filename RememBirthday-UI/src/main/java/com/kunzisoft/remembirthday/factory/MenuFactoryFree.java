@@ -12,7 +12,6 @@ public class MenuFactoryFree extends MenuFactoryBase {
         listMenuAction.add(new MenuActionGift(MenuAction.STATE.NOT_AVAILABLE));
         if(asPhoneNumber) {
             listMenuAction.add(new MenuActionAutoMessage(MenuAction.STATE.NOT_AVAILABLE));
-            //listMenuAction.add(new MenuActionAutoVoice(MenuAction.STATE.NOT_AVAILABLE));
         }
     }
 }

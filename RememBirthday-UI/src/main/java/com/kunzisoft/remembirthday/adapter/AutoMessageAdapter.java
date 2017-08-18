@@ -1,6 +1,8 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,5 +41,51 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
         AutoMessage currentAutoMessage = listReminders.get(position);
         // TODO assign content of message
         holder.messageContent.setText(currentAutoMessage.getContent());
+        holder.messageContent.addTextChangedListener(new OnTextChanged(holder.saveButton));
+
+        holder.saveButton.setVisibility(View.GONE);
+        holder.saveButton.setOnClickListener(new OnClickSaveButton(currentAutoMessage));
+    }
+
+    private class OnTextChanged implements TextWatcher {
+
+        private View textView;
+
+        private OnTextChanged(View textView) {
+            this.textView = textView;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            textView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Class for manage save listener of select reminder
+     */
+    private class OnClickSaveButton implements View.OnClickListener {
+
+        private AutoMessage reminder;
+
+        OnClickSaveButton(AutoMessage reminder) {
+            this.reminder = reminder;
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = listReminders.indexOf(reminder);
+            // Notify observable
+            for(ReminderDataObserver<AutoMessage> observer : reminderDataObservers) {
+                observer.onReminderUpdated(reminder);
+            }
+            notifyItemChanged(position);
+        }
     }
 }

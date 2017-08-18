@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
+import android.support.v7.preference.TwoStatePreference;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -45,7 +47,7 @@ import permissions.dispatcher.RuntimePermissions;
  */
 @RuntimePermissions
 public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
-        SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG_FRAGMENT_DIALOG = "com.kunzisoft.remembirthday.TAG_FRAGMENT_DIALOG";
 
@@ -53,28 +55,41 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
 
     private EditTextPreference remindersDaysEditTextPreference;
 
-    private AccountResolver accountResolver;
+    private Preference.OnPreferenceClickListener onPreferenceProFeatureClick = new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            ((TwoStatePreference) preference).setChecked(false);
+            new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
+            return false;
+        }
+    };
 
-    private SwitchPreferenceCompat preferenceCreateCalendar;
+    private AccountResolver accountResolver;
+    private TwoStatePreference preferenceCreateCalendar;
+    private Preference.OnPreferenceClickListener onPreferenceCalendarClick = new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            SettingsFragmentPermissionsDispatcher.onPreferenceCalendarPermissionClickWithCheck(SettingsFragment.this);
+            onPreferenceCalendarPermissionClick();
+            return false;
+        }
+    };
+
+
+    private TwoStatePreference preferenceSpecial;
+    private Preference.OnPreferenceClickListener onPreferenceSendSmsClick = new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            SettingsFragmentPermissionsDispatcher.onPreferenceSendSmsPermissionClickWithCheck(SettingsFragment.this);
+            onPreferenceSendSmsPermissionClick();
+            return false;
+        }
+    };
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
         remindersDaysEditTextPreference = (EditTextPreference) findPreference(getString(R.string.pref_reminders_days_key));
-
-        if (!BuildConfig.FULL_VERSION) {
-            // Disable switch and show pro dialog if free version
-            SwitchPreferenceCompat preference = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_special_service_key));
-            preference.setDefaultValue(false);
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    ((SwitchPreferenceCompat) preference).setChecked(false);
-                    new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_TAG");
-                    return false;
-                }
-            });
-        }
 
         Preference openCalendar = findPreference(getString(R.string.pref_open_calendar_key));
         openCalendar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -87,26 +102,43 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
         });
 
         accountResolver = CalendarAccount.getAccount(getContext());
-        preferenceCreateCalendar = (SwitchPreferenceCompat) findPreference(getString(R.string.pref_create_calendar_key));
+        preferenceCreateCalendar = (TwoStatePreference) findPreference(getString(R.string.pref_create_calendar_key));
         preferenceCreateCalendar.setDefaultValue(false);
-        preferenceCreateCalendar.setOnPreferenceClickListener(this);
-    }
+        preferenceCreateCalendar.setOnPreferenceClickListener(onPreferenceCalendarClick);
 
-    @Override
-    public boolean onPreferenceClick(Preference preference) {
-        SettingsFragmentPermissionsDispatcher.onPreferencePermissionClickWithCheck(SettingsFragment.this);
-        onPreferencePermissionClick();
-        return false;
+        preferenceSpecial = (TwoStatePreference) findPreference(getString(R.string.pref_special_service_key));
+        preferenceSpecial.setDefaultValue(false);
+        if (!BuildConfig.FULL_VERSION) {
+            // Disable switch and show pro dialog if free version
+            preferenceSpecial.setOnPreferenceClickListener(onPreferenceProFeatureClick);
+        } else {
+            preferenceSpecial.setOnPreferenceClickListener(onPreferenceSendSmsClick);
+        }
+
+        TwoStatePreference preferenceHideInactive = (TwoStatePreference) findPreference(getString(R.string.pref_hide_inactive_features_key));
+        if (!BuildConfig.FULL_VERSION) {
+            preferenceHideInactive.setOnPreferenceClickListener(onPreferenceProFeatureClick);
+        }
     }
 
     @NeedsPermission(Manifest.permission.WRITE_CALENDAR)
-    public void onPreferencePermissionClick() {
+    public void onPreferenceCalendarPermissionClick() {
         if (!preferenceCreateCalendar.isChecked()) {
             preferenceCreateCalendar.setChecked(true);
             accountResolver.addAccountAndSync();
         } else {
             preferenceCreateCalendar.setChecked(false);
             accountResolver.removeAccount();
+        }
+    }
+
+    @NeedsPermission(Manifest.permission.SEND_SMS)
+    public void onPreferenceSendSmsPermissionClick() {
+        // TODO Send SMS services
+        if (!preferenceSpecial.isChecked()) {
+            preferenceSpecial.setChecked(true);
+        } else {
+            preferenceSpecial.setChecked(false);
         }
     }
 
@@ -222,12 +254,42 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_CALENDAR)
-    void showDeniedForCamera() {
+    void showDeniedForCalendar() {
         Toast.makeText(getContext(), R.string.permission_write_calendar_denied, Toast.LENGTH_LONG).show();
     }
 
     @OnNeverAskAgain(Manifest.permission.WRITE_CALENDAR)
-    void showNeverAskForCamera() {
+    void showNeverAskForCalendar() {
         Toast.makeText(getContext(), R.string.permission_write_calendar_never_ask, Toast.LENGTH_LONG).show();
+    }
+
+    @OnShowRationale(Manifest.permission.SEND_SMS)
+    public void showRationaleForSendSms(final PermissionRequest request) {
+        new AlertDialog.Builder(getContext())
+                .setMessage(R.string.permission_send_sms_rationale)
+                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton(R.string.button_deny, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        request.cancel();
+                    }
+                })
+                .show();
+    }
+
+    @OnPermissionDenied(Manifest.permission.SEND_SMS)
+    void showDeniedForSendSms() {
+        Toast.makeText(getContext(), R.string.permission_send_sms_denied, Toast.LENGTH_LONG).show();
+    }
+
+    @OnNeverAskAgain(Manifest.permission.SEND_SMS)
+    void showNeverAskForSendSms() {
+        Toast.makeText(getContext(), R.string.permission_send_sms_never_ask, Toast.LENGTH_LONG).show();
     }
 }

@@ -62,6 +62,17 @@
             android:title="@string/pref_special_service_title"
             android:summary="@string/pref_special_service_summary"
             android:defaultValue="@string/pref_special_service_default" />
+        <android.support.v7.preference.CheckBoxPreference
+            android:key="@string/pref_auto_sms_reminders_key"
+            android:dependency="@string/pref_special_service_key"
+            android:title="@string/pref_auto_sms_reminders_title"
+            android:summary="@string/pref_auto_sms_reminders_summary"
+            android:defaultValue="@string/pref_auto_sms_reminders_default" />
+        <android.support.v7.preference.CheckBoxPreference
+            android:key="@string/pref_hide_inactive_features_key"
+            android:title="@string/pref_hide_inactive_features_title"
+            android:summary="@string/pref_hide_inactive_features_summary"
+            android:defaultValue="@string/pref_hide_inactive_features_default" />
     </PreferenceCategory>
     <!--
     <PreferenceCategory

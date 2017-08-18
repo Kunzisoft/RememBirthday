@@ -1,9 +1,10 @@
-package com.kunzisoft.remembirthday.adapter;
+package com.kunzisoft.remembirthday.adapter.observer;
 
 import android.content.Context;
 import android.widget.Toast;
 
 import com.kunzisoft.remembirthday.R;
+import com.kunzisoft.remembirthday.adapter.AbstractReminderAdapter;
 import com.kunzisoft.remembirthday.element.Reminder;
 
 import java.util.List;
