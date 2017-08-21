@@ -71,6 +71,15 @@
             android:label="@string/about_title">
         </activity>
 
+        <!-- Custom Notification -->
+        <receiver android:name=".notifications.NotificationEventReceiver" />
+        <receiver android:name=".notifications.NotificationServiceStarterReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".notifications.NotificationIntentService"
             android:enabled="true"
@@ -80,6 +89,7 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!-- Calendar -->
         <service android:name=".service.MainIntentService" />
         <service
             android:name=".service.AccountAuthenticatorService"
@@ -106,14 +116,21 @@
                 android:resource="@xml/sync_calendar" />
         </service>
 
-        <receiver android:name=".notifications.NotificationEventReceiver" />
-        <receiver android:name=".notifications.NotificationServiceStarterReceiver">
+        <!-- Auto SMS -->
+        <receiver android:name="com.kunzisoft.autosms.receiver.BootReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+        <receiver android:name="com.kunzisoft.autosms.receiver.ReminderReceiver"/>
+        <receiver android:name="com.kunzisoft.autosms.receiver.SmsSenderReceiver"/>
+        <receiver android:name="com.kunzisoft.autosms.receiver.SmsSentReceiver"/>
+        <receiver android:name="com.kunzisoft.autosms.receiver.SmsDeliveredReceiver"/>
+        <service android:name="com.kunzisoft.autosms.service.ReminderService"/>
+        <service android:name="com.kunzisoft.autosms.service.SmsSenderService" />
+        <service android:name="com.kunzisoft.autosms.service.SmsSentService" />
+        <service android:name="com.kunzisoft.autosms.service.SmsDeliveredService" />
+        <service android:name="com.kunzisoft.autosms.service.UnscheduleService"/>
 
     </application>
 

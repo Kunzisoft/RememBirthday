@@ -28,8 +28,6 @@ public class ProxyAutoMessage {
 
         int minutes = Minutes.minutesBetween(dateTimeScheduled, dateTimeAnniversary).getMinutes();
 
-        Log.e(TAG, "dateTime : " + dateTimeScheduled + " dateTimeAnniversary " + dateTimeAnniversary + " minutes " + minutes);
-
         AutoMessage autoMessage = new AutoMessage(anniversary, minutes);
         autoMessage.setId(autoSms.getDateCreated().getTime());
         autoMessage.setContent(autoSms.getMessage());

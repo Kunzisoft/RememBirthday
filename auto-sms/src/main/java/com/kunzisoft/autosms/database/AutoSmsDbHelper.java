@@ -148,7 +148,23 @@ public class AutoSmsDbHelper extends SQLiteOpenHelper {
         if (cursor != null) {
             List<AutoSms> results = getListAutoSms(cursor);
             cursor.close();
-            Log.e(TAG, "LIST AutoSMS" + results);
+            return results;
+        }
+        return null;
+    }
+
+    public List<AutoSms> getListAutoSmsByStatus(AutoSms.Status status) {
+        Cursor cursor =  AutoSmsDbHelper.getReadableDatabase().query(
+                TABLE_SMS,
+                new String[] { "*", COLUMN_TIMESTAMP_CREATED + " AS _id" },
+                COLUMN_STATUS + "=?",
+                new String[] {status.name()},
+                null,
+                null,
+                COLUMN_TIMESTAMP_CREATED + " DESC");
+        if (cursor != null) {
+            List<AutoSms> results = getListAutoSms(cursor);
+            cursor.close();
             return results;
         }
         return null;

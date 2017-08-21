@@ -90,6 +90,6 @@ public class SmsSenderService extends SmsIntentService {
     private void scheduleNextSms(AutoSms sms) {
         new CalendarResolver().initCalendar(sms.getDateScheduled()).setRecurringMode(sms.getRecurringMode()).advance();
         AutoSmsDbHelper.getDbHelper(this).insert(sms);
-        new Scheduler(getApplicationContext()).schedule(sms, false);
+        new Scheduler(getApplicationContext()).schedule(sms, true);
     }
 }

@@ -26,7 +26,6 @@ public class Scheduler {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-
     public void schedule(AutoSms sms, boolean remindersActive) {
         if (null == alarmManager) {
             return;

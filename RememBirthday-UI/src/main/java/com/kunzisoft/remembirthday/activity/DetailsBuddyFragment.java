@@ -227,7 +227,6 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 // Add elements in database
                 List<AutoSms> autoSmsList = AutoSmsDbHelper.getDbHelper(getContext())
                         .getListAutoSmsByLookupKeyAndStatus(contact.getLookUpKey(), AutoSms.Status.PENDING);
-                Log.e(TAG, autoSmsList.toString());
                 autoMessagesAdapter.addReminders(
                         ProxyAutoMessage.getFromAutoSmsList(contact.getNextBirthdayWithoutHour(), autoSmsList)
                 );

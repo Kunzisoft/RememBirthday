@@ -143,7 +143,7 @@
 
     <string name="pref_reminders_days_key" translatable="false">notifications_day_enable</string>
     <string name="pref_reminders_days_title">Default days</string>
-    <string name="pref_reminders_days_summary">Ex : "0#2#7" Daemon notification visible on the day, 2 and 7 days before the event.</string>
+    <string name="pref_reminders_days_summary">Ex : "0#2#7" Notification visible on the day, 2 and 7 days before the event.</string>
     <string name="pref_reminders_days_default" translatable="false">0</string>
 
     <string name="pref_reminders_time_key" translatable="false">notifications_time_enable</string>
@@ -154,14 +154,12 @@
     <string name="pref_category_special_title">Special</string>
 
     <string name="pref_special_service_key" translatable="false">notifications_service_enable</string>
-    <string name="pref_special_service_title">Powerful daemons</string>
-    <string name="pref_special_service_summary">Creates daemons for gift management or automatic message sending.</string>
+    <string name="pref_special_service_title">Special Services</string>
+    <string name="pref_special_service_summary">Creates special services for gift management or automatic message sending.</string>
     <string name="pref_special_service_default" translatable="false">false</string>
 
-    <string name="pref_auto_sms_reminders_key" translatable="false">auto_sms_reminders</string>
     <string name="pref_auto_sms_reminders_title">Auto-SMS Reminders</string>
     <string name="pref_auto_sms_reminders_summary">Remind before sending SMS.</string>
-    <string name="pref_auto_sms_reminders_default" translatable="false">false</string>
 
     <string name="pref_hide_inactive_features_key" translatable="false">hide_inactive_feature</string>
     <string name="pref_hide_inactive_features_title">Hide inactive features</string>

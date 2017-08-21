@@ -33,7 +33,7 @@ public class AutoMessage extends Reminder {
 
     private void init() {
         type = Type.SMS;
-        content = "";
+        content = " ";
     }
 
     public AutoMessage(Parcel in) {
@@ -55,7 +55,10 @@ public class AutoMessage extends Reminder {
     }
 
     public void setContent(String content) {
-        this.content = content;
+        if(content.isEmpty())
+            this.content = " ";
+        else
+            this.content = content;
     }
 
     @Override

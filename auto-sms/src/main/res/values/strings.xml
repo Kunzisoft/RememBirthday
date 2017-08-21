@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Auto-SMS-Libraries</string>
+
+    <string name="pref_auto_sms_reminders_key" translatable="false">auto_sms_reminders</string>
+    <string name="pref_auto_sms_reminders_default" translatable="false">false</string>
 </resources>
