@@ -164,6 +164,20 @@ public class DateUnknownYear implements Parcelable {
     }
 
     /**
+     * Gets the anniversary not yet passed without hour, minute, second and millisecond
+     * @return Next anniversary in the year
+     */
+    // TODO TEST
+    public Date getNextAnniversaryWithoutHour() {
+        DateTime dateWithoutHour = new DateTime(getNextAnniversary(this.date));
+        dateWithoutHour = dateWithoutHour.withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+        return dateWithoutHour.toDate();
+    }
+
+    /**
      * Gets the anniversary date not yet passed
      * @param date Date without year
      * @return Next anniversary in the year
@@ -173,7 +187,7 @@ public class DateUnknownYear implements Parcelable {
     }
 
     /**
-     * Gets the anniversary date not yet passed
+     * Gets the anniversary date not yet passed (with delta of 1 day)
      * @param date Date
      * @return Next anniversary in the year
      */
@@ -181,9 +195,14 @@ public class DateUnknownYear implements Parcelable {
         DateTime dateTimeNow = DateTime.now();
         MonthDay monthDayNow = MonthDay.now();
         MonthDay monthDayOfNextDate = MonthDay.fromDateFields(date);
-        if(monthDayNow.isEqual(monthDayOfNextDate))
-            return new DateTime().toDate();
-        if(monthDayNow.isBefore(monthDayOfNextDate))
+        if(monthDayNow.isEqual(monthDayOfNextDate)) {
+            DateTime inputDate = new DateTime(date);
+            return dateTimeNow
+                    .withHourOfDay(inputDate.getHourOfDay())
+                    .withMinuteOfHour(inputDate.getMinuteOfHour())
+                    .withSecondOfMinute(inputDate.getSecondOfMinute())
+                    .withMillisOfSecond(inputDate.getMillisOfSecond()).toDate();
+        } if(monthDayNow.isBefore(monthDayOfNextDate))
             return new DateTime(date).withYear(dateTimeNow.getYear()).toDate();
         else {
             DateTime dateTimeOfNextDate = new DateTime(date).withYear(dateTimeNow.getYear()).plusYears(1);

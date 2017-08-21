@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.kunzisoft.autosms.database.AutoSmsDbHelper;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.preference.PreferencesManager;
@@ -115,6 +116,9 @@ public class AbstractBuddyActivity extends AppCompatActivity
                     Log.e(getClass().getSimpleName(), "Error when updating event : " + e.getLocalizedMessage());
                 }
             }
+
+            // Delete auto-message // TODO update
+            AutoSmsDbHelper.getDbHelper(AbstractBuddyActivity.this).deleteAllByLookupKey(contact.getLookUpKey());
         }
 
         @Override

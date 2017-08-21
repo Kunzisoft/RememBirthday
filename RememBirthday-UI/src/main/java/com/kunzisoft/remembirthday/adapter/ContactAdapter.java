@@ -129,7 +129,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
             // Get contact from list if specific sort is defined
             currentContact = listContacts.get(position);
         } else {
-            // Else get contact directly from cursor
+            // Else getAutoSmsById contact directly from cursor
             cursor.moveToPosition(position);
             currentContact = getItemFromCursor(cursor);
         }
@@ -148,7 +148,7 @@ public class ContactAdapter<T extends ContactViewHolder> extends RecyclerView.Ad
      * @return The new item created
      */
     protected Contact getItemFromCursor(Cursor cursor) {
-        //TODO get rawcontact id when click
+        //TODO getAutoSmsById rawcontact id when click
         Contact contact = new Contact(
                 cursor.getLong(contactIdColIdx),
                 cursor.getString(contactLookupColIdx),

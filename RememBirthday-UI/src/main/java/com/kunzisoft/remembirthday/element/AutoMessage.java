@@ -1,5 +1,8 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
@@ -16,12 +19,27 @@ public class AutoMessage extends Reminder {
      */
     public AutoMessage(Date anniversary, int hourOfDay, int minuteOfHour, int deltaDay) {
         super(anniversary, hourOfDay, minuteOfHour, deltaDay);
-        type = Type.SMS;
-        content = "";
+        init();
     }
 
     public AutoMessage(Date anniversary, int hourOfDay, int minuteOfHour) {
         this(anniversary, hourOfDay, minuteOfHour, 0);
+    }
+
+    public AutoMessage(Date anniversary, int minutes) {
+        super(anniversary, minutes);
+        init();
+    }
+
+    private void init() {
+        type = Type.SMS;
+        content = "";
+    }
+
+    public AutoMessage(Parcel in) {
+        super(in);
+        this.type = Type.valueOf(in.readString());
+        this.content = in.readString();
     }
 
     public Type getType() {
@@ -38,6 +56,33 @@ public class AutoMessage extends Reminder {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        super.writeToParcel(parcel, i);
+        parcel.writeString(type.name());
+        parcel.writeString(content);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public AutoMessage createFromParcel(Parcel in) {
+            return new AutoMessage(in);
+        }
+
+        public AutoMessage[] newArray(int size) {
+            return new AutoMessage[size];
+        }
+    };
+
+    @Override
+    public String toString() {
+        String toString = super.toString();
+        return "AutoMessage{" +
+                "type=" + type +
+                ", content='" + content + '\'' +
+                ", " + toString +
+                '}';
     }
 
     public enum Type {

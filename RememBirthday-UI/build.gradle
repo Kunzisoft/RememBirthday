@@ -72,4 +72,6 @@ dependencies {
     }
     // Color preference
     compile "com.github.Kunzisoft:AndroidClearChroma:1.8"
+    //
+    compile project(path: ':auto-sms')
 }

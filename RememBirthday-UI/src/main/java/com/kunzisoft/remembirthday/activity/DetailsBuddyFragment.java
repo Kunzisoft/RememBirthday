@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kunzisoft.autosms.database.AutoSmsDbHelper;
+import com.kunzisoft.autosms.model.AutoSms;
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.AutoMessageAdapter;
@@ -32,6 +34,7 @@ import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.PhoneNumber;
+import com.kunzisoft.remembirthday.element.ProxyAutoMessage;
 import com.kunzisoft.remembirthday.element.Reminder;
 import com.kunzisoft.remembirthday.exception.NoPhoneNumberException;
 import com.kunzisoft.remembirthday.exception.PhoneNumberNotInitializedException;
@@ -134,7 +137,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
         }
         if(contact != null) {
-            // For save memory get RawId only when showMessage details
+            // For insert memory getAutoSmsById RawId only when showMessage details
             setHasOptionsMenu(true);
 
             ContactLoader.assignRawContactIdToContact(getContext(), contact);
@@ -221,9 +224,16 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 // Link auto messages view to adapter
                 autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
                 autoMessagesListView.setAdapter(autoMessagesAdapter);
+                // Add elements in database
+                List<AutoSms> autoSmsList = AutoSmsDbHelper.getDbHelper(getContext())
+                        .getListAutoSmsByLookupKeyAndStatus(contact.getLookUpKey(), AutoSms.Status.PENDING);
+                Log.e(TAG, autoSmsList.toString());
+                autoMessagesAdapter.addReminders(
+                        ProxyAutoMessage.getFromAutoSmsList(contact.getNextBirthdayWithoutHour(), autoSmsList)
+                );
                 // Attach observers
                 autoMessagesAdapter.registerReminderObserver(
-                        new AutoSmsDatabaseObserver());
+                        new AutoSmsDatabaseObserver(contact, getContext()));
                 autoMessagesAdapter.registerReminderObserver(
                         new AutoSmsToastObserver(getContext()));
             } else {
@@ -242,7 +252,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 try {
                     defineMenuContact(contact.getPhoneNumbers());
                 } catch (PhoneNumberNotInitializedException e) {
-                    Log.e(TAG, "Error to get phone number : " + e.getLocalizedMessage());
+                    Log.e(TAG, "Error to getAutoSmsById phone number : " + e.getLocalizedMessage());
                 }
             }
 

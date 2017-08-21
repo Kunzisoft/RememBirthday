@@ -109,7 +109,7 @@ public class EventProvider {
 
     /**
      * Delete the specific event, id must be specified
-     * @param event Event to delete
+     * @param event Event to deleteById
      * @return ContentProviderOperation to apply or null if no id
      */
     public static ContentProviderOperation delete(CalendarEvent event) {
@@ -117,10 +117,10 @@ public class EventProvider {
             ContentProviderOperation.Builder builder;
             builder = ContentProviderOperation.newDelete(
                     ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
-            Log.d(TAG, "Build delete event : " + event);
+            Log.d(TAG, "Build deleteById event : " + event);
             return builder.build();
         } else {
-            Log.e(TAG, "Can't delete the event, there is no id");
+            Log.e(TAG, "Can't deleteById the event, there is no id");
             return null;
         }
     }

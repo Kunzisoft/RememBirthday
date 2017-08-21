@@ -31,8 +31,8 @@ public class Constants {
 
             result = String.format("%s (%s)", info.versionName, info.versionCode);
         } catch (PackageManager.NameNotFoundException e) {
-            Log.w(Utility.class.getSimpleName(), "Unable to get application version", e);
-            result = "Unable to get application version.";
+            Log.w(Utility.class.getSimpleName(), "Unable to getAutoSmsById application version", e);
+            result = "Unable to getAutoSmsById application version.";
         }
 
         return result;

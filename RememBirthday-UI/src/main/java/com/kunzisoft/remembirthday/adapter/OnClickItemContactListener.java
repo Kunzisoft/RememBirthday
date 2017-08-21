@@ -12,8 +12,8 @@ public interface OnClickItemContactListener {
     /**
      * Callback method called when a click event on item is performed
      * @param view The view clicked
-     * @param contact The contact build with information get in database
-     * @param cursor The cursor used to get data
+     * @param contact The contact build with information getAutoSmsById in database
+     * @param cursor The cursor used to getAutoSmsById data
      * @param position The position of item, can be used for retrieve data with cursor
      */
     void onItemContactClick(View view, Contact contact, Cursor cursor, int position);

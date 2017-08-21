@@ -46,7 +46,7 @@ public abstract class ContactProvider extends AsyncTask<Void, Void, Exception> {
     }
 
     /**
-     * Callback for do action after insert/update/delete birthday of contact in database
+     * Callback for do action after insert/update/deleteById birthday of contact in database
      */
     public interface CallbackActionBirthday {
 

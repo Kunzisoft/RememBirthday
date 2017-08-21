@@ -1,5 +1,8 @@
 package com.kunzisoft.remembirthday.element;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Minutes;
@@ -9,8 +12,7 @@ import java.util.Date;
 /**
  * Created by joker on 01/07/17.
  */
-
-public class Reminder {
+public class Reminder implements Parcelable{
     public static final long ID_UNDEFINED = -1;
 
     private long id;
@@ -29,6 +31,7 @@ public class Reminder {
                 .withHourOfDay(0)
                 .withMinuteOfHour(0)
                 .withSecondOfMinute(0)
+                .withMillisOfSecond(0)
                 .toDate();
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minuteOfHour;
@@ -52,6 +55,7 @@ public class Reminder {
                 .withHourOfDay(0)
                 .withMinuteOfHour(0)
                 .withSecondOfMinute(0)
+                .withMillisOfSecond(0)
                 .toDate();
         DateTime dateReminder = new DateTime(dateEvent).minusMinutes(minuteBeforeEvent);
         this.hourOfDay = dateReminder.getHourOfDay();
@@ -68,10 +72,17 @@ public class Reminder {
     public Reminder(Reminder another) {
         this.id = ID_UNDEFINED;
         this.dateEvent = another.dateEvent;
-        this.dateEvent = another.dateEvent;
         this.hourOfDay = another.hourOfDay;
         this.minuteOfHour = another.minuteOfHour;
         this.daysBefore = another.daysBefore;
+    }
+
+    public Reminder(Parcel in) {
+        this.id = in.readLong();
+        this.dateEvent = new Date(in.readLong());
+        this.hourOfDay = in.readInt();
+        this.minuteOfHour = in.readInt();
+        this.daysBefore = in.readInt();
     }
 
     public boolean hasId() {
@@ -133,4 +144,28 @@ public class Reminder {
                 ", date=" + getDate() +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeLong(dateEvent.getTime());
+        parcel.writeInt(hourOfDay);
+        parcel.writeInt(minuteOfHour);
+        parcel.writeInt(daysBefore);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Reminder createFromParcel(Parcel in) {
+            return new Reminder(in);
+        }
+
+        public Reminder[] newArray(int size) {
+            return new Reminder[size];
+        }
+    };
 }

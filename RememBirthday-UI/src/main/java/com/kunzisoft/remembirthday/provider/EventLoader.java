@@ -49,7 +49,7 @@ public class EventLoader {
                 .toDateTime().toDate().getTime();
         List<CalendarEvent> calendarEvents = getEventsFromContact(context, contact, eventTimes);
         if(calendarEvents.isEmpty())
-            throw new EventException("Unable to get next event from contact : " + contact.toString());
+            throw new EventException("Unable to getAutoSmsById next event from contact : " + contact.toString());
         else {
             CalendarEvent event = calendarEvents.get(0);
             Log.d(TAG, "Get next event " + event + " from contact " + contact);
@@ -83,7 +83,7 @@ public class EventLoader {
     }
 
     /**
-     * Utility class for get all events from contact with list of StartTime
+     * Utility class for getAutoSmsById all events from contact with list of StartTime
      * @param context Context to call
      * @param contact Contact link
      * @param eventTimes List of events' StartTime
@@ -164,7 +164,7 @@ public class EventLoader {
      * @param context Context to call
      * @param contact Contact link
      * @return The next event
-     * @throws EventException If event can't be get after creation
+     * @throws EventException If event can't be getAutoSmsById after creation
      */
     public synchronized static CalendarEvent getNextEventOrCreateNewFromContact(Context context, Contact contact) throws EventException {
         try {
@@ -189,7 +189,7 @@ public class EventLoader {
 
         for (CalendarEvent event : eventsAfterNeeded) {
             if (eventsAfterSaved.contains(event)) {
-                // For get id
+                // For getAutoSmsById id
                 event = eventsAfterSaved.get(eventsAfterSaved.indexOf(event));
                 eventsSaved.add(event);
             }
@@ -235,7 +235,7 @@ public class EventLoader {
 
         for (CalendarEvent event : eventsAroundNeeded) {
             if (eventsAroundSaved.contains(event)) {
-                // For get id
+                // For getAutoSmsById id
                 event = eventsAroundSaved.get(eventsAroundSaved.indexOf(event));
                 eventsSaved.add(event);
             }
@@ -257,13 +257,13 @@ public class EventLoader {
 
         for (CalendarEvent event : eventsAroundNeeded) {
             if (eventsAroundSaved.contains(event)) {
-                // For get id
+                // For getAutoSmsById id
                 event = eventsAroundSaved.get(eventsAroundSaved.indexOf(event));
                 eventsSaved.add(event);
             } else {
                 // TODO Replace by saveEventIfNotExistsFromContactWithBirthday
                 saveEventsIfNotExistsFromAllContactWithBirthday(context);
-                // TODO get all news
+                // TODO getAutoSmsById all news
             }
         }
         return eventsSaved;
@@ -284,7 +284,7 @@ public class EventLoader {
                     Log.d(TAG, contentProviderResult.uri.toString());
             }
         } catch (RemoteException |OperationApplicationException |EventException e) {
-            Log.e(TAG, "Unable to delete events : " + e.getMessage());
+            Log.e(TAG, "Unable to deleteById events : " + e.getMessage());
         }
     }
 
@@ -300,7 +300,7 @@ public class EventLoader {
         ContentResolver contentResolver = context.getContentResolver();
 
         if (contentResolver == null) {
-            Log.e(TAG, "Unable to get content resolver!");
+            Log.e(TAG, "Unable to getAutoSmsById content resolver!");
             return;
         }
 

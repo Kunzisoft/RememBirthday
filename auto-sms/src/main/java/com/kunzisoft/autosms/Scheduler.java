@@ -5,11 +5,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.kunzisoft.autosms.database.DbHelper;
-import com.kunzisoft.autosms.model.SmsModel;
+import com.kunzisoft.autosms.database.AutoSmsDbHelper;
+import com.kunzisoft.autosms.model.AutoSms;
+import com.kunzisoft.autosms.receiver.ReminderReceiver;
+import com.kunzisoft.autosms.receiver.SmsSenderReceiver;
 
 import java.text.DateFormat;
 
@@ -25,14 +26,15 @@ public class Scheduler {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void schedule(SmsModel sms, boolean remindersActive) {
+
+    public void schedule(AutoSms sms, boolean remindersActive) {
         if (null == alarmManager) {
             return;
         }
-        Log.i(getClass().getName(), "Scheduling sms to " + DateFormat.getDateTimeInstance().format(sms.getCalendar().getTime()));
-        setAlarm(sms.getTimestampScheduled(), getAlarmPendingIntent(sms.getTimestampCreated(), SmsSenderReceiver.class));
+        Log.i(getClass().getName(), "Scheduling sms to " + DateFormat.getDateTimeInstance().format(sms.getDateScheduled()));
+        setAlarm(sms.getDateScheduled().getTime(), getAlarmPendingIntent(sms.getDateCreated().getTime(), SmsSenderReceiver.class));
         if (remindersActive) {
-            setAlarm(sms.getTimestampScheduled() - HOUR, getAlarmPendingIntent(sms.getTimestampCreated(), ReminderReceiver.class));
+            setAlarm(sms.getDateScheduled().getTime() - HOUR, getAlarmPendingIntent(sms.getDateCreated().getTime(), ReminderReceiver.class));
         }
     }
 
@@ -56,7 +58,7 @@ public class Scheduler {
 
     private PendingIntent getAlarmPendingIntent(long timestampCreated, Class receiverClass) {
         Intent intent = new Intent(context, receiverClass);
-        intent.putExtra(DbHelper.COLUMN_TIMESTAMP_CREATED, timestampCreated);
+        intent.putExtra(AutoSmsDbHelper.COLUMN_TIMESTAMP_CREATED, timestampCreated);
         return PendingIntent.getBroadcast(
                 context,
                 (int) (timestampCreated / 1000L),

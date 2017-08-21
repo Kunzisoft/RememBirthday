@@ -36,7 +36,7 @@ public class ReminderCalendarProviderObserver implements AbstractReminderAdapter
         try {
             this.afterEvents = EventLoader.getEventsSavedOrCreateNewsForEachYearAfterNextEvent(context, contact);
         } catch (EventLoader.EventException e) {
-            Log.e(getClass().getSimpleName(), "Unable to get next events. " + e.getLocalizedMessage());
+            Log.e(getClass().getSimpleName(), "Unable to getAutoSmsById next events. " + e.getLocalizedMessage());
             this.afterEvents = new ArrayList<>();
         }
         this.baseEvent = baseEvent;
@@ -93,7 +93,7 @@ public class ReminderCalendarProviderObserver implements AbstractReminderAdapter
 
     @Override
     public void onRemindersDeleted(List<Reminder> reminders) {
-        // TODO delete
+        // TODO deleteById
         for(Reminder reminder : reminders) {
             ops.add(ReminderProvider.delete(context, baseEvent.getId(), reminder));
             for(CalendarEvent afterEvent : afterEvents) {

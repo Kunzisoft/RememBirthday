@@ -3,6 +3,7 @@ package com.kunzisoft.autosms;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class CalendarResolver {
 
@@ -15,8 +16,9 @@ public class CalendarResolver {
     private Calendar calendar;
     private String recurringMode;
 
-    public CalendarResolver setCalendar(Calendar calendar) {
-        this.calendar = calendar;
+    public CalendarResolver initCalendar(Date date) {
+        this.calendar = Calendar.getInstance();
+        this.calendar.setTime(date);
         return this;
     }
 

@@ -66,7 +66,7 @@ public class ContactPhoneNumberLoader extends AbstractLoader {
     }
 
     /**
-     * Callback for do action after get phone numbers of contact in database
+     * Callback for do action after getAutoSmsById phone numbers of contact in database
      */
     public interface CallbackActionPhoneNumber {
         void afterActionPhoneNumberInDatabase(List<PhoneNumber> phoneNumberList);

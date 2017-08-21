@@ -126,7 +126,7 @@ public abstract class ContactLoader extends AbstractLoader {
     public static List<Contact> getContactsFromCursor(Cursor cursor) {
         List<Contact> contactList = new ArrayList<>();
         if(cursor != null) {
-            // TODO get only first for each contact
+            // TODO getAutoSmsById only first for each contact
             while (cursor.moveToNext()) {
                 int eventLookupKeyColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.LOOKUP_KEY);
                 int displayNameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
@@ -187,7 +187,7 @@ public abstract class ContactLoader extends AbstractLoader {
     }
 
     /**
-     * Loader who get all contacts
+     * Loader who getAutoSmsById all contacts
      */
     public static class ContactBaseLoader extends ContactLoader {
 
@@ -211,7 +211,7 @@ public abstract class ContactLoader extends AbstractLoader {
     }
 
     /**
-     * Loader who get contacts with birthdays
+     * Loader who getAutoSmsById contacts with birthdays
      */
     public static class ContactBirthdayLoader extends ContactLoader {
 

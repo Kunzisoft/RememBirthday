@@ -230,6 +230,14 @@ public class Contact implements Parcelable{
         return birthday.getNextAnniversary();
     }
 
+    /**
+     * Gets the birthday not yet passed without hour, minute, second and millisecond
+     * @return Next birthday in the year
+     */
+    public Date getNextBirthdayWithoutHour() {
+        return birthday.getNextAnniversaryWithoutHour();
+    }
+
     @Override
     public int describeContents() {
         return 0;

@@ -3,6 +3,7 @@ package com.kunzisoft.remembirthday.adapter;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.kunzisoft.remembirthday.preference.PreferencesManager;
  * Adapter who manage list of auto messages
  */
 public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, AutoMessageViewHolder> {
+
+    private static final String TAG = "AutoMessageAdapter";
 
     public AutoMessageAdapter(Context context, DateUnknownYear anniversary) {
         super(context, anniversary);
@@ -41,7 +44,7 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
         AutoMessage currentAutoMessage = listReminders.get(position);
         // TODO assign content of message
         holder.messageContent.setText(currentAutoMessage.getContent());
-        holder.messageContent.addTextChangedListener(new OnTextChanged(holder.saveButton));
+        holder.messageContent.addTextChangedListener(new OnTextChanged(currentAutoMessage, holder.saveButton));
 
         holder.saveButton.setVisibility(View.GONE);
         holder.saveButton.setOnClickListener(new OnClickSaveButton(currentAutoMessage));
@@ -49,9 +52,11 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
 
     private class OnTextChanged implements TextWatcher {
 
+        private AutoMessage autoMessage;
         private View textView;
 
-        private OnTextChanged(View textView) {
+        private OnTextChanged(AutoMessage autoMessage, View textView) {
+            this.autoMessage = autoMessage;
             this.textView = textView;
         }
 
@@ -59,8 +64,9 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            autoMessage.setContent(charSequence.toString());
+        }
         @Override
         public void afterTextChanged(Editable editable) {
             textView.setVisibility(View.VISIBLE);
@@ -68,22 +74,22 @@ public class AutoMessageAdapter extends AbstractReminderAdapter<AutoMessage, Aut
     }
 
     /**
-     * Class for manage save listener of select reminder
+     * Class for manage insert listener of select reminder
      */
     private class OnClickSaveButton implements View.OnClickListener {
 
-        private AutoMessage reminder;
+        private AutoMessage autoMessage;
 
-        OnClickSaveButton(AutoMessage reminder) {
-            this.reminder = reminder;
+        OnClickSaveButton(AutoMessage autoMessage) {
+            this.autoMessage = autoMessage;
         }
 
         @Override
         public void onClick(View view) {
-            int position = listReminders.indexOf(reminder);
+            int position = listReminders.indexOf(autoMessage);
             // Notify observable
             for(ReminderDataObserver<AutoMessage> observer : reminderDataObservers) {
-                observer.onReminderUpdated(reminder);
+                observer.onReminderUpdated(autoMessage);
             }
             notifyItemChanged(position);
         }
