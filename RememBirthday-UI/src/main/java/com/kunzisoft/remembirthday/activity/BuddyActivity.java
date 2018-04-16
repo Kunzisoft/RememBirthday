@@ -51,7 +51,7 @@ public class BuddyActivity extends AbstractBuddyActivity implements IntentCall.O
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BuddyActivityPermissionsDispatcher.showRationalForContactsWithCheck(BuddyActivity.this);
+                BuddyActivityPermissionsDispatcher.showRationalForContactsWithPermissionCheck(BuddyActivity.this);
             }
         });
 

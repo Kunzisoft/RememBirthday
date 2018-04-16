@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.kunzisoft.remembirthday"
         buildConfigField "String", "PRO_APPLICATION_ID", "\"com.kunzisoft.remembirthday.pro\""
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,6 +22,7 @@ android {
         }
     }
 
+    flavorDimensions "tier"
     productFlavors {
         libre {
             applicationId = ".libre"
@@ -44,34 +45,34 @@ android {
     }
 }
 
-def supportVersion = "25.3.1"
+def supportVersion = "27.1.1"
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:preference-v7:$supportVersion"
-    compile "com.android.support:preference-v14:$supportVersion"
-    compile "com.android.support:cardview-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:preference-v7:$supportVersion"
+    implementation "com.android.support:preference-v14:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
     // Date library
-    compile "net.danlew:android.joda:2.9.9"
+    implementation "net.danlew:android.joda:2.9.9"
     // Permission
-    compile "com.github.hotchemi:permissionsdispatcher:2.4.0"
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+    implementation "com.github.hotchemi:permissionsdispatcher:3.1.0"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
     // Picasso
-    compile "com.squareup.picasso:picasso:2.5.2"
+    implementation "com.squareup.picasso:picasso:2.5.2"
     // Unit Tests
-    testCompile "junit:junit:4.12"
+    testImplementation "junit:junit:4.12"
     // HTML
-    compile "org.sufficientlysecure:html-textview:3.4"
+    implementation "org.sufficientlysecure:html-textview:3.5"
     // Reveal
-    compile ("com.github.ozodrukh:CircularReveal:2.0.1@aar") {
+    implementation ("com.github.ozodrukh:CircularReveal:2.0.1@aar") {
         transitive = true;
     }
     // Color preference
-    compile "com.github.Kunzisoft:AndroidClearChroma:1.8"
+    implementation "com.github.Kunzisoft:AndroidClearChroma:1.9"
     //
-    compile project(path: ':auto-sms')
+    implementation project(path: ':auto-sms')
 }

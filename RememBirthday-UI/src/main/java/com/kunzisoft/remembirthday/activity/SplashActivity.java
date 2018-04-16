@@ -37,12 +37,12 @@ public class SplashActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SplashActivityPermissionsDispatcher.showRationalForContactsWithCheck(SplashActivity.this);
+                            SplashActivityPermissionsDispatcher.showRationalForContactsWithPermissionCheck(SplashActivity.this);
                         }
                     })
                     .show();
         } else
-            SplashActivityPermissionsDispatcher.showRationalForContactsWithCheck(this);
+            SplashActivityPermissionsDispatcher.showRationalForContactsWithPermissionCheck(this);
     }
 
     @NeedsPermission(Manifest.permission.READ_CONTACTS)

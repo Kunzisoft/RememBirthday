@@ -6,8 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.support.v4.content.WakefulBroadcastReceiver;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -20,6 +19,7 @@ import com.kunzisoft.remembirthday.element.Contact;
  */
 public class NotificationIntentService extends IntentService {
 
+    private static final String CHANNEL_ID_ANNIVERSARY = "CHANNEL_ID_ANNIVERSARY";
     private static final int NOTIFICATION_ID = 1;
     private static final String ACTION_START = "ACTION_START";
     private static final String ACTION_DELETE = "ACTION_DELETE";
@@ -57,7 +57,7 @@ public class NotificationIntentService extends IntentService {
                 processDeleteNotification(intent);
             }
         } finally {
-            WakefulBroadcastReceiver.completeWakefulIntent(intent);
+            // TODO WakefulBroadcastReceiver.completeWakefulIntent(intent);
         }
     }
 
@@ -67,7 +67,7 @@ public class NotificationIntentService extends IntentService {
         String textMessage
                 = getString(R.string.notifications_anniversary_today, contact.getName());
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ANNIVERSARY);
         builder.setContentTitle(getString(R.string.notifications_anniversary_title))
                 .setAutoCancel(true);
         // Get ColorAccent for notification

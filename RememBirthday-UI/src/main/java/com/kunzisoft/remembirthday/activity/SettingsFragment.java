@@ -69,7 +69,7 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
     private Preference.OnPreferenceClickListener onPreferenceCalendarClick = new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            SettingsFragmentPermissionsDispatcher.onPreferenceCalendarPermissionClickWithCheck(SettingsFragment.this);
+            SettingsFragmentPermissionsDispatcher.onPreferenceCalendarPermissionClickWithPermissionCheck(SettingsFragment.this);
             onPreferenceCalendarPermissionClick();
             return false;
         }
@@ -80,7 +80,7 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
     private Preference.OnPreferenceClickListener onPreferenceSendSmsClick = new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            SettingsFragmentPermissionsDispatcher.onPreferenceSendSmsPermissionClickWithCheck(SettingsFragment.this);
+            SettingsFragmentPermissionsDispatcher.onPreferenceSendSmsPermissionClickWithPermissionCheck(SettingsFragment.this);
             onPreferenceSendSmsPermissionClick();
             return false;
         }
