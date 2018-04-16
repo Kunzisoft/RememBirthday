@@ -75,4 +75,5 @@ dependencies {
     implementation "com.github.Kunzisoft:AndroidClearChroma:1.9"
     //
     implementation project(path: ':auto-sms')
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter-api'
 }

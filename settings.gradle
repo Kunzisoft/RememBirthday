@@ -1,1 +1,1 @@
-include ':RememBirthday-UI', ':auto-sms'
+include ':app', ':auto-sms'

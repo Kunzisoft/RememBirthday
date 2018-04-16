@@ -5,7 +5,7 @@ import android.app.Application;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 /**
- * Class for initialize library at startup
+ * Class to initialize library at startup
  */
 public class RememBirthday extends Application{
 
