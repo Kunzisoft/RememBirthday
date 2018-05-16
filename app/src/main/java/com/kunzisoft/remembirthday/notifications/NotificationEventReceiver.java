@@ -2,9 +2,9 @@ package com.kunzisoft.remembirthday.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.kunzisoft.remembirthday.element.Contact;
@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by joker on 17/04/17.
  */
-public class NotificationEventReceiver extends WakefulBroadcastReceiver {
+public class NotificationEventReceiver extends BroadcastReceiver {
 
     private static final String ACTION_START_NOTIFICATION_SERVICE = "com.kunzisoft.remembirthday.ACTION_START_NOTIFICATION_SERVICE";
     private static final String ACTION_DELETE_NOTIFICATION = "com.kunzisoft.remembirthday.ACTION_DELETE_NOTIFICATION";
@@ -28,9 +28,11 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent alarmIntent = getStartPendingIntent(context, contact);
         //TODO Get Anniversary bug just last is called
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-                getTriggerAt(contact.getBirthday().getNextAnniversary()),
-                alarmIntent);
+        if (alarmManager != null) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    getTriggerAt(contact.getBirthday().getNextAnniversary()),
+                    alarmIntent);
+        }
     }
 
     @Override
@@ -46,8 +48,12 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
             serviceIntent = NotificationIntentService.createIntentDeleteNotification(context);
         }
 
+
+        NotificationIntentService.enqueueWork(context, NotificationIntentService.class, 0, intent);
+
         if (serviceIntent != null) {
-            startWakefulService(context, serviceIntent);
+            context.startService(serviceIntent);
+
         }
     }
 

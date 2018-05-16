@@ -25,22 +25,22 @@ android {
     flavorDimensions "tier"
     productFlavors {
         libre {
-            applicationId = ".libre"
+            applicationIdSuffix = ".libre"
             versionNameSuffix "-libre"
             buildConfigField "boolean", "FULL_VERSION", "true"
-            buildConfigField "boolean", "GOOGLE_PLAY_VERSION", "false"
+            buildConfigField "boolean", "CLOSED_STORE", "false"
         }
-        pro_google {
+        pro {
             applicationIdSuffix = ".pro"
             versionNameSuffix "-pro"
             buildConfigField "boolean", "FULL_VERSION", "true"
-            buildConfigField "boolean", "GOOGLE_PLAY_VERSION", "true"
+            buildConfigField "boolean", "CLOSED_STORE", "true"
         }
-        free_google {
+        free {
             applicationIdSuffix = ".free"
             versionNameSuffix "-free"
             buildConfigField "boolean", "FULL_VERSION", "false"
-            buildConfigField "boolean", "GOOGLE_PLAY_VERSION", "true"
+            buildConfigField "boolean", "CLOSED_STORE", "true"
         }
     }
 }
@@ -75,5 +75,4 @@ dependencies {
     implementation "com.github.Kunzisoft:AndroidClearChroma:1.9"
     //
     implementation project(path: ':auto-sms')
-    androidTestImplementation 'org.junit.jupiter:junit-jupiter-api'
 }

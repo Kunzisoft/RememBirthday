@@ -1,11 +1,12 @@
 package com.kunzisoft.remembirthday.notifications;
 
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -17,7 +18,7 @@ import com.kunzisoft.remembirthday.element.Contact;
 /**
  * Service for send notifications of each anniversary
  */
-public class NotificationIntentService extends IntentService {
+public class NotificationIntentService extends JobIntentService {
 
     private static final String CHANNEL_ID_ANNIVERSARY = "CHANNEL_ID_ANNIVERSARY";
     private static final int NOTIFICATION_ID = 1;
@@ -25,11 +26,6 @@ public class NotificationIntentService extends IntentService {
     private static final String ACTION_DELETE = "ACTION_DELETE";
 
     private static final String EXTRA_CONTACT_NOTIFICATION = "EXTRA_CONTACT_NOTIFICATION_SERVICE";
-
-
-    public NotificationIntentService() {
-        super(NotificationIntentService.class.getSimpleName());
-    }
 
     public static Intent createIntentStartNotificationService(Context context, Contact contact) {
         Intent intent = new Intent(context, NotificationIntentService.class);
@@ -45,19 +41,15 @@ public class NotificationIntentService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(getClass().getSimpleName(), "onHandleIntent, started handling a notification event");
-        try {
-            String action = intent.getAction();
-            if (ACTION_START.equals(action)) {
-                Contact contact = intent.getParcelableExtra(EXTRA_CONTACT_NOTIFICATION);
-                //TODO processStartNotification(contact);
-            }
-            if (ACTION_DELETE.equals(action)) {
-                processDeleteNotification(intent);
-            }
-        } finally {
-            // TODO WakefulBroadcastReceiver.completeWakefulIntent(intent);
+    protected void onHandleWork(@NonNull Intent intent) {
+        Log.d(getClass().getSimpleName(), "onHandleWork, started handling a notification event");
+        String action = intent.getAction();
+        if (ACTION_START.equals(action)) {
+            Contact contact = intent.getParcelableExtra(EXTRA_CONTACT_NOTIFICATION);
+            processStartNotification(contact);
+        }
+        if (ACTION_DELETE.equals(action)) {
+            processDeleteNotification(intent);
         }
     }
 
