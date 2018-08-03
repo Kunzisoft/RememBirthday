@@ -57,29 +57,21 @@
             android:id="@+id/fragment_details_buddy_container_reminders"
             android:layout_below="@+id/fragment_details_buddy_container_date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/birthday_picture"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/birthday_picture">
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_details_buddy_list_reminders"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/fragment_details_buddy_list_reminders"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                    android:layout_height="match_parent" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/fragment_details_buddy_list_auto_messages"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_details_buddy_list_auto_messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </FrameLayout>
 
@@ -96,7 +88,7 @@
             android:layout_gravity="end"
             app:elevation="8dp"
             app:fabSize="mini"
-            app:srcCompat="@drawable/ic_add_alarm_white_24dp"
+            app:srcCompat="@drawable/ic_add_alarm"
             android:layout_alignBottom="@+id/fragment_details_buddy_container_date"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"

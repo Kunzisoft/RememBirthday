@@ -10,7 +10,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="512"
-   height="512"
+   height="200"
    id="svg4830"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -53,7 +53,7 @@
          id="feComposite8977" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4159">
       <feFlood
@@ -118,7 +118,7 @@
          result="composite2" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4176">
       <feFlood
@@ -150,7 +150,7 @@
          id="feComposite4186" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4193">
       <feFlood
@@ -182,7 +182,7 @@
          id="feComposite4203" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4245">
       <feFlood
@@ -214,7 +214,7 @@
          id="feComposite4255" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4257">
       <feFlood
@@ -246,7 +246,7 @@
          id="feComposite4267" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4269">
       <feFlood
@@ -278,7 +278,7 @@
          id="feComposite4279" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4281">
       <feFlood
@@ -310,7 +310,7 @@
          id="feComposite4291" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4293">
       <feFlood
@@ -342,7 +342,7 @@
          id="feComposite4303" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4339">
       <feFlood
@@ -407,7 +407,7 @@
          result="composite2" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4363">
       <feFlood
@@ -439,7 +439,7 @@
          id="feComposite4373" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4375">
       <feFlood
@@ -471,7 +471,7 @@
          id="feComposite4385" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4399">
       <feFlood
@@ -510,9 +510,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98975522"
-     inkscape:cx="206.43521"
-     inkscape:cy="359.53683"
+     inkscape:zoom="1.3997253"
+     inkscape:cx="76.51907"
+     inkscape:cy="142.38211"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
@@ -520,7 +520,7 @@
      inkscape:window-width="1920"
      inkscape:window-height="1023"
      inkscape:window-x="0"
-     inkscape:window-y="246"
+     inkscape:window-y="27"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -542,27 +542,21 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     transform="translate(0,480)">
-    <path
-       sodipodi:nodetypes="ccccc"
-       style="opacity:1;fill:#ffecb3;fill-opacity:1;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4176)"
-       d="m 1.457444e-6,-480 0,481.11328 L 512,-27.36133 512,-480 Z"
-       id="rect4171"
-       inkscape:connector-curvature="0" />
+     transform="translate(0,168)">
     <path
        inkscape:connector-curvature="0"
        id="rect4413"
-       d="m 1.457444e-6,-480 0,111.94141 L 512,-307.30078 512,-480 1.457444e-6,-480 Z"
+       d="m 1.457444e-6,-168 0,111.94141 L 512,4.69922 512,-168 1.457444e-6,-168 Z"
        style="opacity:1;fill:#795548;fill-opacity:1;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4399)" />
     <path
        inkscape:connector-curvature="0"
        id="rect4317"
-       d="m 1.457444e-6,-480 0,81.25391 C 1.457444e-6,-398.74609 512,-338 512,-337.89844 L 512,-480 Z"
+       d="m 1.457444e-6,-168 0,81.25391 C 1.457444e-6,-86.74609 512,-26 512,-25.89844 L 512,-168 Z"
        style="opacity:1;fill:#6d4c41;fill-opacity:1;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4339)"
        sodipodi:nodetypes="ccccc" />
     <path
        style="opacity:1;fill:#fb8c00;fill-opacity:1;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4375)"
-       d="m 1.457444e-6,-480 0,10.99219 L 512,-407.39844 512,-480 Z"
+       d="m 1.457444e-6,-168 0,10.99219 L 512,-95.39844 512,-168 Z"
        id="rect4154"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />

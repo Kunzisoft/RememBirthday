@@ -171,6 +171,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 menuViewButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View viewButton) {
+                        viewButton.setActivated(!viewButton.isActivated());
                         menuAnimationViewCircle
                                 .startPoint(menuView.getWidth() - 80, 0)
                                 .animate();
@@ -258,6 +259,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             // Open the menu if no reminder
             if((remindersAdapter == null || (remindersAdapter != null && remindersAdapter.getItemCount() < 1))
                 && (autoMessagesAdapter == null || (autoMessagesAdapter != null && autoMessagesAdapter.getItemCount() < 1))) {
+                menuViewButton.setActivated(true);
                 menuView.setVisibility(View.VISIBLE);
             }
         }
@@ -316,6 +318,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             if (!BuildConfig.FULL_VERSION)
                 new ProFeatureDialogFragment().show(getFragmentManager(), "PRO_FEATURE_DIALOG_TAG");
         } else {
+            menuViewButton.setActivated(false);
             menuAnimationViewCircle.hide();
             switch (menuAction.getItemId()) {
                 case MenuActionCalendar.ITEM_ID :

@@ -4,11 +4,10 @@
     android:id="@+id/item_list_contacts_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="2dp">
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="2dp">
 
     <FrameLayout
         android:id="@+id/item_list_contact_icon_container"

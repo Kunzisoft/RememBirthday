@@ -49,6 +49,9 @@ def supportVersion = "27.1.1"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v13'
+    }
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
