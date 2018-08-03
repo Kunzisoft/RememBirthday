@@ -160,7 +160,7 @@ public class SettingsFragment extends ChromaPreferenceFragmentCompat implements
         // Show dialog
         if (dialogFragment != null) {
             dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getChildFragmentManager(), TAG_FRAGMENT_DIALOG);
+            dialogFragment.show(getFragmentManager(), TAG_FRAGMENT_DIALOG);
         } else {
             super.onDisplayPreferenceDialog(preference);
         }
