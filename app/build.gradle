@@ -59,8 +59,8 @@ dependencies {
     // Date library
     implementation "net.danlew:android.joda:2.9.9"
     // Permission
-    implementation "com.github.hotchemi:permissionsdispatcher:3.1.0"
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
+    implementation "com.github.hotchemi:permissionsdispatcher:3.3.1"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.3.1"
     // Picasso
     implementation "com.squareup.picasso:picasso:2.5.2"
     // Unit Tests
@@ -72,7 +72,7 @@ dependencies {
         transitive = true;
     }
     // Color preference
-    implementation "com.github.Kunzisoft:AndroidClearChroma:1.9"
-    //
+    implementation "com.github.Kunzisoft:AndroidClearChroma:2.0"
+    // Modules
     implementation project(path: ':auto-sms')
 }
