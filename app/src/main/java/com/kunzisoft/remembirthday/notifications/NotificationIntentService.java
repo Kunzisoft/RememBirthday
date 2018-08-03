@@ -80,7 +80,9 @@ public class NotificationIntentService extends JobIntentService {
         builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
 
         final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify((int) (contact.getRawId()), builder.build());
+        if (manager != null) {
+            manager.notify((int) (contact.getRawId()), builder.build());
+        }
     }
 
     private void processDeleteNotification(Intent intent) {

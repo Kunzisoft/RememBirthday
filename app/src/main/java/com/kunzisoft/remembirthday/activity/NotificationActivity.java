@@ -7,5 +7,5 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public class NotificationActivity extends AppCompatActivity {
-
+    //TODO layout with send a gift, send a message, call etc...
 }
