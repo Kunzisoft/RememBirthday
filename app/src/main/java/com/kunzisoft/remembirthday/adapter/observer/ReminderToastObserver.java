@@ -6,7 +6,9 @@ import android.widget.Toast;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.adapter.AbstractReminderAdapter;
 import com.kunzisoft.remembirthday.element.Reminder;
+import com.kunzisoft.remembirthday.utility.Utility;
 
+import java.text.DateFormat;
 import java.util.List;
 
 /**
@@ -16,14 +18,16 @@ import java.util.List;
 public class ReminderToastObserver implements AbstractReminderAdapter.ReminderDataObserver<Reminder> {
 
     private Context context;
+    private DateFormat dateFormat;
 
     public ReminderToastObserver(Context context) {
         this.context = context;
+        this.dateFormat = Utility.getDateTimeInstanceWithoutYears();
     }
 
     @Override
     public void onReminderAdded(Reminder reminder) {
-        Toast.makeText(context, context.getString(R.string.reminder_added, reminder.getDate()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.reminder_added, dateFormat.format(reminder.getDate())), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -33,7 +37,7 @@ public class ReminderToastObserver implements AbstractReminderAdapter.ReminderDa
 
     @Override
     public void onReminderUpdated(Reminder reminder) {
-        Toast.makeText(context, context.getString(R.string.reminder_updated, reminder.getDate()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.reminder_updated, dateFormat.format(reminder.getDate())), Toast.LENGTH_SHORT).show();
     }
 
     @Override

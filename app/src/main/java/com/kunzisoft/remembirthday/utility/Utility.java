@@ -1,24 +1,16 @@
 package com.kunzisoft.remembirthday.utility;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.kunzisoft.remembirthday.R;
 
-import java.text.ParseException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -74,6 +66,16 @@ public class Utility {
         } else{
             textView.setText(resources.getString(R.string.dialog_select_birthday_number_days_left, numberDaysRemaining));
         }
+    }
+
+    /**
+     * Retrieve a DateTimeFormat (LONG date, SHORT time) without the year
+     * @return DateFormat without year
+     */
+    public static DateFormat getDateTimeInstanceWithoutYears() {
+        SimpleDateFormat sdf = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT);
+        sdf.applyPattern(sdf.toPattern().replaceAll("[^\\p{Alpha}]*y+[^\\p{Alpha}]*", " "));
+        return sdf;
     }
 
 }
