@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.account.BackgroundStatusHandler;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 import com.kunzisoft.remembirthday.provider.CalendarLoader;
 
 /**
@@ -63,7 +63,7 @@ public class MainIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         // Only if calendar is active
-        if(PreferencesManager.isCustomCalendarActive(this)) {
+        if(PreferencesHelper.isCustomCalendarActive(this)) {
 
             Bundle extras = intent.getExtras();
             if (extras == null) {

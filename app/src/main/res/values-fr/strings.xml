@@ -128,12 +128,13 @@
     <string name="pref_create_calendar_summary">Créer un calendrier customisé pour la gestion des notifications</string>
 
     <string name="pref_calendar_color_title">Couleur du calendrier</string>
-    <string name="pref_calendar_color_summary">Définit la couleur du calendrier avec [color]</string>
+    <string name="pref_calendar_color_summary">Définir la couleur du calendrier avec [color]</string>
 
     <string name="pref_category_reminders_title">Rappels</string>
 
     <string name="pref_reminders_days_title">Jours par défaut</string>
-    <string name="pref_reminders_days_summary">Ex : "0#2#7" Notification visible pour le jour, 2 et 7 jours avant l\'événement.</string>
+    <string name="pref_reminders_days_summary">Personnaliser les notifications par défaut présentes avant l\'événement : %1$s</string>
+    <string name="pref_reminders_days_explanation">Ex : "0\-2\-7" Notification visible pour le jour, 2 et 7 jours avant l\'événement.</string>
 
     <string name="pref_reminders_time_title">Heure par défaut</string>
     <string name="pref_reminders_time_summary">Heure de l\événement du démon : [time]</string>
@@ -141,13 +142,13 @@
     <string name="pref_category_special_title">Special</string>
 
     <string name="pref_special_service_title">Services Spéciaux</string>
-    <string name="pref_special_service_summary">Créer des services spéciaux pour la gestion de cadeaux ou l\'envoie automatique de messages.</string>
+    <string name="pref_special_service_summary">Créer des services spéciaux pour la gestion de cadeaux ou l\'envoie automatique de messages</string>
 
     <string name="pref_auto_sms_reminders_title">Rappels Auto-SMS</string>
-    <string name="pref_auto_sms_reminders_summary">Rappelle avant l\'envoi d\'un auto-SMS.</string>
+    <string name="pref_auto_sms_reminders_summary">Rappeller avant l\'envoi d\'un auto-SMS</string>
 
     <string name="pref_hide_inactive_features_title">Cacher les fonctionnalités inactives</string>
-    <string name="pref_hide_inactive_features_summary">Cache ou affiche les boutons pour les fonctionnalités inactives</string>
+    <string name="pref_hide_inactive_features_summary">Cacher ou afficher les boutons pour les fonctionnalités inactives</string>
 
     <string name="pref_category_contacts_sort_title">Trie de contacts</string>
 

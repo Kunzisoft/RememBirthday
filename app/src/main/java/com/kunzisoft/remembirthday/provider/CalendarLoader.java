@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.account.CalendarAccount;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 
 import java.util.ArrayList;
 
@@ -43,7 +43,7 @@ public class CalendarLoader {
      */
     @SuppressWarnings("deprecation")
     public static void updateCalendarColor(Context context) {
-        int color = PreferencesManager.getCustomCalendarColor(context);
+        int color = PreferencesHelper.getCustomCalendarColor(context);
         ContentResolver contentResolver = context.getContentResolver();
 
         Uri uri = ContentUris.withAppendedId(
@@ -99,7 +99,7 @@ public class CalendarLoader {
                 builder.withValue(CalendarContract.Calendars.NAME, CALENDAR_COLUMN_NAME);
                 builder.withValue(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
                         context.getString(R.string.calendar_display_name));
-                builder.withValue(CalendarContract.Calendars.CALENDAR_COLOR, PreferencesManager.getCustomCalendarColor(context));
+                builder.withValue(CalendarContract.Calendars.CALENDAR_COLOR, PreferencesHelper.getCustomCalendarColor(context));
                 //if (BuildConfig.DEBUG) {
                 //    builder.withValue(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_EDITOR);
                 //} else {

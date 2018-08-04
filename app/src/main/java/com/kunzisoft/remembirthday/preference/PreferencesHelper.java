@@ -9,6 +9,7 @@ import android.support.v7.preference.PreferenceManager;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.factory.ContactSort;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,9 +17,10 @@ import java.util.regex.Pattern;
  * Class to retrieve items from preferences
  * @author joker on 05/07/17.
  */
-public class PreferencesManager {
+public class PreferencesHelper {
 
-    public static final String PATTERN_REMINDER_PREF = "^\\d{1,2}+(#\\d{1,2})*$";
+    public static final String PATTERN_REMINDER_PREF = "^\\d{1,2}+(-\\d{1,2})*$";
+    public static final String PATTERN_REMINDER_SPLITTER = "-";
 
     /**
      * Return true if custom calendar is active, false elsewhere
@@ -59,7 +61,7 @@ public class PreferencesManager {
         int[] days;
         Matcher m = p.matcher(prefNotificationsDay);
         if(m.matches()) {
-            String[] splitString = prefNotificationsDay.split("#");
+            String[] splitString = prefNotificationsDay.split(PATTERN_REMINDER_SPLITTER);
             days = new int[splitString.length];
             for(int i=0; i<splitString.length; i++) {
                 days[i] = Integer.parseInt(splitString[i]);
@@ -70,6 +72,24 @@ public class PreferencesManager {
         days = new int[1];
         days[0] = 0;
         return days;
+    }
+
+    /**
+     * Get default days in preferences as a string
+     * @param context Context to call
+     * @return String for Array of days with "-" separator
+     */
+    public static String getDefaultDaysAsString(Context context) {
+        StringBuilder stringDays = new StringBuilder();
+        boolean firstTime = true;
+        for (int day : getDefaultDays(context)) {
+            if (firstTime)
+                stringDays.append(day);
+            else
+                stringDays.append(PATTERN_REMINDER_SPLITTER).append(day);
+            firstTime = false;
+        }
+        return stringDays.toString();
     }
 
     /**

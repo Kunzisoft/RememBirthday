@@ -2,7 +2,7 @@ package com.kunzisoft.remembirthday.factory;
 
 import android.content.Context;
 
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 
 /**
  * Menu Factory for base variant of application
@@ -17,9 +17,9 @@ public abstract class MenuFactoryBase extends MenuContact {
             listMenuAction.add(new MenuActionCall());
         }
 
-        if(PreferencesManager.isCustomCalendarActive(context)) {
+        if(PreferencesHelper.isCustomCalendarActive(context)) {
             listMenuAction.add(new MenuActionReminder());
-        } else if (!PreferencesManager.isButtonsForInactiveFeaturesHidden(context)) {
+        } else if (!PreferencesHelper.isButtonsForInactiveFeaturesHidden(context)) {
                 listMenuAction.add(new MenuActionReminder(MenuAction.STATE.INACTIVE));
         }
     }

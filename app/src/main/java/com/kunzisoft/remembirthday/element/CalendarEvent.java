@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.kunzisoft.remembirthday.R;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
@@ -46,7 +46,7 @@ public class CalendarEvent implements Parcelable {
     public static CalendarEvent buildDefaultEventFromContactToSave(Context context, Contact contact) {
         CalendarEvent event = new CalendarEvent(getEventTitleFromContact(context, contact),
                 contact.getNextBirthday(), true);
-        int[] defaultTime = PreferencesManager.getDefaultTime(context);
+        int[] defaultTime = PreferencesHelper.getDefaultTime(context);
         event.addReminder(
                 new Reminder(event.getDate(), defaultTime[0], defaultTime[1]));
 

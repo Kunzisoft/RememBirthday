@@ -7,7 +7,7 @@ import android.util.Log;
 import com.kunzisoft.autosms.database.AutoSmsDbHelper;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
 import com.kunzisoft.remembirthday.provider.EventLoader;
 
@@ -109,7 +109,7 @@ public class AbstractBuddyActivity extends AppCompatActivity
             updateBirthdayContactProvider.execute();
 
             // Update event in calendar
-            if(PreferencesManager.isCustomCalendarActive(AbstractBuddyActivity.this)) {
+            if(PreferencesHelper.isCustomCalendarActive(AbstractBuddyActivity.this)) {
                 try {
                     EventLoader.updateEvent(AbstractBuddyActivity.this, contact, newBirthday);
                 } catch (EventLoader.EventException e) {

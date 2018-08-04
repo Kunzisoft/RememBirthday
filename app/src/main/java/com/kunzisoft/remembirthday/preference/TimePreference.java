@@ -43,6 +43,7 @@ public class TimePreference extends DialogPreference {
 
     private void initialize(Context context, AttributeSet attrs) {
         summaryPreference = getSummary();
+        setDialogTitle(null);
     }
 
     @Override

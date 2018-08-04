@@ -48,7 +48,7 @@ import com.kunzisoft.remembirthday.factory.MenuActionMessage;
 import com.kunzisoft.remembirthday.factory.MenuActionReminder;
 import com.kunzisoft.remembirthday.factory.MenuContact;
 import com.kunzisoft.remembirthday.factory.MenuContactCreator;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 import com.kunzisoft.remembirthday.provider.ContactLoader;
 import com.kunzisoft.remembirthday.provider.ContactPhoneNumberLoader;
 import com.kunzisoft.remembirthday.provider.ContactProvider;
@@ -194,7 +194,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
         // Initialize adapters
         if(contact != null && contact.hasBirthday()) {
-            if(PreferencesManager.isCustomCalendarActive(getContext())) {
+            if(PreferencesHelper.isCustomCalendarActive(getContext())) {
                 // Add default reminders and link view to adapter
                 remindersAdapter = new ReminderCalendarNotificationsAdapter(getContext(), contact.getBirthday());
                 remindersListView.setAdapter(remindersAdapter);
@@ -221,7 +221,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
             }
 
             // Build adapters only if daemons active
-            if(PreferencesManager.isDaemonsActive(getContext())) {
+            if(PreferencesHelper.isDaemonsActive(getContext())) {
                 // Link auto messages view to adapter
                 autoMessagesAdapter = new AutoMessageAdapter(getContext(), contact.getBirthday());
                 autoMessagesListView.setAdapter(autoMessagesAdapter);
@@ -342,21 +342,21 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     }
                     break;
                 case MenuActionReminder.ITEM_ID :
-                    if(PreferencesManager.isCustomCalendarActive(getContext())) {
+                    if(PreferencesHelper.isCustomCalendarActive(getContext())) {
                         remindersAdapter.addDefaultItem();
                     } else {
                         calendarDialog.show(getFragmentManager(), CALENDAR_DIALOG_TAG);
                     }
                     break;
                 case MenuActionGift.ITEM_ID :
-                    if(PreferencesManager.isDaemonsActive(getContext())) {
+                    if(PreferencesHelper.isDaemonsActive(getContext())) {
                         // TODO Gift for pro
                     } else {
                         specialFeaturesDialog.show(getFragmentManager(), SPECIAL_FEATURES_DIALOG_TAG);
                     }
                     break;
                 case MenuActionAutoMessage.ITEM_ID :
-                    if(PreferencesManager.isDaemonsActive(getContext())) {
+                    if(PreferencesHelper.isDaemonsActive(getContext())) {
                         autoMessagesAdapter.addDefaultItem();
                         // TODO Auto-message for pro
                     } else {
@@ -408,7 +408,7 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                             removeBirthdayContactProvider.execute();
 
                             // Delete event in calendar
-                            if(PreferencesManager.isCustomCalendarActive(getContext())) {
+                            if(PreferencesHelper.isCustomCalendarActive(getContext())) {
                                 EventLoader.deleteEventsFromContact(getContext(), contact);
                             }
                         }

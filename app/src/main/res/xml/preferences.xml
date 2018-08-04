@@ -42,12 +42,11 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_reminders_title">
-        <EditTextPreference
+        <com.kunzisoft.remembirthday.preference.DaysExplanationPreference
             android:key="@string/pref_reminders_days_key"
             android:dependency="@string/pref_create_calendar_key"
             android:title="@string/pref_reminders_days_title"
-            android:summary="@string/pref_reminders_days_summary"
-            android:defaultValue="@string/pref_reminders_days_default" />
+            android:defaultValue="@string/pref_reminders_days_default"/>
         <com.kunzisoft.remembirthday.preference.TimePreference
             android:key="@string/pref_reminders_time_key"
             android:dependency="@string/pref_create_calendar_key"

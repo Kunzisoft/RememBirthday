@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 
 
 /**
@@ -22,7 +22,7 @@ public class ReminderCalendarNotificationsAdapter extends AbstractReminderAdapte
 
     @Override
     public void addDefaultItem() {
-        int[] defaultTime = PreferencesManager.getDefaultTime(context);
+        int[] defaultTime = PreferencesHelper.getDefaultTime(context);
         addReminder(new Reminder(anniversary.getDate(), defaultTime[0], defaultTime[1], 0));
     }
 

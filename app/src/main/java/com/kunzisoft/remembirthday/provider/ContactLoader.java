@@ -12,7 +12,7 @@ import android.support.v4.content.Loader;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.factory.ContactSort;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,7 +238,7 @@ public abstract class ContactLoader extends AbstractLoader {
                     ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
             };
 
-            contactSort = PreferencesManager.getDefaultContactSort(context);
+            contactSort = PreferencesHelper.getDefaultContactSort(context);
         }
     }
 

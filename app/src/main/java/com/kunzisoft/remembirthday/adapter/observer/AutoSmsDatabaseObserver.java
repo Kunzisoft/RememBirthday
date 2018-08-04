@@ -10,7 +10,7 @@ import com.kunzisoft.remembirthday.adapter.AbstractReminderAdapter;
 import com.kunzisoft.remembirthday.element.AutoMessage;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.ProxyAutoMessage;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class AutoSmsDatabaseObserver implements AbstractReminderAdapter.Reminder
         AutoSms autoSms = ProxyAutoMessage.getAutoSms(contact, autoMessage);
         AutoSmsDbHelper.getDbHelper(context).insert(autoSms);
         autoMessage.setId(autoSms.getDateCreated().getTime());
-        boolean autoSmsReminder = PreferencesManager.isAutoSmsRemindersActive(context);
+        boolean autoSmsReminder = PreferencesHelper.isAutoSmsRemindersActive(context);
         new Scheduler(context).schedule(autoSms, autoSmsReminder);
         Log.d(TAG, "Message added and scheduled " + autoSms);
     }
@@ -48,7 +48,7 @@ public class AutoSmsDatabaseObserver implements AbstractReminderAdapter.Reminder
         Log.d(TAG, "Content : " + autoMessage);
         AutoSms autoSms = ProxyAutoMessage.getAutoSms(contact, autoMessage);
         AutoSmsDbHelper.getDbHelper(context).update(autoSms);
-        boolean autoSmsReminder = PreferencesManager.isAutoSmsRemindersActive(context);
+        boolean autoSmsReminder = PreferencesHelper.isAutoSmsRemindersActive(context);
         new Scheduler(context).schedule(autoSms, autoSmsReminder);
         Log.d(TAG, "Message updated and scheduled " + autoSms);
     }

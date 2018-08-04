@@ -21,10 +21,10 @@ import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;
 import com.kunzisoft.remembirthday.element.Reminder;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
-import com.kunzisoft.remembirthday.provider.ContactProvider;
+import com.kunzisoft.remembirthday.preference.PreferencesHelper;
 import com.kunzisoft.remembirthday.provider.CalendarLoader;
 import com.kunzisoft.remembirthday.provider.ContactLoader;
+import com.kunzisoft.remembirthday.provider.ContactProvider;
 import com.kunzisoft.remembirthday.provider.EventProvider;
 import com.kunzisoft.remembirthday.provider.ReminderProvider;
 
@@ -90,7 +90,7 @@ public class ListContactsActivity extends AppCompatActivity
                 finish();
 
                 // Add new event in calendar
-                if(PreferencesManager.isCustomCalendarActive(ListContactsActivity.this)) {
+                if(PreferencesHelper.isCustomCalendarActive(ListContactsActivity.this)) {
                     // TODO Encapsulate
                     long calendarId = CalendarLoader.getCalendar(ListContactsActivity.this);
                     if (calendarId != -1) {

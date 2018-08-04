@@ -3,7 +3,6 @@ package com.kunzisoft.remembirthday.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +17,6 @@ import com.kunzisoft.remembirthday.adapter.ContactAdapter;
 import com.kunzisoft.remembirthday.adapter.ContactBirthdayAdapter;
 import com.kunzisoft.remembirthday.adapter.OnClickItemContactListener;
 import com.kunzisoft.remembirthday.element.Contact;
-import com.kunzisoft.remembirthday.preference.PreferencesManager;
 import com.kunzisoft.remembirthday.provider.ContactLoader;
 
 /**

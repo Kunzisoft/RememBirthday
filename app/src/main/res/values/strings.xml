@@ -143,7 +143,8 @@
 
     <string name="pref_reminders_days_key" translatable="false">notifications_day_enable</string>
     <string name="pref_reminders_days_title">Default days</string>
-    <string name="pref_reminders_days_summary">E.g: "0#2#7" Notification visible on the day, 2 and 7 days before the event.</string>
+    <string name="pref_reminders_days_summary">Customize the default notifications present before the event : %1$s</string>
+    <string name="pref_reminders_days_explanation">E.g: "0\-2\-7" Notification visible on the day, 2 and 7 days before the event.</string>
     <string name="pref_reminders_days_default" translatable="false">0</string>
 
     <string name="pref_reminders_time_key" translatable="false">notifications_time_enable</string>
