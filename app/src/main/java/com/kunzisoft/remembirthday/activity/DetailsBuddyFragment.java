@@ -73,6 +73,11 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
 
     private Contact contact;
 
+    private TextView dayAndMonthTextView;
+    private TextView yearTextView;
+    private TextView daysLeftTextView;
+    private View selectBirthdayButton;
+
     protected RecyclerView autoMessagesListView;
     protected AutoMessageAdapter autoMessagesAdapter;
 
@@ -103,84 +108,32 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_details_buddy, container, false);
 
-        TextView dayAndMonthTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
-        TextView yearTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_year);
-        TextView daysLeftTextView = (TextView) root.findViewById(R.id.fragment_details_buddy_days_left);
-        View selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_date);
+        dayAndMonthTextView = root.findViewById(R.id.fragment_details_buddy_dayAndMonth);
+        yearTextView = root.findViewById(R.id.fragment_details_buddy_year);
+        daysLeftTextView = root.findViewById(R.id.fragment_details_buddy_days_left);
+        selectBirthdayButton = root.findViewById(R.id.fragment_details_buddy_date);
 
         // Animation init
         menuView = root.findViewById(R.id.fragment_details_buddy_add_menu);
         menuViewButton = root.findViewById(R.id.fragment_details_buddy_add_button);
         menuAnimationViewCircle = AnimationViewCircle.build(menuView);
 
-        menuListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_menu_list);
+        menuListView = root.findViewById(R.id.fragment_details_buddy_menu_list);
         gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
         menuListView.setLayoutManager(gridLayoutManager);
 
         // List of reminders elements
-        remindersListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_reminders);
+        remindersListView = root.findViewById(R.id.fragment_details_buddy_list_reminders);
         LinearLayoutManager linearLayoutManagerReminder = new LinearLayoutManager(getContext());
         linearLayoutManagerReminder.setOrientation(LinearLayoutManager.VERTICAL);
         remindersListView.setLayoutManager(linearLayoutManagerReminder);
 
         // List of auto messages elements
-        autoMessagesListView = (RecyclerView) root.findViewById(R.id.fragment_details_buddy_list_auto_messages);
+        autoMessagesListView = root.findViewById(R.id.fragment_details_buddy_list_auto_messages);
         LinearLayoutManager linearLayoutManagerAutoMessage = new LinearLayoutManager(getContext());
         linearLayoutManagerAutoMessage.setOrientation(LinearLayoutManager.VERTICAL);
         autoMessagesListView.setLayoutManager(linearLayoutManagerAutoMessage);
 
-        // Contact attributes
-        contact = null;
-        if(savedInstanceState != null)
-            contact = savedInstanceState.getParcelable(CONTACT_KEY);
-        else if(getArguments()!=null) {
-            contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
-        }
-        if(contact != null) {
-            // For insert memory getAutoSmsById RawId only when showMessage details
-            setHasOptionsMenu(true);
-
-            ContactLoader.assignRawContactIdToContact(getContext(), contact);
-
-            selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((AnniversaryDialogOpen) getActivity()).openAnniversaryDialogSelection(contact);
-                }
-            });
-
-            if(contact.hasBirthday()) {
-                // Display date
-                DateUnknownYear currentBuddyBirthday = contact.getBirthday();
-
-                // Assign text for day and month
-                dayAndMonthTextView.setText(currentBuddyBirthday.toStringMonthAndDay(java.text.DateFormat.FULL));
-
-                // Assign text for year
-                if (contact.getBirthday().containsYear()) {
-                    yearTextView.setVisibility(View.VISIBLE);
-                    yearTextView.setText(currentBuddyBirthday.toStringYear());
-                } else {
-                    yearTextView.setVisibility(View.GONE);
-                    yearTextView.setText("");
-                }
-                // Number days left before birthday
-                Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
-
-                // Animation for menu
-                menuViewButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View viewButton) {
-                        viewButton.setActivated(!viewButton.isActivated());
-                        menuAnimationViewCircle
-                                .startPoint(menuView.getWidth() - 80, 0)
-                                .animate();
-                    }
-                });
-            } else {
-                //TODO Error
-            }
-        }
         return root;
     }
 
@@ -191,6 +144,17 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
         // Initialize dialogs
         calendarDialog = new NeedCalendarDialogFragment();
         specialFeaturesDialog = new NeedSpecialFeaturesDialogFragment();
+
+        // Contact attributes
+        contact = null;
+        if(savedInstanceState != null)
+            contact = savedInstanceState.getParcelable(CONTACT_KEY);
+        else if(getArguments()!=null) {
+            contact = getArguments().getParcelable(BuddyActivity.EXTRA_BUDDY);
+        }
+
+        // For insert memory getAutoSmsById RawId only when showMessage details
+        setHasOptionsMenu(true);
 
         // Initialize adapters
         if(contact != null && contact.hasBirthday()) {
@@ -255,13 +219,62 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                     Log.e(TAG, "Error to getAutoSmsById phone number : " + e.getLocalizedMessage());
                 }
             }
+        }
+    }
 
-            // Open the menu if no reminder
-            if((remindersAdapter == null || (remindersAdapter != null && remindersAdapter.getItemCount() < 1))
-                && (autoMessagesAdapter == null || (autoMessagesAdapter != null && autoMessagesAdapter.getItemCount() < 1))) {
-                menuViewButton.setActivated(true);
-                menuView.setVisibility(View.VISIBLE);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(contact != null) {
+            ContactLoader.assignRawContactIdToContact(getContext(), contact);
+
+            selectBirthdayButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO by activity creation
+                    ((AnniversaryDialogOpen) getActivity()).openAnniversaryDialogSelection(contact);
+                }
+            });
+
+            if(contact.hasBirthday()) {
+                // Display date
+                DateUnknownYear currentBuddyBirthday = contact.getBirthday();
+
+                // Assign text for day and month
+                dayAndMonthTextView.setText(currentBuddyBirthday.toStringMonthAndDay(java.text.DateFormat.FULL));
+
+                // Assign text for year
+                if (contact.getBirthday().containsYear()) {
+                    yearTextView.setVisibility(View.VISIBLE);
+                    yearTextView.setText(currentBuddyBirthday.toStringYear());
+                } else {
+                    yearTextView.setVisibility(View.GONE);
+                    yearTextView.setText("");
+                }
+                // Number days left before birthday
+                Utility.assignDaysRemainingInTextView(daysLeftTextView, contact.getBirthdayDaysRemaining());
+
+                // Animation for menu
+                menuViewButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View viewButton) {
+                        viewButton.setActivated(!viewButton.isActivated());
+                        menuAnimationViewCircle
+                                .startPoint(menuView.getWidth() - 80, 0)
+                                .animate();
+                    }
+                });
+            } else {
+                //TODO Error
             }
+        }
+
+        // Open the menu if no reminder
+        if((remindersAdapter == null || remindersAdapter.getItemCount() < 1)
+                && (autoMessagesAdapter == null || autoMessagesAdapter.getItemCount() < 1)) {
+            menuViewButton.setActivated(true);
+            menuView.setVisibility(View.VISIBLE);
         }
     }
 

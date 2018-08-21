@@ -24,6 +24,8 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity implements Inten
 
     public static final int UPDATE_BIRTHDAY_RESULT_CODE = 1786;
 
+    private ImageView avatarImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +40,12 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity implements Inten
         }
 
         // Retrieve contact
-        contactSelected = getIntent().getExtras().getParcelable(BuddyActivity.EXTRA_BUDDY);
+        if (getIntent() != null
+                && getIntent().getExtras() != null)
+            contactSelected = getIntent().getExtras().getParcelable(BuddyActivity.EXTRA_BUDDY);
 
         // Add name in title
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if(contactSelected != null)
         toolbar.setTitle(contactSelected.getName());
         setSupportActionBar(toolbar);
@@ -50,7 +54,26 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity implements Inten
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Display avatar
-        ImageView avatarImageView = (ImageView) findViewById(R.id.fragment_details_buddy_avatar);
+        avatarImageView = findViewById(R.id.fragment_details_buddy_avatar);
+
+        // Build dialog
+        initDialogSelection(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            // During initial setup, plug in the details fragment.
+            DetailsBuddyFragment details = new DetailsBuddyFragment();
+            details.setArguments(getIntent().getExtras());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_details_buddy_fragment_details_buddy, details, TAG_DETAILS_FRAGMENT)
+                    .commit();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         if(avatarImageView != null) {
             if (contactSelected != null && contactSelected.containsImage()) {
                 Picasso.with(this).load(contactSelected.getImageUri()).into(avatarImageView);
@@ -71,19 +94,6 @@ public class DetailsBuddyActivity extends AbstractBuddyActivity implements Inten
                     IntentCall.openAppForContactModifications(DetailsBuddyActivity.this, contactSelected);
                 }
             });
-        }
-
-        // Build dialog
-        initDialogSelection(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            // During initial setup, plug in the details fragment.
-            DetailsBuddyFragment details = new DetailsBuddyFragment();
-            details.setArguments(getIntent().getExtras());
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.activity_details_buddy_fragment_details_buddy, details, TAG_DETAILS_FRAGMENT)
-                    .commit();
         }
     }
 

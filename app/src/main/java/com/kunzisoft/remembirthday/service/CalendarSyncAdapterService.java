@@ -39,7 +39,11 @@ public class CalendarSyncAdapterService extends Service {
 
     public static void performSync(Context context) {
         Log.d(TAG, "Starting sync...");
-        EventLoader.saveEventsIfNotExistsFromAllContactWithBirthday(context);
+        try {
+            EventLoader.saveEventsIfNotExistsFromAllContactWithBirthday(context);
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to sync the calendar", e);
+        }
     }
 
 
