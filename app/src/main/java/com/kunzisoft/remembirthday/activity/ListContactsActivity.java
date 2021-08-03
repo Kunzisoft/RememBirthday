@@ -9,13 +9,14 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.CalendarEvent;
 import com.kunzisoft.remembirthday.element.Contact;
@@ -49,14 +50,14 @@ public class ListContactsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_contacts);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.select_contact_title));
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        FloatingActionButton addContactButton = (FloatingActionButton) findViewById(R.id.fab_add_buddy);
+        FloatingActionButton addContactButton = findViewById(R.id.fab_add_buddy);
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2,13 +2,14 @@ package com.kunzisoft.remembirthday.preference;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.kunzisoft.remembirthday.R;
 

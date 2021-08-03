@@ -1,8 +1,9 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kunzisoft.autosms.database.AutoSmsDbHelper;
 import com.kunzisoft.remembirthday.element.Contact;

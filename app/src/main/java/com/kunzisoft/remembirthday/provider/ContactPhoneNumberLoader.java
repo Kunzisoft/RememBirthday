@@ -2,8 +2,12 @@ package com.kunzisoft.remembirthday.provider;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.content.Loader;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.content.Loader;
 
 import com.kunzisoft.remembirthday.element.Contact;
 import com.kunzisoft.remembirthday.element.PhoneNumber;
@@ -63,6 +67,12 @@ public class ContactPhoneNumberLoader extends AbstractLoader {
 
     public void setCallbackActionPhoneNumber(CallbackActionPhoneNumber callbackActionPhoneNumber) {
         this.callbackActionPhoneNumber = callbackActionPhoneNumber;
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return null;
     }
 
     /**

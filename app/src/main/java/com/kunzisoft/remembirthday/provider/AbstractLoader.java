@@ -4,9 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 /**
  * Created by joker on 08/08/17.
@@ -26,8 +29,9 @@ public abstract class AbstractLoader implements LoaderManager.LoaderCallbacks<Cu
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         return new CursorLoader(
                 context,
                 uri,
@@ -37,5 +41,4 @@ public abstract class AbstractLoader implements LoaderManager.LoaderCallbacks<Cu
                 sortOrder
         );
     }
-
 }

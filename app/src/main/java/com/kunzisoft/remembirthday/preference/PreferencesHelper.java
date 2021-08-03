@@ -2,9 +2,10 @@ package com.kunzisoft.remembirthday.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.PreferenceManager;
+
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.factory.ContactSort;
@@ -42,7 +43,8 @@ public class PreferencesHelper {
      * @param context Context to call
      * @return Color
      */
-    public static @ColorInt int getCustomCalendarColor(Context context) {
+    public static @ColorInt
+    int getCustomCalendarColor(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getInt(context.getString(R.string.pref_calendar_color_key),
                 ContextCompat.getColor(context, R.color.pref_calendar_color_default));

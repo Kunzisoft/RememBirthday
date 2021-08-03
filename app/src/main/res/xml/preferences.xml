@@ -20,12 +20,12 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_calendar_title">
-        <android.support.v7.preference.Preference
+        <Preference
             android:key="@string/pref_open_calendar_key"
             android:title="@string/pref_open_calendar_title"
             android:summary="@string/pref_open_calendar_summary"
             android:persistent="false" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <SwitchPreferenceCompat
             android:key="@string/pref_create_calendar_key"
             android:title="@string/pref_create_calendar_title"
             android:summary="@string/pref_create_calendar_summary"
@@ -56,18 +56,18 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_special_title">
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <SwitchPreferenceCompat
             android:key="@string/pref_special_service_key"
             android:title="@string/pref_special_service_title"
             android:summary="@string/pref_special_service_summary"
             android:defaultValue="@string/pref_special_service_default" />
-        <android.support.v7.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="@string/pref_auto_sms_reminders_key"
             android:dependency="@string/pref_special_service_key"
             android:title="@string/pref_auto_sms_reminders_title"
             android:summary="@string/pref_auto_sms_reminders_summary"
             android:defaultValue="@string/pref_auto_sms_reminders_default" />
-        <android.support.v7.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="@string/pref_hide_inactive_features_key"
             android:title="@string/pref_hide_inactive_features_title"
             android:summary="@string/pref_hide_inactive_features_summary"

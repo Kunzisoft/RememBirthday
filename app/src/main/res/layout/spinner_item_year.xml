@@ -2,7 +2,6 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="?android:attr/spinnerItemStyle"
-    android:maxLines="1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="22sp"
@@ -11,4 +10,5 @@
     android:text=""
     android:duplicateParentState="true"
     android:ellipsize="marquee"
+    android:singleLine="true"
     android:textAlignment="inherit"/>

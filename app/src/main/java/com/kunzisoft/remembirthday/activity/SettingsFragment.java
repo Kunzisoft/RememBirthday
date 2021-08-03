@@ -7,12 +7,15 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.TwoStatePreference;
+import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+import androidx.preference.TwoStatePreference;
 
 import com.kunzisoft.androidclearchroma.ChromaPreferenceFragmentCompat;
 import com.kunzisoft.remembirthday.BuildConfig;

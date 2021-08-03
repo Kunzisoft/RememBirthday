@@ -22,60 +22,53 @@ android {
         }
     }
 
-    flavorDimensions "tier"
+    flavorDimensions "version"
     productFlavors {
         libre {
-            applicationIdSuffix = ".libre"
+            dimension "version"
+            applicationId = ".libre"
             versionNameSuffix "-libre"
             buildConfigField "boolean", "FULL_VERSION", "true"
-            buildConfigField "boolean", "CLOSED_STORE", "false"
+            buildConfigField "boolean", "GOOGLE_PLAY_VERSION", "false"
         }
-        pro {
+        pro_google {
+            dimension "version"
             applicationIdSuffix = ".pro"
             versionNameSuffix "-pro"
             buildConfigField "boolean", "FULL_VERSION", "true"
-            buildConfigField "boolean", "CLOSED_STORE", "true"
+            buildConfigField "boolean", "GOOGLE_PLAY_VERSION", "true"
         }
-        free {
+        free_google {
+            dimension "version"
             applicationIdSuffix = ".free"
             versionNameSuffix "-free"
             buildConfigField "boolean", "FULL_VERSION", "false"
-            buildConfigField "boolean", "CLOSED_STORE", "true"
+            buildConfigField "boolean", "GOOGLE_PLAY_VERSION", "true"
         }
     }
 }
 
-def supportVersion = "27.1.1"
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    configurations {
-        all*.exclude group: 'com.android.support', module: 'support-v13'
-    }
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:preference-v7:$supportVersion"
-    implementation "com.android.support:preference-v14:$supportVersion"
-    implementation "com.android.support:cardview-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.4.0'
     // Date library
     implementation "net.danlew:android.joda:2.9.9"
     // Permission
-    implementation "com.github.hotchemi:permissionsdispatcher:3.3.1"
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.3.1"
+    implementation "com.github.hotchemi:permissionsdispatcher:2.4.0"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
     // Picasso
     implementation "com.squareup.picasso:picasso:2.5.2"
-    // Unit Tests
-    testImplementation "junit:junit:4.12"
     // HTML
-    implementation "org.sufficientlysecure:html-textview:3.5"
+    implementation "org.sufficientlysecure:html-textview:3.4"
     // Reveal
     implementation ("com.github.ozodrukh:CircularReveal:2.0.1@aar") {
-        transitive = true
+        transitive = true;
     }
     // Color preference
     implementation "com.github.Kunzisoft:AndroidClearChroma:2.4"
-    // Modules
+    //
     implementation project(path: ':auto-sms')
 }

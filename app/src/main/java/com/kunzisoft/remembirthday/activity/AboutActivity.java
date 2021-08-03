@@ -1,10 +1,11 @@
 package com.kunzisoft.remembirthday.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.utility.Constants;
@@ -24,17 +25,17 @@ public class AboutActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_about);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.about_title));
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        TextView versionText = (TextView) findViewById(R.id.activity_about_version);
+        TextView versionText = findViewById(R.id.activity_about_version);
         versionText.setText(getString(R.string.about_version) + " " + Constants.getVersion(this));
 
-        HtmlTextView aboutTextView = (HtmlTextView) findViewById(R.id.activity_about_content);
+        HtmlTextView aboutTextView = findViewById(R.id.activity_about_content);
 
         String htmlContent =
                 "<p>"+getString(R.string.powered_by)+" <a href=\""+ Constants.URL_WEB_SITE +"\">"+ Constants.URL_WEB_SITE +"</a></p>"+

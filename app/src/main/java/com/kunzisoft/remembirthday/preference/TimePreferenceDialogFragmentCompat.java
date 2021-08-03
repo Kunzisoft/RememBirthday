@@ -3,9 +3,10 @@ package com.kunzisoft.remembirthday.preference;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
 import android.widget.TimePicker;
+
+import androidx.preference.PreferenceDialogFragmentCompat;
 
 /**
  * PreferenceDialog for showing Time selector with hour and seconds

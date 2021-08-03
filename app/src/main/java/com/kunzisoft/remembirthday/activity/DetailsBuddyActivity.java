@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.element.DateUnknownYear;

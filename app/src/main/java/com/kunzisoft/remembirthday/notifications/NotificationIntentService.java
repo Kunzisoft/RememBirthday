@@ -5,11 +5,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
-import android.support.v4.app.JobIntentService;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.TypedValue;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
+import androidx.core.app.NotificationCompat;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.activity.NotificationActivity;
@@ -56,32 +57,34 @@ public class NotificationIntentService extends JobIntentService {
     private void processStartNotification(Contact contact) {
 
         //TODO in future
-        String textMessage
-                = getString(R.string.notifications_anniversary_today, contact.getName());
+        if (contact != null) {
+            String textMessage
+                    = getString(R.string.notifications_anniversary_today, contact.getName());
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ANNIVERSARY);
-        builder.setContentTitle(getString(R.string.notifications_anniversary_title))
-                .setAutoCancel(true);
-        // Get ColorAccent for notification
-        TypedValue typedValue = new TypedValue();
-        TypedArray a = obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
-        int color = a.getColor(0, 0);
-        a.recycle();
-        builder.setColor(color)
-                .setContentText(textMessage)
-                .setSmallIcon(R.drawable.ic_notification_24dp);
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ANNIVERSARY);
+            builder.setContentTitle(getString(R.string.notifications_anniversary_title))
+                    .setAutoCancel(true);
+            // Get ColorAccent for notification
+            TypedValue typedValue = new TypedValue();
+            TypedArray a = obtainStyledAttributes(typedValue.data, new int[]{R.attr.colorAccent});
+            int color = a.getColor(0, 0);
+            a.recycle();
+            builder.setColor(color)
+                    .setContentText(textMessage)
+                    .setSmallIcon(R.drawable.ic_notification_24dp);
 
-        // TODO contact.getID() with anniversary
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                (int) (contact.getRawId()),
-                new Intent(this, NotificationActivity.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
+            // TODO contact.getID() with anniversary
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                    (int) (contact.getRawId()),
+                    new Intent(this, NotificationActivity.class),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(pendingIntent);
+            builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
 
-        final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.notify((int) (contact.getRawId()), builder.build());
+            final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.notify((int) (contact.getRawId()), builder.build());
+            }
         }
     }
 

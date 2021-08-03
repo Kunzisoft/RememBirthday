@@ -9,8 +9,9 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.kunzisoft.remembirthday.BuildConfig;
 import com.kunzisoft.remembirthday.element.Contact;

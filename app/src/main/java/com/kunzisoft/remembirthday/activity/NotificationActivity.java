@@ -1,6 +1,6 @@
 package com.kunzisoft.remembirthday.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by joker on 17/04/17.

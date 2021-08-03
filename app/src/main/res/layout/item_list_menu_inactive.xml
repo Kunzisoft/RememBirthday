@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="18dp">
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/item_list_menu_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -17,7 +17,7 @@
         app:backgroundTint="?attr/colorInactive"
         app:srcCompat="@drawable/ic_message_white_24dp"
         android:tint="?attr/colorInactiveDark"/>
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_list_menu_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

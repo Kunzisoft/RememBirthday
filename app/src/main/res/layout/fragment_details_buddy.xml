@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/backgroundAccentElement">
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="?attr/cardViewLight"
@@ -28,12 +28,12 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:padding="20dp">
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/fragment_details_buddy_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18sp" />
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/fragment_details_buddy_dayAndMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -43,14 +43,14 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginRight="24dp"
                         android:layout_marginEnd="24dp" />
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/fragment_details_buddy_days_left"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textStyle="italic"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <FrameLayout
@@ -59,16 +59,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/birthday_picture">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/birthday_picture"/>
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fragment_details_buddy_list_reminders"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fragment_details_buddy_list_auto_messages"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -81,7 +86,7 @@
             android:layout_below="@+id/fragment_details_buddy_container_date"
             layout="@layout/include_menu_buddy" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fragment_details_buddy_add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,4 +101,4 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="-20dp" />
     </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

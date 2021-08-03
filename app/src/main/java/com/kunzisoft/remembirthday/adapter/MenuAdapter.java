@@ -1,10 +1,11 @@
 package com.kunzisoft.remembirthday.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunzisoft.remembirthday.R;
 import com.kunzisoft.remembirthday.factory.MenuAction;

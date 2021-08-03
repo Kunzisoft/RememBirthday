@@ -2,13 +2,6 @@ package com.kunzisoft.remembirthday.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunzisoft.autosms.database.AutoSmsDbHelper;
 import com.kunzisoft.autosms.model.AutoSms;
@@ -316,7 +318,11 @@ public class DetailsBuddyFragment extends Fragment implements ActionContactMenu{
                 contact.setPhoneNumbers(phoneNumberList);
             }
         });
-        getLoaderManager().initLoader(0, null, phoneNumberLoader);
+        try {
+            LoaderManager.getInstance(this).initLoader(0, null, phoneNumberLoader);
+        } catch (Exception exception) {
+            Log.e(TAG, "Unable to get phone number", exception);
+        }
     }
 
     @Override

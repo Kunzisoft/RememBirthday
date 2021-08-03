@@ -1,8 +1,9 @@
 package com.kunzisoft.remembirthday.preference;
 
 import android.content.Context;
-import android.support.v7.preference.DialogPreference;
 import android.util.AttributeSet;
+
+import androidx.preference.DialogPreference;
 
 import com.kunzisoft.remembirthday.R;
 
